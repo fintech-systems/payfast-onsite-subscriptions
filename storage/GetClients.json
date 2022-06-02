@@ -1,0 +1,20 @@
+{
+  "result": "success",
+  "totalresults": 1,
+  "startnumber": 0,
+  "numreturned": 1,
+  "clients": {
+    "client": [
+      {
+        "id": 1,
+        "firstname": "Joe",
+        "lastname": "Bloggs",
+        "companyname": "ACME Company",
+        "email": "joe@example.com",
+        "datecreated": "2020-10-18",
+        "groupid": 1,
+        "status": "Active"
+      }
+    ]
+  }
+}

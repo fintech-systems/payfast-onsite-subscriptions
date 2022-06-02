@@ -1,0 +1,23 @@
+language: php
+
+php:
+      - 7.4
+      - 8.0
+
+env:
+  matrix:
+    - COMPOSER_FLAGS="--prefer-lowest"
+    - COMPOSER_FLAGS=""
+  global:
+    - XDEBUG_MODE=coverage
+
+before_script:
+      - travis_retry composer update
+
+script:
+      - vendor/bin/phpunit  --coverage-clover coverage.xml
+
+after_success:
+      - bash <(curl -s https://codecov.io/bash)
+
+
