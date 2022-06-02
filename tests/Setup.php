@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\WhmcsApi\Tests;
+namespace FintechSystems\Payfast\Tests;
 
 use Exception;
 use PHPUnit\Framework\TestCase;

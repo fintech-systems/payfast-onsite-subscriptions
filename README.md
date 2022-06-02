@@ -13,7 +13,7 @@ Requirements:
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require fintechsystems/payfast-onsite-subscriptions
 ```
 
 # Usage
@@ -23,7 +23,7 @@ composer require :vendor_slug/:package_slug
 ```php
 <?php
 
-use VendorName\Api\Technology;
+use FintechSystems\Api\Technology;
 
 require 'vendor/autoload.php';
 
@@ -45,7 +45,7 @@ $result = $api->getInformation();
 
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --provider="VendorName\Skeleton\SkeletonServiceProvider" --tag=":package_slug-config"
+php artisan vendor:publish --provider="FintechSystems\Payfast\PayfastServiceProvider" --tag="payfast-onsite-subscriptions-config"
 ```
 
 # Features
@@ -119,7 +119,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Eugene van der Merwe](https://github.com/fintech-systems)
 - [All Contributors](../../contributors)
 
 ## License

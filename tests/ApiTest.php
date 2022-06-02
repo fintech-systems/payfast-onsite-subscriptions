@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\WhmcsApi\Tests;
+namespace FintechSystems\Payfast\Tests;
 
 use Symfony\Component\Dotenv\Dotenv;
 
