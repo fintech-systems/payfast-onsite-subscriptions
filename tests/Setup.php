@@ -30,9 +30,9 @@ class Setup extends TestCase
         }
 
         $server = [
-            'url'            => env('WHMCS_URL'),
+            'url' => env('WHMCS_URL'),
             'api_identifier' => env('WHMCS_API_IDENTIFIER'),
-            'api_secret'     => env('WHMCS_API_SECRET'),
+            'api_secret' => env('WHMCS_API_SECRET'),
         ];
 
         if (! $server['url']) {
