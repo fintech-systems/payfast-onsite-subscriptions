@@ -1,10 +1,10 @@
 <?php
 
-namespace FintechSystems\Payfast\Facades;
+namespace FintechSystems\PayFast\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Payfast extends Facade
+class PayFast extends Facade
 {
     protected static function getFacadeAccessor()
     {

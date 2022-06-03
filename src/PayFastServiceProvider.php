@@ -1,11 +1,10 @@
 <?php
 
-namespace FintechSystems\Payfast;
+namespace FintechSystems\PayFast;
 
-// use FintechSystems\WhmcsApi\Payfast;
 use Illuminate\Support\ServiceProvider;
 
-class PayfastServiceProvider extends ServiceProvider
+class PayFastServiceProvider extends ServiceProvider
 {
     public function boot()
     {
@@ -22,7 +21,7 @@ class PayfastServiceProvider extends ServiceProvider
         );
 
         $this->app->bind('payfast', function () {
-            return new Payfast([
+            return new PayFast([
                 'merchant_id' => config('payfast.merchant_id'),
                 'merchant_key' => config('payfast.merchant_key'),
                 'passphrase' => config('payfast.passphrase'),

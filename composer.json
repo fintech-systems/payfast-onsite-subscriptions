@@ -1,6 +1,6 @@
 {
     "name": "fintechsystems/payfast-onsite-subscriptions",
-    "description": "This is my package payfast-onsite-subscriptions",
+    "description": "A Laravel service provider for subscription billing",
     "keywords": [        
         "laravel",
         "payfast",
@@ -17,19 +17,20 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "FintechSystems\\Payfast\\": "src/"            
+            "FintechSystems\\PayFast\\": "src/"            
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "FintechSystems\\Payfast\\Tests\\": "tests"
+            "FintechSystems\\PayFast\\Tests\\": "tests"
         }
     },
     "require": {
         "php": "^8.0",
         "symfony/dotenv": "^5.3",
-        "illuminate/contracts": "^8.37"
+        "illuminate/contracts": "^8.37",
+        "guzzlehttp/guzzle": "^7.4"
     },
     "require-dev": {  
         "nunomaduro/collision": "^5.3",      
@@ -41,10 +42,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "FintechSystems\\Payfast\\PayfastServiceProvider"
+                "FintechSystems\\PayFast\\PayFastServiceProvider"
             ],
             "aliases": {
-                "payfast": "FintechSystems\\Payfast\\Facades\\Payfast"
+                "payfast": "FintechSystems\\PayFast\\Facades\\PayFast"
             }
         }
     }

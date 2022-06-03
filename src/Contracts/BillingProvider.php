@@ -1,7 +1,8 @@
 <?php
 
-namespace FintechSystems\Payfast\Contracts;
+namespace FintechSystems\PayFast\Contracts;
 
 interface BillingProvider
 {
+
 }
