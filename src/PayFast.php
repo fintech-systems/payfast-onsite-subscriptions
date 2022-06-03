@@ -5,8 +5,8 @@ namespace FintechSystems\PayFast;
 use Carbon\Carbon;
 use FintechSystems\PayFast\Contracts\BillingProvider;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class PayFast implements BillingProvider
 {
@@ -96,7 +96,7 @@ class PayFast implements BillingProvider
             ->body();
     }
 
-    function dataToString($dataArray)
+    public function dataToString($dataArray)
     {
         // Create parameter string
         $pfOutput = '';
@@ -109,20 +109,20 @@ class PayFast implements BillingProvider
         return substr($pfOutput, 0, -1);
     }
 
-    function generatePaymentIdentifier($pfParameters)
+    public function generatePaymentIdentifier($pfParameters)
     {
         $url = 'https://www.payfast.co.za/onsite/process';
 
         $response = Http::post($url, $pfParameters)->json();
 
         // dd($response);
-                
+
         // $rsp = json_decode($response, true);
 
-        if (!$response['uuid']) {
-            return null;            
+        if (! $response['uuid']) {
+            return null;
         }
-        
+
         return $response['uuid'];
     }
 

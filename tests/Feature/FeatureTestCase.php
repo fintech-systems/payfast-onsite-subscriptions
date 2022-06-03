@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\Fixtures\User;
-use Orchestra\Testbench\TestCase;
-use Livewire\LivewireServiceProvider;
 use FintechSystems\PayFast\PayFastServiceProvider;
+use Livewire\LivewireServiceProvider;
+use Orchestra\Testbench\TestCase;
+use Tests\Fixtures\User;
 
 abstract class FeatureTestCase extends TestCase
 {
@@ -35,12 +35,12 @@ abstract class FeatureTestCase extends TestCase
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
         ], $options));
     }
-    
+
     protected function getPackageProviders($app)
     {
         return [
             PayFastServiceProvider::class,
-            LivewireServiceProvider::class,            
+            LivewireServiceProvider::class,
         ];
     }
 }
