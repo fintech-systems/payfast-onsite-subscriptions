@@ -209,14 +209,14 @@ class SubscriptionsTest extends FeatureTestCase
                             'token' => "244",
                         ],
                     ],
-                ]
+                ],
             ]),
         ]);
 
         $result = Payfast::fetchSubscription($subscription->payfast_token);
 
         // ray($result);
-    
+
         $this->assertSame('244', $subscription->payfast_token);
 
         // $this->assertSame('john@example.com', $subscription->paddleEmail());
