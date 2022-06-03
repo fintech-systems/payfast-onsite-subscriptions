@@ -30,7 +30,9 @@
         "php": "^8.0",
         "symfony/dotenv": "^5.3",
         "illuminate/contracts": "^8.37",
-        "guzzlehttp/guzzle": "^7.4"
+        "guzzlehttp/guzzle": "^7.4",
+        "livewire/livewire": "^2.10",
+        "moneyphp/money": "^4.0"
     },
     "require-dev": {  
         "nunomaduro/collision": "^5.3",      

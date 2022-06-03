@@ -11,6 +11,10 @@ class PayFastServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/payfast.php' => config_path('payfast.php'),
         ], 'payfast-config');
+
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     public function register()
