@@ -3,9 +3,8 @@
 namespace FintechSystems\PayFast\Tests;
 
 use Dotenv\Dotenv;
-use Rawilk\Printing\PrintingServiceProvider;
-use Orchestra\Testbench\TestCase as Orchestra;
 use FintechSystems\PayFast\PayFastServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
@@ -28,7 +27,7 @@ class TestCase extends Orchestra
         return [
             'PayFast' => PayFast::class,
         ];
-    }    
+    }
 
     protected function loadEnvironmentVariables(): void
     {

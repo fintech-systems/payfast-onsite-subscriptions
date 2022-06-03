@@ -3,8 +3,8 @@
 namespace FintechSystems\PayFast;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Http;
 use FintechSystems\PayFast\Contracts\BillingProvider;
+use Illuminate\Support\Facades\Http;
 
 class PayFast implements BillingProvider
 {
@@ -61,7 +61,7 @@ class PayFast implements BillingProvider
             'timestamp' => Carbon::now()->toIso8601String(),
             'version' => "v1",
         ];
-        
+
         $signature = $this->generateApiSignature($pfData, $this->passphrase);
 
         return array_merge(
@@ -69,7 +69,7 @@ class PayFast implements BillingProvider
             ["signature" => $signature]
         );
     }
-    
+
     /**
      * To ensure our tests are working, we do a dependency injection test and simply return true
      */
