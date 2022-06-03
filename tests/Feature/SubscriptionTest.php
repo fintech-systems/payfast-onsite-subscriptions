@@ -2,8 +2,8 @@
 
 namespace FintechSystems\PayFast\Tests;
 
-use Illuminate\Support\Facades\Http;
 use FintechSystems\Payfast\Facades\PayFast;
+use Illuminate\Support\Facades\Http;
 
 class SubscriptionTest extends TestCase
 {
@@ -27,7 +27,7 @@ class SubscriptionTest extends TestCase
                             "status_text" => "ACTIVE",
                             "token" => "f89aac35-a817-48b6-9c7a-6d18cb7958d4",
                         ],
-                    ]
+                    ],
                 ]
             ),
         ]);
@@ -57,7 +57,7 @@ class SubscriptionTest extends TestCase
                             "status_text" => "PAUSED",
                             "token" => "1294009b-3778-420f-8ddc-aac0f9c8b477",
                         ],
-                    ]
+                    ],
                 ]
             ),
         ]);
