@@ -18,7 +18,7 @@ class PayFastTest extends FeatureTestCase
                 ]
             ),
         ]);
-        
+
         $pfData = [
             'merchant_id' => config('payfast.merchant_id'),
             'merchant_key' => config('payfast.merchant_key'),

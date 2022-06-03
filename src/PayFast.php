@@ -114,7 +114,7 @@ class PayFast implements BillingProvider
         $url = 'https://www.payfast.co.za/onsite/process';
 
         $response = Http::post($url, $pfParameters)->json();
-        
+
         if (! $response['uuid']) {
             return null;
         }
