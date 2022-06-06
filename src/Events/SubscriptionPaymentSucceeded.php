@@ -2,7 +2,7 @@
 
 namespace FintechSystems\Payfast\Events;
 
-use FintechSystems\Payfast\Receipt;
+use FintechSystems\PayFast\Receipt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -22,7 +22,7 @@ class SubscriptionPaymentSucceeded
     /**
      * The receipt instance.
      *
-     * @var \FintechSystems\Payfast\Receipt
+     * @var \FintechSystems\PayFast\Receipt
      */
     public $receipt;
 
@@ -37,7 +37,7 @@ class SubscriptionPaymentSucceeded
      * Create a new event instance.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $billable
-     * @param  \FintechSystems\Payfast\Receipt  $receipt
+     * @param  \FintechSystems\PayFast\Receipt  $receipt
      * @param  array  $payload
      * @return void
      */

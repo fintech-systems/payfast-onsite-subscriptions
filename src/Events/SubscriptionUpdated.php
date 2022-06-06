@@ -2,7 +2,7 @@
 
 namespace FintechSystems\Payfast\Events;
 
-use FintechSystems\Payfast\Subscription;
+use FintechSystems\PayFast\Subscription;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -14,7 +14,7 @@ class SubscriptionUpdated
     /**
      * The subscription instance.
      *
-     * @var \FintechSystems\Payfast\Subscription
+     * @var \FintechSystems\PayFast\Subscription
      */
     public $subscription;
 
@@ -28,7 +28,7 @@ class SubscriptionUpdated
     /**
      * Create a new event instance.
      *
-     * @param  \FintechSystems\Payfast\Subscription  $subscription
+     * @param  \FintechSystems\PayFast\Subscription  $subscription
      * @param  array  $payload
      * @return void
      */

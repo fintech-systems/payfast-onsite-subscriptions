@@ -5,6 +5,9 @@ return [
     'merchant_key' => env('PAYFAST_MERCHANT_KEY'),    
     'passphrase' => env('PAYFAST_PASSPHRASE'),    
     'testmode' => env('PAYFAST_TESTMODE'),
+    'return_url' => env('PAYFAST_RETURN_URL', config('app.url') . '/payfast/success'),
+    'cancel_url' => env('PAYFAST_CANCEL_URL', config('app.url') . '/payfast/cancel'),
+    'notify_url' => env('PAYFAST_NOTIFY_URL', config('app.url') . '/payfast/webhook'),
     'plans' => [
         3 => [
             'name' => 'Monthly R 99',

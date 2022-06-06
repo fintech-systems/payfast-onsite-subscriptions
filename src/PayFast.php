@@ -14,13 +14,31 @@ class PayFast implements BillingProvider
     private string $merchant_key;
     private string $passphrase;
     private string $testmode;
+    private string $returnUrl;
+    private string $cancelUrl;
+    private string $notifyUrl;
 
-    public function __construct($server)
+    public function __construct($client)
     {
-        $this->merchant_id = $server['merchant_id'];
-        $this->merchant_key = $server['merchant_key'];
-        $this->passphrase = $server['passphrase'];
-        $this->testmode = $server['testmode'];
+        $this->merchant_id = $client['merchant_id'];
+
+        $this->merchant_key = $client['merchant_key'];
+
+        $this->passphrase = $client['passphrase'];
+
+        $this->testmode = $client['testmode'];
+
+        $this->returnUrl = $client['return_url'];
+
+        $this->cancelUrl = $client['cancel_url'];
+
+        $this->notifyUrl = $client['notify_url'];
+
+        $this->urlCollection = [
+            'return_url' => $this->returnUrl,
+            'cancel_url' => $this->cancelUrl,
+            'notify_url' => $this->notifyUrl,
+        ];
     }
 
     /**
@@ -35,6 +53,8 @@ class PayFast implements BillingProvider
         ray("billingDate in createOnsitePayment: " . $billingDate);
 
         $data = [
+            'merchant_id' => config('payfast.merchant_id'),
+            'merchant_key' => config('payfast.merchant_key'),
             'subscription_type' => 1,
             'm_payment_id' => Order::generate(),
             'amount' => $plan['initial_amount'],
@@ -70,8 +90,12 @@ class PayFast implements BillingProvider
 
         ray($data)->orange();
 
+        $signature = PayFast::generateApiSignature($data, config('payfast.passphrase'));
+
+        $pfData = array_merge($data, ["signature" => $signature]);
+
         // $identifier = $this->payment->onsite->generatePaymentIdentifier($data);
-        $identifier = $this->generatePaymentIdentifier($data);
+        $identifier = $this->generatePaymentIdentifier($pfData);
 
         if ($identifier !== null) {
             return $identifier;
@@ -112,6 +136,8 @@ class PayFast implements BillingProvider
     public function generatePaymentIdentifier($pfParameters)
     {
         $url = 'https://www.payfast.co.za/onsite/process';
+
+        ray("generatePaymentIdentifier parameters:", $pfParameters);
 
         $response = Http::post($url, $pfParameters)->json();
 

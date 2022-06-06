@@ -1,78 +1,170 @@
-# Technology API
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/fintech-systems/packagist-boilerplate) [![Build Status](https://app.travis-ci.com/fintech-systems/packagist-boilerplate.svg?branch=main)](https://app.travis-ci.com/fintech-systems/packagist-boilerplate) ![GitHub](https://img.shields.io/github/license/fintech-systems/packagist-boilerplate)
+## About PayFast Onsite Subscriptions
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/fintech-systems/payfast-onsite-subscriptions) [![Build Status](https://app.travis-ci.com/fintech-systems/payfast-onsite-subscriptions.svg?branch=main)](https://app.travis-ci.com/fintech-systems/payfast-onsite-subscriptions) ![GitHub](https://img.shields.io/github/license/fintech-systems/payfast-onsite-subscriptions)
 
-A Technology API designed to run standalone or part of a Laravel Application
+A [PayFast Onsite Payments](https://developers.payfast.co.za/docs#onsite_payments) implementation for Laravel designed to ease subscription billing. [Livewire](https://laravel-livewire.com/) views are included.
+
+**THIS IS BETA SOFTWARE**
+
+- There may be some bugs but the core functionality should work.
 
 Requirements:
 
 - PHP 8.0
-- Technology
+- Laravel
+- A [PayFast account](https://www.payfast.co.za/registration)
 
 ## Installation
 
-You can install the package via composer:
+Install the package via composer:
 
 ```bash
-composer require fintechsystems/payfast-onsite-subscriptions
+composer require fintech-systems/payfast-onsite-subscriptions
 ```
 
-# Usage
+## Publish Configuration and Views
 
-## Framework Agnostic PHP
+Publish the config file with:
+```bash
+php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProvider" --tag="config"
+```
+
+Publish the Success and Cancelled views and the Livewire components for subscriptions and receipts.
+
+```bash
+php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProvider" --tag="views"
+```
+
+### Nova Integration
+
+Optionally publish Laravel Nova Subscription and Receipts Resources
+
+```bash
+php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProvider" --tag="nova-resources"
+```
+
+## Migrations
+
+A migration is needed to create Customers, Orders, Receipts and Subscriptions tables:
+
+```bash
+php artisan migrate
+```
+
+## Example Configuration
+
+`config/payfast.php`:
 
 ```php
 <?php
 
-use FintechSystems\Api\Technology;
-
-require 'vendor/autoload.php';
-
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-$server = [
-    'api_url'        => $_ENV['TECHNOLOGY_API_URL'],
-    'api_key'        => $_ENV['TECHNOLOGY_API_KEY'],
-    'api_secret'     => $_ENV['TECHNOLOGY_API_SECRET'],
+return [
+    'merchant_id' => env('PAYFAST_MERCHANT_ID', '10004002'),
+    'merchant_key' => env('PAYFAST_MERCHANT_KEY', 'q1cd2rdny4a53'),
+    'passphrase' => env('PAYFAST_PASSPHRASE', 'payfast'),
+    'testmode' => env('PAYFAST_TESTMODE', true),        
+    'return_url' => env('PAYFAST_RETURN_URL', config('app.url') . '/payfast/success'),
+    'cancel_url' => env('PAYFAST_CANCEL_URL', config('app.url') . '/payfast/cancel'),
+    'notify_url' => env('PAYFAST_NOTIFY_URL', config('app.url') . '/payfast/webhook'),
+    'card_update_link_css' => env('CARD_UPDATE_LINK_CSS', 'inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition'),
+    'card_updated_return_url' => env('CARD_UPDATED_RETURN_URL', config('app.url') . '/user/profile'),
+    'plans' => [
+        3 => [
+            'name' => 'Monthly R 99',
+            'start_date' => \Carbon\Carbon::now()->addDay()->format('Y-m-d'),
+            'payfast_frequency' => 3,
+            'initial_amount' => 5.99,
+            'recurring_amount' => 5.99,
+        ],
+        6 => [
+            'name' => 'Yearly R 1089',
+            'start_date' => \Carbon\Carbon::now()->format('Y-m-d'),
+            'payfast_frequency' => 6,
+            'initial_amount' => 6.89,
+            'recurring_amount' => 6.89,
+        ]
+    ],
+    'cancelation_reasons' => [
+        'Too expensive',
+        'Lacks features',
+        'Not what I expected',
+    ],
 ];
-
-$api = new Technology($server);
-
-$result = $api->getInformation();
 ```
 
-## Laravel Installation
+## Livewire Setup
 
-You can publish the config file with:
-```bash
-php artisan vendor:publish --provider="FintechSystems\Payfast\PayfastServiceProvider" --tag="payfast-onsite-subscriptions-config"
-```
+### Views
 
-# Features
+I have modelled some Livewire views to fit into a [Laravel Jetstream](https://jetstream.laravel.com) user profile page.
 
-## Feature 1
+When calling the Livewire component, you can override any [PayFast form field](https://developers.payfast.co.za/docs#step_1_form_fields) by specifying a `mergeFields` array.
 
-Framework Agnostic PHP:
+Example modification Jetstream Livewire's `resources/views/profiles/show.php`:
+
+Replace `$user->name` with your first name and last name fields.
 
 ```php
-$newRecord = ['test1', 'test2'];
+<!-- Subscriptions -->
+<div class="mt-10 sm:mt-0">    
+    @livewire('subscriptions', ['mergeFields' => [
+            'name_first' => $user->name,
+            'name_last' => $user->name,
+            'item_description' => 'Subscription to Online Service'
+        ]] )        
+</div>
 
-$api = new Technology;
-$api->post($test);
+<x-jet-section-border />
+<!-- End Subscriptions -->
+
+<!-- Receipts -->
+    <div class="mt-10 sm:mt-0">
+        @livewire('receipts')
+    </div>
+
+<x-jet-section-border />
+<!-- End Receipts -->
 ```
 
-Laravel App:
+## Usage
 
+### Examples
+
+- Generate a payment link
+- Create an ad-hoc token optionally specifying the amount
+- Cancel a subscription
+- Update a card
 
 ```php
-$newRecord = ['test1', 'test2'];
+use FintechSystems\Payfast\Facades\Payfast;
 
-Technology::post($newRecord);
+Route::get('/payment', function() {
+    return Payfast::payment(5,'Order #1');
+});
+
+Route::get('/cancel-subscription', function() {
+    return Payfast::cancelSubscription('73d2a218-695e-4bb5-9f62-383e53bef68f');
+});
+
+Route::get('/create-subscription', function() {
+    return Payfast::createSubscription(
+        Carbon::now()->addDay()->format('Y-m-d'),
+        5, // Amount
+        6 // Frequency (6 = annual, 3 = monthly)
+    );
+});
+
+Route::get('/create-adhoc-token', function() {
+    return Payfast::createAdhocToken(5);
+});
+
+Route::get('/fetch-subscription', function() {
+    return Payfast::fetchSubscription('21189d52-12eb-4108-9c0e-53343c7ac692');
+});
+
+Route::get('/update-card', function() {
+    return Payfast::updateCardLink('40ab3194-20f0-4814-8c89-4d2a6b5462ed');
+});
 ```
-
-Expected result:
-
-A new record is added.
 
 ## Testing
 
@@ -80,47 +172,17 @@ A new record is added.
 vendor/bin/phpunit
 ```
 
-Use the command below to run tests that excludes touching the API:
-
-`vendor/bin/phpunit --exclude-group=live`
-
-The `storage` folder has examples API responses, also used for caching during tests.
-
-### Coverage reports
-
-To regenerate coverage reports:
-
-`XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html=tests/coverage-report`
-
-See also `.travis.yml`
-
-### Local Editing
-
-For local editing, add this to `composer.json`:
-
-```json
-"repositories" : [
-        {
-            "type": "path",
-            "url": "../technology-api"
-        }
-    ]
-```
-
-Then in `require` section:
-
-```json
-"fintech-systems/technology-api": "dev-main",
-```
-
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
+## Screenshots
+
+![Livewire Subscriptions and Receipts Components](../../blob/main/screenshots/subscription_and_receipts.png)
+
 ## Credits
 
-- [Eugene van der Merwe](https://github.com/fintech-systems)
-- [All Contributors](../../contributors)
+- [Eugene van der Merwe](https://github.com/eugenevdm)
 
 ## License
 

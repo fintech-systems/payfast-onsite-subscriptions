@@ -25,7 +25,11 @@ Homestead.json
 .phpunit.result.cache
 
 ## Customizations
+
 ## /build is created by phpunit
 /build/
 coverage.xml
 /.idea
+
+## phpunit.xml contains sensitive info
+.phpunit.xml
