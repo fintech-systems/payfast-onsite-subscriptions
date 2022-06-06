@@ -2,10 +2,10 @@
 
 namespace FintechSystems\PayFast\Components;
 
-use Livewire\Component;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use FintechSystems\PayFast\Facades\PayFast;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Livewire\Component;
 
 class Subscriptions extends Component
 {
