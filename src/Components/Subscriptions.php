@@ -63,9 +63,9 @@ class Subscriptions extends Component
      */
     public function updateCard()
     {
-        $token = $this->user->subscription('default')->token;
+        $token = $this->user->subscription('default')->payfast_token;
 
-        $url = "https://www.payfast.co.za/eng/recurring/update/$token?return=" . config('app.url') . "/user/profile?card_updated=true";
+        $url = "https://www.payfast.co.za/eng/recurring/update/$payfast_token?return=" . config('app.url') . "/user/profile?card_updated=true";
 
         ray($url);
 
