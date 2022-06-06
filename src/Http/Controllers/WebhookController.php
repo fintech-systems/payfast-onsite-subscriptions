@@ -41,7 +41,7 @@ class WebhookController extends Controller
 
         Log::debug($payload);
 
-        if (isset($payload['event_time'])) {
+        if (isset($payload['event_time'])) { // Used by tests to see if endpoint is working
             return new Response();
         }
 
@@ -151,7 +151,7 @@ class WebhookController extends Controller
             'plan_id' => $payload['custom_int2'],
             'merchant_payment_id' => $payload['m_payment_id'],
             'payfast_status' => $payload['payment_status'],
-            'next_bill_at' => $payload['billing_date'],
+            'next_bill_at' => $payload['billing_date'] ?? null, // This happens when subscription was never created but then cancelled
         ]);
 
         SubscriptionCreated::dispatch($customer, $subscription, $payload);
@@ -186,6 +186,10 @@ class WebhookController extends Controller
         ray($message)->orange();
 
         $billable = $this->findSubscription($payload['token'])->billable;
+
+        if (!isset($payload['amount_gross'])) {
+            throw new Exception("Unable to apply a payment to an existing subscription because amount_gross is not set. Probably cause the subscription was deleted.");
+        }
 
         $receipt = $billable->receipts()->create([
             'payfast_token' => $payload['token'],
@@ -239,21 +243,22 @@ class WebhookController extends Controller
         return response('Subscription Payment Applied', 200);
     }
 
-    protected function fetchSubscriptionInformation(array $payload)
-    {
-        $message = "Fetching subscription information for " . $payload['token'] . "...";
-        Log::info($message);
-        ray($message)->orange();
+    // Commmented out 23:48 of 6th of June 2022 due to find(1) statement - doesn't make sense
+    // protected function fetchSubscriptionInformation(array $payload)
+    // {
+    //     $message = "Fetching subscription information for " . $payload['token'] . "...";
+    //     Log::info($message);
+    //     ray($message)->orange();
 
-        $result = PayFast::fetchSubscription($payload['token']);
+    //     $result = PayFast::fetchSubscription($payload['token']);
 
-        // Update or Create Subscription
-        $subscription = Subscription::find(1);
+    //     // Update or Create Subscription
+    //     $subscription = Subscription::find(1);
 
-        ray($result);
+    //     ray($result);
 
-        SubscriptionFetched::dispatch($subscription, $payload);
-    }
+    //     SubscriptionFetched::dispatch($subscription, $payload);
+    // }
 
     /**
      * Handle subscription cancelled.
@@ -313,10 +318,12 @@ class WebhookController extends Controller
     }
 
     private function findOrCreateCustomer(array $passthrough)
-    {
+    {        
         if (! isset($passthrough['custom_str1'], $passthrough['custom_int1'])) {
             throw new InvalidMorphModelInPayload($passthrough['custom_str1'] . "|" . $passthrough['custom_int1']);
         }
+
+        ray("findOrCreate customer is looking for " . $passthrough['custom_str1'] . " " . $passthrough['custom_int1']);
 
         return Cashier::$customerModel::firstOrCreate([
             'billable_id' => $passthrough['custom_int1'],

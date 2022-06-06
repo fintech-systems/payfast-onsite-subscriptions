@@ -2,9 +2,10 @@
 
 namespace FintechSystems\PayFast\Components;
 
-use FintechSystems\PayFast\Facades\PayFast;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use FintechSystems\PayFast\Facades\PayFast;
 
 class Subscriptions extends Component
 {
@@ -65,7 +66,17 @@ class Subscriptions extends Component
     {
         $payfast_token = $this->user->subscription('default')->payfast_token;
 
+        ray("The updateCard token is ", $payfast_token);
+
         $url = "https://www.payfast.co.za/eng/recurring/update/$payfast_token?return=" . config('app.url') . "/user/profile?card_updated=true";
+
+        $message = "updateCard is going to redirect()->to this URL: " . $url;
+
+        Log::debug($message);
+
+        Log::debug($url);
+
+        ray($message);
 
         ray($url);
 

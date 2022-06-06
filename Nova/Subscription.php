@@ -64,23 +64,16 @@ class Subscription extends Resource
                 Text::make('Name'),
             ]),
 
-            Stack::make('Token/Order', [
-                Text::make('PayFast Token')->displayUsing(function ($value) {
-                    return Str::limit($value, 8);
-                })->onlyOnIndex(),
+            Text::make('Merchant Payment ID'),
 
-                Text::make('Merchant Payment ID'),
+            Text::make('PayFast Token'),
+
+            // Stack::make('Status/Payment', [
+            Stack::make('PayFast Status', [
+                Text::make('PayFast Status'),
+
+                // Text::make('Payment Status'),
             ]),
-
-            Text::make('PayFast Token')->hideFromIndex(),
-
-            Stack::make('Status/Payment', [
-                Text::make('Status'),
-
-                Text::make('Payment Status'),
-            ]),
-
-            Text::make('Subscription Status')->sortable(),
 
             Date::make('Next Bill At'),
 
