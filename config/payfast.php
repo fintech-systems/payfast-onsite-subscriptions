@@ -1,13 +1,10 @@
 <?php
 
 return [
-    // 'merchant_id' => env('PAYFAST_MERCHANT_ID', '10004002'),
-    'merchant_id' => env('PAYFAST_MERCHANT_ID', '13741656'),
-    // 'merchant_key' => env('PAYFAST_MERCHANT_KEY', 'q1cd2rdny4a53'),
-    'merchant_key' => env('PAYFAST_MERCHANT_KEY', 'gsps17qv8giri'),
-    // 'passphrase' => env('PAYFAST_PASSPHRASE', 'payfast'),
-    'passphrase' => env('PAYFAST_PASSPHRASE', 'Fintechsystems1'),
-    'testmode' => env('PAYFAST_TESTMODE', true),
+    'merchant_id' => env('PAYFAST_MERCHANT_ID'),
+    'merchant_key' => env('PAYFAST_MERCHANT_KEY'),    
+    'passphrase' => env('PAYFAST_PASSPHRASE'),    
+    'testmode' => env('PAYFAST_TESTMODE'),
     'plans' => [
         3 => [
             'name' => 'Monthly R 99',

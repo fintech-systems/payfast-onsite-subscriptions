@@ -1,6 +1,6 @@
 {
     "name": "fintechsystems/payfast-onsite-subscriptions",
-    "description": "A Laravel service provider for subscription billing",
+    "description": "A Laravel service provider and Livewire bladed for PayFast subscription billing",
     "keywords": [        
         "laravel",
         "payfast",
