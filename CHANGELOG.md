@@ -2,9 +2,13 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+# 1.0.0 - 2022-06-06
+
+- bump version due to composer minimum stability issues
+
 ## 0.1.1 - 2022-06-06
 
-- migrated most of `laravel-payfast-onsite` functions. Ready for testing on live.
+- migrated most of `laravel-payfast-onsite` functions to `payfast-onsite-subscriptions`. Ready for testing on live.
 
 ## 0.0.1 - 2022-06-02
 
