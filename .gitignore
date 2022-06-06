@@ -32,4 +32,4 @@ coverage.xml
 /.idea
 
 ## phpunit.xml contains sensitive info
-.phpunit.xml
+phpunit.xml
