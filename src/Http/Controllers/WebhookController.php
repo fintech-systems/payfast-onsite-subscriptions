@@ -187,7 +187,7 @@ class WebhookController extends Controller
 
         $billable = $this->findSubscription($payload['token'])->billable;
 
-        if (!isset($payload['amount_gross'])) {
+        if (! isset($payload['amount_gross'])) {
             throw new Exception("Unable to apply a payment to an existing subscription because amount_gross is not set. Probably cause the subscription was deleted.");
         }
 
@@ -318,7 +318,7 @@ class WebhookController extends Controller
     }
 
     private function findOrCreateCustomer(array $passthrough)
-    {        
+    {
         if (! isset($passthrough['custom_str1'], $passthrough['custom_int1'])) {
             throw new InvalidMorphModelInPayload($passthrough['custom_str1'] . "|" . $passthrough['custom_int1']);
         }
