@@ -56,7 +56,7 @@ class Receipts extends Resource
 
             Text::make('Merchant Payment ID')->readonly(),
 
-            Number::make('Payfast Payment Id')->readonly(),
+            Number::make('PayFast Payment Id')->readonly(),
 
             Text::make('Payment Status')->readonly(),
 
@@ -70,7 +70,7 @@ class Receipts extends Resource
 
             Number::make('Amount Net')->readonly(),
 
-            Text::make('Payfast Token')->readonly(),
+            Text::make('PayFast Token')->readonly(),
 
             Text::make('Order ID')->readonly(),
 

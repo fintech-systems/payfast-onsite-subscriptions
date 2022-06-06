@@ -7,7 +7,7 @@ use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\ActionFields;
 use Illuminate\Queue\InteractsWithQueue;
-use FintechSystems\Payfast\Facades\Payfast;
+use FintechSystems\PayFast\Facades\PayFast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class CancelSubscription extends Action
@@ -24,7 +24,7 @@ class CancelSubscription extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach($models as $subscription) {
-            Payfast::cancelSubscription($subscription->token);
+            PayFast::cancelSubscription($subscription->token);
         }
     }
 

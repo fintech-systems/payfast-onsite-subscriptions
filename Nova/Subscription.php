@@ -43,7 +43,7 @@ class Subscription extends Resource
     public static $search = [
         'id',
         'billable_id',
-        'token',
+        'payfast_token',
         'merchant_payment_id',
     ];
 
@@ -65,14 +65,14 @@ class Subscription extends Resource
             ]),
 
             Stack::make('Token/Order', [
-                Text::make('Token')->displayUsing(function ($value) {
+                Text::make('PayFast Token')->displayUsing(function ($value) {
                     return Str::limit($value, 8);
                 })->onlyOnIndex(),
 
                 Text::make('Merchant Payment ID'),
             ]),
 
-            Text::make('Token')->hideFromIndex(),
+            Text::make('PayFast Token')->hideFromIndex(),
 
             Stack::make('Status/Payment', [
                 Text::make('Status'),

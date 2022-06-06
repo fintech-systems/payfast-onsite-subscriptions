@@ -23,8 +23,17 @@ class Subscriptions extends Component
     public $mergeFields;
 
     protected $listeners = [
-        'billingUpdated' => '$refresh',        
+        // 'billingUpdated' => '$refresh',        
+        'billingUpdated' => 'billingWasUpdated',
     ];
+
+    public function billingWasUpdated() {
+        ray("billingWasUpdated event fired, resetting displayingCreateSubscription");
+
+        $this->displayingCreateSubscription = false;
+    }
+
+    
 
     public function confirmCancelSubscription()
     {
@@ -39,9 +48,11 @@ class Subscriptions extends Component
 
     public function cancelSubscription()
     {
-        ray($this->user->subscriptions()->active()->first()->token);
+        ray($this->user->subscriptions()->active()->first()->payfast_token);
 
-        Payfast::cancelSubscription(Auth::user()->subscriptions()->active()->first()->token);
+        $result = PayFast::cancelSubscription(Auth::user()->subscriptions()->active()->first()->payfast_token);
+
+        ray("Result of cancel subscription", $result);
 
         $this->emit('billingUpdated');
 
@@ -72,25 +83,24 @@ class Subscriptions extends Component
 
     public function displayCreateSubscription()
     {
-        if ($this->user->onGenericTrial()) {
-            // TODO check if monthly or yearly before moving date forward
-            $subscriptionStartsAt =  $this->user->trialEndsAt()->addMonth()->format('Y-m-d');
+        if ($this->user->onGenericTrial()) {            
+            $subscriptionStartsAt =  $this->user->trialEndsAt()->addDay()->format('Y-m-d');
+            $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
         }
 
         if ($this->user->subscribed('default') && $this->user->subscription('default')->onGracePeriod()) {
-            $subscriptionStartsAt = $this->user->subscribed('default')->ends_at->addDay()->format('Y-m-d');
+            $subscriptionStartsAt = $this->user->subscription('default')->ends_at->addDay()->format('Y-m-d');
         }
 
         if (!isset($subscriptionStartsAt)) {
             $subscriptionStartsAt = \Carbon\Carbon::now()->format('Y-m-d');
         }
-
-        // TBA && check if date is in the past?
+        
         if ( $this->user->subscribed('default') && $this->user->subscription('default')->onGracePeriod() ) {
             $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
         }
         
-        $this->identifier = Payfast::createOnsitePayment(
+        $this->identifier = PayFast::createOnsitePayment(
             (int) $this->plan,
             $subscriptionStartsAt,
             $this->mergeFields

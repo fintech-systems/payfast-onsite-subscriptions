@@ -41,6 +41,17 @@ class PayFast implements BillingProvider
         ];
     }
 
+    public function cancelSubscription($payfast_token)
+    {
+        $headers = $this->getHeaders();
+
+        ray("cancelSubscription is called with this token", $payfast_token);
+
+        return Http::withHeaders($headers)
+            ->put("https://api.payfast.co.za/subscriptions/$payfast_token/cancel")
+            ->json();
+    }
+
     /**
      * Create a new subscription using PayFast Onsite Payments
      */
@@ -106,6 +117,8 @@ class PayFast implements BillingProvider
     {
         $headers = $this->getHeaders();
 
+        ray("fetchSubscription is called with this token", $token);
+
         return Http::withHeaders($headers)
             ->get("https://api.payfast.co.za/subscriptions/$token/fetch")
             ->json();
@@ -124,11 +137,13 @@ class PayFast implements BillingProvider
     {
         // Create parameter string
         $pfOutput = '';
+
         foreach ($dataArray as $key => $val) {
             if ($val !== '') {
                 $pfOutput .= $key . '=' . urlencode(trim($val)) . '&';
             }
         }
+        
         // Remove last ampersand
         return substr($pfOutput, 0, -1);
     }
@@ -136,12 +151,12 @@ class PayFast implements BillingProvider
     public function generatePaymentIdentifier($pfParameters)
     {
         $url = 'https://www.payfast.co.za/onsite/process';
-
-        ray("generatePaymentIdentifier parameters:", $pfParameters);
-
+        
         $response = Http::post($url, $pfParameters)->json();
 
-        if (! $response['uuid']) {
+        if (! isset($response['uuid'])) {
+            ray("Unable to generate onsite payment identifier");
+            ray("generatePaymentIdentifier parameters:", $pfParameters);
             return null;
         }
 

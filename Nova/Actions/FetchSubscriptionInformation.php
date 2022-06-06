@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Fields\ActionFields;
 use FintechSystems\PayFast\Subscription;
 use Illuminate\Queue\InteractsWithQueue;
-use FintechSystems\Payfast\Facades\Payfast;
+use FintechSystems\PayFast\Facades\PayFast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class FetchSubscriptionInformation extends Action
@@ -28,7 +28,7 @@ class FetchSubscriptionInformation extends Action
         Log::debug('Looping through subscriptions and fetching information...');
 
         foreach($models as $subscription) {            
-            $result = Payfast::fetchSubscription($subscription->token);
+            $result = PayFast::fetchSubscription($subscription->payfast_token);
 
             Log::debug($result);
 

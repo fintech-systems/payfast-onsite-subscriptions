@@ -10,4 +10,5 @@ Route::get('/payfast/cancel', function() {
     return view('vendor.payfast.cancel');
 });
 
-Route::post('/payfast/notify', 'FintechSystems\PayFast\Http\Controllers\WebhookController')->name('notify');
+Route::post('/payfast/notify', 'FintechSystems\PayFast\Http\Controllers\WebhookController');
+Route::post('/payfast/webhook', 'FintechSystems\PayFast\Http\Controllers\WebhookController');

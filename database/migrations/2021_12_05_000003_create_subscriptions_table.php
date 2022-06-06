@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use FintechSystems\Payfast\Enums\PaymentMethod;
+use FintechSystems\PayFast\Enums\PaymentMethod;
 
 class CreateSubscriptionsTable extends Migration
 {
@@ -31,6 +31,9 @@ class CreateSubscriptionsTable extends Migration
             $table->timestamps();
 
             $table->index(['billable_id', 'billable_type']);
+
+            // Fields added post design
+            $table->string('merchant_payment_id')->nullable();
                     
             // $table->unsignedBigInteger('amount')->nullable();
             // $table->unsignedInteger('cycles')->nullable();
@@ -42,7 +45,7 @@ class CreateSubscriptionsTable extends Migration
             // $table->string('payfast_status_text')->nullable();
                         
             // $table->string('status');
-            // $table->string('merchant_payment_id');
+            
             // $table->string('payment_status')->nullable();
             // $table->string('subscription_status')->nullable();
             

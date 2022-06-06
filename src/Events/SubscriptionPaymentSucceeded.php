@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\Payfast\Events;
+namespace FintechSystems\PayFast\Events;
 
 use FintechSystems\PayFast\Receipt;
 use Illuminate\Database\Eloquent\Model;

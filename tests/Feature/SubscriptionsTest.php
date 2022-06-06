@@ -213,13 +213,14 @@ class SubscriptionsTest extends FeatureTestCase
             ]),
         ]);
 
-        $result = Payfast::fetchSubscription($subscription->payfast_token);
+        $result = PayFast::fetchSubscription($subscription->payfast_token);
 
         // ray($result);
 
         $this->assertSame('244', $subscription->payfast_token);
 
-        // $this->assertSame('john@example.com', $subscription->paddleEmail());
+        $this->assertSame('john@example.com', $subscription->payFastEmail());
+
         // $this->assertSame('card', $subscription->paymentMethod());
         // $this->assertSame('visa', $subscription->cardBrand());
         // $this->assertSame('1234', $subscription->cardLastFour());

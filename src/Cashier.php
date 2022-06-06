@@ -2,7 +2,7 @@
 
 namespace FintechSystems\PayFast;
 
-use FintechSystems\Payfast\Exceptions\PayfastException;
+use FintechSystems\PayFast\Exceptions\PayFastException;
 use Illuminate\Support\Facades\Http;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
@@ -62,7 +62,7 @@ class Cashier
     public static $receiptModel = Receipt::class;
 
     /**
-     * Get the Paddle webhook url.
+     * Get the PayFast webhook url.
      *
      * @return string
      */
@@ -134,7 +134,7 @@ class Cashier
         $response = Http::$method($uri, $payload);
 
         if ($response['success'] === false) {
-            throw new PayfastException($response['error']['message'], $response['error']['code']);
+            throw new PayFastException($response['error']['message'], $response['error']['code']);
         }
 
         return $response;

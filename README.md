@@ -62,9 +62,9 @@ return [
     'merchant_key' => env('PAYFAST_MERCHANT_KEY', 'q1cd2rdny4a53'),
     'passphrase' => env('PAYFAST_PASSPHRASE', 'payfast'),
     'testmode' => env('PAYFAST_TESTMODE', true),        
-    'return_url' => env('PAYFAST_RETURN_URL', config('app.url') . '/payfast/success'),
+    'return_url' => env('PAYFAST_RETURN_URL', config('app.url') . '/payfast/return'),
     'cancel_url' => env('PAYFAST_CANCEL_URL', config('app.url') . '/payfast/cancel'),
-    'notify_url' => env('PAYFAST_NOTIFY_URL', config('app.url') . '/payfast/webhook'),
+    'notify_url' => env('PAYFAST_NOTIFY_URL', config('app.url') . '/payfast/notify'),
     'card_update_link_css' => env('CARD_UPDATE_LINK_CSS', 'inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition'),
     'card_updated_return_url' => env('CARD_UPDATED_RETURN_URL', config('app.url') . '/user/profile'),
     'plans' => [
@@ -135,18 +135,18 @@ Replace `$user->name` with your first name and last name fields.
 - Update a card
 
 ```php
-use FintechSystems\Payfast\Facades\Payfast;
+use FintechSystems\PayFast\Facades\PayFast;
 
 Route::get('/payment', function() {
-    return Payfast::payment(5,'Order #1');
+    return PayFast::payment(5,'Order #1');
 });
 
 Route::get('/cancel-subscription', function() {
-    return Payfast::cancelSubscription('73d2a218-695e-4bb5-9f62-383e53bef68f');
+    return PayFast::cancelSubscription('73d2a218-695e-4bb5-9f62-383e53bef68f');
 });
 
 Route::get('/create-subscription', function() {
-    return Payfast::createSubscription(
+    return PayFast::createSubscription(
         Carbon::now()->addDay()->format('Y-m-d'),
         5, // Amount
         6 // Frequency (6 = annual, 3 = monthly)
@@ -154,15 +154,15 @@ Route::get('/create-subscription', function() {
 });
 
 Route::get('/create-adhoc-token', function() {
-    return Payfast::createAdhocToken(5);
+    return PayFast::createAdhocToken(5);
 });
 
 Route::get('/fetch-subscription', function() {
-    return Payfast::fetchSubscription('21189d52-12eb-4108-9c0e-53343c7ac692');
+    return PayFast::fetchSubscription('21189d52-12eb-4108-9c0e-53343c7ac692');
 });
 
 Route::get('/update-card', function() {
-    return Payfast::updateCardLink('40ab3194-20f0-4814-8c89-4d2a6b5462ed');
+    return PayFast::updateCardLink('40ab3194-20f0-4814-8c89-4d2a6b5462ed');
 });
 ```
 

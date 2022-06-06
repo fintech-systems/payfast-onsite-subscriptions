@@ -2,7 +2,7 @@
 
 namespace FintechSystems\PayFast\Concerns;
 
-use FintechSystems\Payfast\Cashier;
+use FintechSystems\PayFast\Cashier;
 use InvalidArgumentException;
 use LogicException;
 

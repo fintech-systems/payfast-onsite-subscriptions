@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Tests\Feature\FeatureTestCase;
 
 class PayFastTest extends FeatureTestCase
-{
+{  
     /** @test */
     public function it_can_fetch_a_unique_payment_identifier_for_a_new_subscription()
     {

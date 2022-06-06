@@ -11,7 +11,7 @@ trait ManagesCustomer
      * Create a customer record for the billable model.
      *
      * @param  array  $attributes
-     * @return \Laravel\Paddle\Customer
+     * @return \FintechSystems\PayFast\Customer
      */
     public function createAsCustomer(array $attributes = [])
     {

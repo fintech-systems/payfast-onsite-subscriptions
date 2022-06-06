@@ -15,12 +15,12 @@
                 {{-- Trial --}}
                 @if ($user->onGenericTrial())
                     <h3 class="text-lg font-medium text-gray-900">
-                        You are current on trial till the {{ $user->trialEndsAt()->format('jS F Y') }}
+                        You are currently on trial till the {{ $user->trialEndsAt()->format('jS \o\f F Y') }}
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>
                             If you subscribe now the first payment is due on the
-                            {{ $user->trialEndsAt()->addDay()->format('jS F Y') }}.
+                            {{ $user->trialEndsAt()->addDay()->format('jS \o\f F Y') }}.
                         </p>
                     </div>
                 @else
@@ -38,8 +38,8 @@
                 @if ($user->subscription('default')->onGracePeriod())
                 {{-- Grace period --}}
                     <h3 class="text-lg font-medium text-gray-900">
-                        Your subscription was cancelled
-                        {{ $user->subscription('default')->cancelled_at->format('Y-m-d H:i:s') }}.
+                        Your subscription was cancelled on the 
+                        {{ $user->subscription('default')->cancelled_at->format('jS \o\f F Y \a\t H:i:s') }}.
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         @if (\Carbon\Carbon::now()->diffInDays(
@@ -48,8 +48,8 @@
                             <p>
                                 There are
                                 {{ \Carbon\Carbon::now()->diffInDays($user->subscription('default')->ends_at) }}
-                                days left of your subscription and the last day is
-                                {{ $user->subscription('default')->ends_at->format('Y-m-d') }}.
+                                days left of your subscription and the last day is the
+                                {{ $user->subscription('default')->ends_at->format('jS \o\f F Y') }}.
                             </p>
                         @else
                             <p>
@@ -65,8 +65,8 @@
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>
-                            The next payment is due                            
-                                {{ $user->subscription('default')->next_bill_at->format('Y-m-d') }}.                            
+                            The next payment is due on the                            
+                                {{ $user->subscription('default')->next_bill_at->format('jS \o\f F Y') }}.                            
                         </p>
                     </div>
                 @endif        
@@ -111,7 +111,7 @@
         </div>
         <!-- End Subscription Action Buttons -->
 
-        <!-- Launch Payfast Subscription Modal -->
+        <!-- Launch PayFast Subscription Modal -->
         @if ($displayingCreateSubscription)
             <script>
                 console.log('Launching PayFast onsite payment modal')
@@ -144,9 +144,7 @@
             </x-slot>
 
             <x-slot name="content">
-                {{ __('Are you sure you want to cancel your Best Agent subscription? Once your subscription is cancelled, your Best Agent profile, rankings, and property listings will be hidden.') }}
-                <br><br>
-                {{ __('The last date until which your rankings and sold properties will show is the ') }}
+                {{ __('Are you sure you want to cancel your subscription?') }}                
             </x-slot>
 
             <x-slot name="footer">
@@ -156,7 +154,7 @@
 
                 <x-jet-secondary-button wire:click="$toggle('confirmingCancelSubscription')"
                     wire:loading.attr="disabled">
-                    {{ __('Cancel') }}
+                    {{ __('Nevermind') }}
                 </x-jet-secondary-button>
 
                 <x-jet-danger-button class="ml-2" wire:click="cancelSubscription"

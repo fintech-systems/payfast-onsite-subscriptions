@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\Payfast\Events;
+namespace FintechSystems\PayFast\Events;
 
 use FintechSystems\PayFast\Subscription;
 use Illuminate\Foundation\Events\Dispatchable;

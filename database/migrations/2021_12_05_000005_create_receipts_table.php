@@ -16,7 +16,8 @@ class CreateReceiptsTable extends Migration
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
             $table->string('merchant_payment_id')->nullable();
-            $table->string('payfast_payment_id')->unique();
+            // $table->string('payfast_payment_id')->unique(); // When API return calls fail further, this will duplicate
+            $table->string('payfast_payment_id');
             $table->string('payment_status');
             $table->string('item_name');
             $table->string('item_description')->nullable();
