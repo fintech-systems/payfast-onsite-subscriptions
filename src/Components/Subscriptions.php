@@ -23,17 +23,16 @@ class Subscriptions extends Component
     public $mergeFields;
 
     protected $listeners = [
-        // 'billingUpdated' => '$refresh',        
+        // 'billingUpdated' => '$refresh',
         'billingUpdated' => 'billingWasUpdated',
     ];
 
-    public function billingWasUpdated() {
+    public function billingWasUpdated()
+    {
         ray("billingWasUpdated event fired, resetting displayingCreateSubscription");
 
         $this->displayingCreateSubscription = false;
     }
-
-    
 
     public function confirmCancelSubscription()
     {
@@ -70,9 +69,9 @@ class Subscriptions extends Component
 
         ray($url);
 
-        return redirect()->to($url);        
+        return redirect()->to($url);
     }
-    
+
     /**
      * When the selected plan changes, refresh the PayFast identifier's signature
      */
@@ -83,8 +82,8 @@ class Subscriptions extends Component
 
     public function displayCreateSubscription()
     {
-        if ($this->user->onGenericTrial()) {            
-            $subscriptionStartsAt =  $this->user->trialEndsAt()->addDay()->format('Y-m-d');
+        if ($this->user->onGenericTrial()) {
+            $subscriptionStartsAt = $this->user->trialEndsAt()->addDay()->format('Y-m-d');
             $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
         }
 
@@ -92,14 +91,14 @@ class Subscriptions extends Component
             $subscriptionStartsAt = $this->user->subscription('default')->ends_at->addDay()->format('Y-m-d');
         }
 
-        if (!isset($subscriptionStartsAt)) {
+        if (! isset($subscriptionStartsAt)) {
             $subscriptionStartsAt = \Carbon\Carbon::now()->format('Y-m-d');
         }
-        
-        if ( $this->user->subscribed('default') && $this->user->subscription('default')->onGracePeriod() ) {
+
+        if ($this->user->subscribed('default') && $this->user->subscription('default')->onGracePeriod()) {
             $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
         }
-        
+
         $this->identifier = PayFast::createOnsitePayment(
             (int) $this->plan,
             $subscriptionStartsAt,
@@ -111,7 +110,7 @@ class Subscriptions extends Component
 
     public function mount()
     {
-        $this->user = Auth::user();        
+        $this->user = Auth::user();
     }
 
     /**

@@ -3,11 +3,11 @@
 namespace Tests\Feature;
 
 use Dotenv\Dotenv;
-use Tests\Fixtures\User;
-use Orchestra\Testbench\TestCase;
-use Livewire\LivewireServiceProvider;
 use FintechSystems\PayFast\PayFastServiceProvider;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Livewire\LivewireServiceProvider;
+use Orchestra\Testbench\TestCase;
+use Tests\Fixtures\User;
 
 abstract class FeatureTestCase extends TestCase
 {

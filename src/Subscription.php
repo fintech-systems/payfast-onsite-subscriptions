@@ -101,7 +101,7 @@ class Subscription extends Model
     public function active()
     {
         return (is_null($this->ends_at) || $this->onGracePeriod() || $this->onPausedGracePeriod()) &&
-            (!Cashier::$deactivatePastDue || $this->payfast_status !== self::STATUS_PAST_DUE) &&
+            (! Cashier::$deactivatePastDue || $this->payfast_status !== self::STATUS_PAST_DUE) &&
             $this->payfast_status !== self::STATUS_PAUSED;
     }
 
@@ -156,7 +156,7 @@ class Subscription extends Model
      */
     public function recurring()
     {
-        return !$this->onTrial() && !$this->paused() && !$this->onPausedGracePeriod() && !$this->cancelled();
+        return ! $this->onTrial() && ! $this->paused() && ! $this->onPausedGracePeriod() && ! $this->cancelled();
     }
 
     /**
@@ -241,7 +241,7 @@ class Subscription extends Model
      */
     public function cancelled()
     {
-        return !is_null($this->ends_at);
+        return ! is_null($this->ends_at);
     }
 
     /**
@@ -273,7 +273,7 @@ class Subscription extends Model
      */
     public function ended()
     {
-        return $this->cancelled() && !$this->onGracePeriod();
+        return $this->cancelled() && ! $this->onGracePeriod();
     }
 
     /**
@@ -550,7 +550,7 @@ class Subscription extends Model
     {
         if ($result['status'] !== 'success') {
             $message = 'Unable to update PayFast subscription because API result !== success';
-            
+
             Log::error($message);
 
             ray($message);
@@ -711,7 +711,7 @@ class Subscription extends Model
      */
     public function nextPayment()
     {
-        if (!isset($this->payfastInfo()['next_payment'])) {
+        if (! isset($this->payfastInfo()['next_payment'])) {
             return;
         }
 

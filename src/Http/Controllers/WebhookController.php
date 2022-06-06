@@ -48,14 +48,14 @@ class WebhookController extends Controller
         WebhookReceived::dispatch($payload);
 
         try {
-            if (!isset($payload['token'])) {
+            if (! isset($payload['token'])) {
                 $this->nonSubscriptionPaymentReceived($payload);
                 WebhookHandled::dispatch($payload);
 
                 return new Response('Webhook nonSubscriptionPaymentReceived handled');
             }
 
-            if (!$this->findSubscription($payload['token'])) {
+            if (! $this->findSubscription($payload['token'])) {
                 $this->createSubscription($payload);
                 WebhookHandled::dispatch($payload);
 
@@ -267,7 +267,7 @@ class WebhookController extends Controller
         Log::info($message);
         ray($message)->orange();
 
-        if (!$subscription = $this->findSubscription($payload['token'])) {
+        if (! $subscription = $this->findSubscription($payload['token'])) {
             throw new MissingSubscription();
         }
 
@@ -314,7 +314,7 @@ class WebhookController extends Controller
 
     private function findOrCreateCustomer(array $passthrough)
     {
-        if (!isset($passthrough['custom_str1'], $passthrough['custom_int1'])) {
+        if (! isset($passthrough['custom_str1'], $passthrough['custom_int1'])) {
             throw new InvalidMorphModelInPayload($passthrough['custom_str1'] . "|" . $passthrough['custom_int1']);
         }
 

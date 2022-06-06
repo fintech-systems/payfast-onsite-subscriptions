@@ -2,10 +2,10 @@
 
 namespace FintechSystems\PayFast;
 
-use Livewire\Livewire;
-use Illuminate\Support\ServiceProvider;
 use FintechSystems\PayFast\Components\Receipts;
 use FintechSystems\PayFast\Components\Subscriptions;
+use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class PayFastServiceProvider extends ServiceProvider
 {

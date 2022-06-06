@@ -143,7 +143,7 @@ class PayFast implements BillingProvider
                 $pfOutput .= $key . '=' . urlencode(trim($val)) . '&';
             }
         }
-        
+
         // Remove last ampersand
         return substr($pfOutput, 0, -1);
     }
@@ -151,12 +151,13 @@ class PayFast implements BillingProvider
     public function generatePaymentIdentifier($pfParameters)
     {
         $url = 'https://www.payfast.co.za/onsite/process';
-        
+
         $response = Http::post($url, $pfParameters)->json();
 
         if (! isset($response['uuid'])) {
             ray("Unable to generate onsite payment identifier");
             ray("generatePaymentIdentifier parameters:", $pfParameters);
+
             return null;
         }
 
