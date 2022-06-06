@@ -323,11 +323,15 @@ class WebhookController extends Controller
             throw new InvalidMorphModelInPayload($passthrough['custom_str1'] . "|" . $passthrough['custom_int1']);
         }
 
-        ray("findOrCreate customer is looking for " . $passthrough['custom_str1'] . " " . $passthrough['custom_int1']);
+        ray("findOrCreate customer is looking for this existing model / user ID " . $passthrough['custom_str1'] . " / " . $passthrough['custom_int1']);
 
-        return Cashier::$customerModel::firstOrCreate([
+        $customer = Cashier::$customerModel::firstOrCreate([
             'billable_id' => $passthrough['custom_int1'],
             'billable_type' => $passthrough['custom_str1'],
         ])->billable;
+
+        ray("The new customer to be returned now that was firstOrCreate is ", $customer);
+
+        return $customer;
     }
 }
