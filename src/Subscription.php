@@ -2,7 +2,6 @@
 
 namespace FintechSystems\PayFast;
 
-use App\Nova\Subscription as NovaSubscription;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Exception;
@@ -24,7 +23,8 @@ class Subscription extends Model
     public const STATUS_PAUSED = 'PAUSED';
     public const STATUS_DELETED = 'CANCELLED';
 
-    public static function uiOptions() {
+    public static function uiOptions()
+    {
         return [
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_TRIALING => 'Trialing',
@@ -586,9 +586,9 @@ class Subscription extends Model
 
         $subscription->next_bill_at = $result['data']['response']['run_date'];
 
-        if ($subscription->payfast_status == self::STATUS_DELETED && !$subscription->cancelled_at) {
+        if ($subscription->payfast_status == self::STATUS_DELETED && ! $subscription->cancelled_at) {
             $message = ("Subscription status at PayFast is cancelled but no cancelled_at exists. Adding now() as cancellation date.");
-            
+
             Log::warning($message);
 
             ray($message)->orange();

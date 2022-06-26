@@ -145,7 +145,7 @@ class WebhookController extends Controller
 
         ray($message)->orange();
 
-        if (!$customer) {
+        if (! $customer) {
             throw new Exception("findOrCreateCustomer returned false so a subscription can't be created");
         }
 
