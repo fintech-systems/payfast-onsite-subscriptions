@@ -24,7 +24,9 @@ class CancelSubscription extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach($models as $subscription) {
-            PayFast::cancelSubscription($subscription->token);
+            ray($subscription);
+            
+            PayFast::cancelSubscription($subscription->payfast_token);
         }
     }
 

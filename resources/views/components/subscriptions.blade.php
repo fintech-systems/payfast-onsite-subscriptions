@@ -65,8 +65,12 @@
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>
+                        @if($user->subscription('default')->next_bill_at) 
                             The next payment is due on the                            
                                 {{ $user->subscription('default')->next_bill_at->format('jS \o\f F Y') }}.                            
+                        @else
+                            Cannot determine next_bill_at
+                        @endif
                         </p>
                     </div>
                 @endif        

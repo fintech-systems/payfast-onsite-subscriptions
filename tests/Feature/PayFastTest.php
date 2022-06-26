@@ -3,6 +3,7 @@
 namespace FintechSystems\PayFast\Tests;
 
 use FintechSystems\PayFast\Facades\PayFast;
+use FintechSystems\PayFast\Subscription;
 use Illuminate\Support\Facades\Http;
 use Tests\Feature\FeatureTestCase;
 
@@ -14,7 +15,7 @@ class PayFastTest extends FeatureTestCase
         Http::fake([
             'https://www.payfast.co.za/onsite/process' => Http::response(
                 [
-                    "uuid" => "12345678-1234-1234-1234-123456789012",
+                    "uuid" => "12345678-9012-3456-7890-123456789012",
                 ]
             ),
         ]);
@@ -89,7 +90,7 @@ class PayFastTest extends FeatureTestCase
 
         $result = PayFast::fetchSubscription("f89aac35-a817-48b6-9c7a-6d18cb7958d4");
 
-        $this->assertEquals("ACTIVE", $result['data']['response']['status_text']);
+        $this->assertEquals(Subscription::STATUS_ACTIVE, $result['data']['response']['status_text']);
     }
 
     /** @test */
@@ -119,6 +120,6 @@ class PayFastTest extends FeatureTestCase
 
         $result = PayFast::fetchSubscription("1294009b-3778-420f-8ddc-aac0f9c8b477");
 
-        $this->assertEquals("PAUSED", $result['data']['response']['status_text']);
+        $this->assertEquals(Subscription::STATUS_PAUSED, $result['data']['response']['status_text']);
     }
 }

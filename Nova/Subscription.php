@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use App\Nova\Actions\CancelSubscription;
 use App\Nova\Actions\FetchSubscriptionInformation;
+use App\Nova\Actions\OverridePayFastStatus;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -130,7 +131,8 @@ class Subscription extends Resource
     {
         return [
             new FetchSubscriptionInformation,
-            new CancelSubscription
+            new CancelSubscription,
+            new OverridePayFastStatus,
         ];
     }
 }

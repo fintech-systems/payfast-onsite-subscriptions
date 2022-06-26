@@ -145,6 +145,10 @@ class WebhookController extends Controller
 
         ray($message)->orange();
 
+        if (!$customer) {
+            throw new Exception("findOrCreateCustomer returned false so a subscription can't be created");
+        }
+
         $subscription = $customer->subscriptions()->create([
             'name' => 'default',
             'payfast_token' => $payload['token'],
@@ -282,6 +286,10 @@ class WebhookController extends Controller
 
         // ray($subscription);
 
+        $message = "About to adjust subscription ends_at either to trial_ends_at or next_bill_at...";
+        Log::debug($message);
+        ray($message);
+
         // Cancellation date...
         if (is_null($subscription->ends_at)) {
             $subscription->ends_at = $subscription->onTrial()
@@ -289,19 +297,20 @@ class WebhookController extends Controller
                 : $subscription->next_bill_at->subMinutes(1);
         }
 
-        // $message = "We've interpreted and possibly saved the ends_at date...";
-        // Log::debug($message);
-        // ray($message);
+        $message = "Date adjustment completed.";
+        Log::debug($message);
+        ray($message);
 
         $subscription->cancelled_at = now();
 
         $subscription->payfast_status = $payload['payment_status'];
 
+        // TBA why this code is here, which example was used
         $subscription->paused_from = null;
 
-        // $message = "Now we're going to save information about the subscription...";
-        // Log::debug($message);
-        // ray($message);
+        $message = "Saving cancelled_at, payfast_status, and paused_from...";
+        Log::debug($message);
+        ray($message);
 
         $subscription->save();
 

@@ -47,9 +47,13 @@ class PayFast implements BillingProvider
 
         ray("cancelSubscription is called with this token", $payfast_token);
 
-        return Http::withHeaders($headers)
+        $response = Http::withHeaders($headers)
             ->put("https://api.payfast.co.za/subscriptions/$payfast_token/cancel")
             ->json();
+
+        ray($response);
+
+        return $response;
     }
 
     /**
@@ -119,9 +123,13 @@ class PayFast implements BillingProvider
 
         ray("fetchSubscription is called with this token", $token);
 
-        return Http::withHeaders($headers)
-            ->get("https://api.payfast.co.za/subscriptions/$token/fetch")
-            ->json();
+        $response = Http::withHeaders($headers)
+        ->get("https://api.payfast.co.za/subscriptions/$token/fetch")
+        ->json();
+
+        ray($response);
+
+        return $response;
     }
 
     public function ping()
