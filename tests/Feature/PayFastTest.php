@@ -9,13 +9,13 @@ use Tests\Feature\FeatureTestCase;
 
 class PayFastTest extends FeatureTestCase
 {
-    /** 
-     * @test 
-     * 
+    /**
+     * @test
+     *
      * This test fails when using test credentials. Instead of returning
      * a UUID it returns HTML to the payment processing page.
      * Set testmode in phpunit.xml to false to test.
-     * 
+     *
      * Additionally Http::fake doesn't work in test mode
     */
     public function it_can_fetch_a_unique_payment_identifier_for_a_new_subscription()
@@ -27,7 +27,7 @@ class PayFastTest extends FeatureTestCase
                 ]
             ),
         ]);
-                
+
         $pfData = [
             'merchant_id' => PayFast::merchantId(),
             'merchant_key' => PayFast::merchantKey(),
@@ -45,7 +45,7 @@ class PayFastTest extends FeatureTestCase
             'item_name' => config('app.name') . " Monthly Subscription",
             'email_address' => 'user@example.com',
         ];
-        
+
         $signature = PayFast::generateApiSignature($pfData, PayFast::passphrase());
 
         $pfData = array_merge($pfData, ["signature" => $signature]);
@@ -53,7 +53,7 @@ class PayFastTest extends FeatureTestCase
         $identifier = PayFast::generatePaymentIdentifier($pfData);
 
         ray("generatePaymentIdentifier result: $identifier");
-        
+
         $this->assertEquals(strlen($identifier), 36);
     }
 
@@ -97,7 +97,7 @@ class PayFastTest extends FeatureTestCase
                 ]
             ),
         ]);
-        
+
         $result = PayFast::fetchSubscription("667b8608-38bd-4513-8c49-250ce836876a");
 
         $this->assertEquals(Subscription::STATUS_ACTIVE, $result['data']['response']['status_text']);

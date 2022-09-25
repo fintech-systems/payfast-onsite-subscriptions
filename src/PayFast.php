@@ -13,7 +13,7 @@ class PayFast implements BillingProvider
     private string $merchant_id;
     private string $merchant_key;
     private string $passphrase;
-    
+
     private string $testmode;
 
     private string $returnUrl;
@@ -23,7 +23,7 @@ class PayFast implements BillingProvider
     public function __construct($client)
     {
         $this->testmode = $client['testmode'];
-        
+
         if ($this->testmode == true) {
             $this->merchant_id = $client['merchant_id_test'];
             $this->merchant_key = $client['merchant_key_test'];
@@ -33,11 +33,11 @@ class PayFast implements BillingProvider
             $this->merchant_id = $client['merchant_id'];
             $this->merchant_key = $client['merchant_key'];
             $this->passphrase = $client['passphrase'];
-            $this->url = 'https://www.payfast.co.za/onsite/process';        
+            $this->url = 'https://www.payfast.co.za/onsite/process';
         }
 
         ray("In PayFast constructor, testmode: $this->testmode, URL: $this->url");
-            
+
         $this->returnUrl = $client['return_url'];
         $this->cancelUrl = $client['cancel_url'];
         $this->notifyUrl = $client['notify_url'];
@@ -50,7 +50,7 @@ class PayFast implements BillingProvider
     }
 
     public function cancelSubscription($payfast_token)
-    {        
+    {
         ray("cancelSubscription is called with this token", $payfast_token);
 
         $response = Http::withHeaders($this->headers())
@@ -139,9 +139,9 @@ class PayFast implements BillingProvider
     }
 
     public function fetchSubscription($token)
-    {        
+    {
         ray("fetchSubscription is called with this token", $token);
-        
+
         $append = ($this->testmode == true ? 'testing=true' : "");
 
         $response = Http::withHeaders($this->headers())
@@ -152,19 +152,19 @@ class PayFast implements BillingProvider
 
         return $response;
     }
-    
+
     /**
      * Generate Payment Identifier
-     * 
+     *
      * Has different behavior in test versus live. In test
      * mode it returns the HTML processing page, in live
      * mode it returns a payment identifier.
      */
     public function generatePaymentIdentifier($pfParameters)
-    {                        
+    {
         $response = Http::post($this->url, $pfParameters);
-                
-        if (! isset($response['uuid'])) {            
+
+        if (! isset($response['uuid'])) {
             ray("Unable to generate payment identifier with these parameters:", $pfParameters);
 
             ray($response->body());
@@ -183,7 +183,7 @@ class PayFast implements BillingProvider
 
         // Sort the array alphabetically by key
         ksort($pfData);
-        
+
         $pfParamString = http_build_query($pfData);
 
         return md5($pfParamString);
@@ -205,19 +205,23 @@ class PayFast implements BillingProvider
         );
     }
 
-    public function merchantId() {
+    public function merchantId()
+    {
         return $this->merchant_id;
     }
 
-    public function merchantKey() {
+    public function merchantKey()
+    {
         return $this->merchant_key;
     }
 
-    public function passphrase() {
+    public function passphrase()
+    {
         return $this->passphrase;
     }
 
-    public function url() {
+    public function url()
+    {
         return $this->url;
     }
 
@@ -230,7 +234,7 @@ class PayFast implements BillingProvider
     }
 
     public function ping()
-    {        
+    {
         return Http::withHeaders($this->headers())
             ->get('https://api.payfast.co.za/ping')
             ->body();
