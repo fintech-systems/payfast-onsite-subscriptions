@@ -29,18 +29,20 @@ class PayFast implements BillingProvider
             $this->merchant_key = $client['merchant_key_test'];
             $this->passphrase = $client['passphrase_test'];
             $this->url = 'https://sandbox.payfast.co.za​/onsite/process';
+            $prependUrl = config('payfast.callback_url_test');
         } else {
             $this->merchant_id = $client['merchant_id'];
             $this->merchant_key = $client['merchant_key'];
             $this->passphrase = $client['passphrase'];
-            $this->url = 'https://www.payfast.co.za/onsite/process';        
+            $this->url = 'https://www.payfast.co.za/onsite/process';
+            $prependUrl = config('payfast.callback_url');
         }
 
         ray("In PayFast constructor, testmode: $this->testmode, URL: $this->url");
             
-        $this->returnUrl = $client['return_url'];
-        $this->cancelUrl = $client['cancel_url'];
-        $this->notifyUrl = $client['notify_url'];
+        $this->returnUrl = $prependUrl . $client['return_url'];
+        $this->cancelUrl = $prependUrl . $client['cancel_url'];
+        $this->notifyUrl = $prependUrl . $client['notify_url'];
 
         $this->urlCollection = [
             'return_url' => $this->returnUrl,
@@ -53,8 +55,10 @@ class PayFast implements BillingProvider
     {        
         ray("cancelSubscription is called with this token", $payfast_token);
 
+        $append = ($this->testmode == true ? 'testing=true' : "");
+
         $response = Http::withHeaders($this->headers())
-            ->put("https://api.payfast.co.za/subscriptions/$payfast_token/cancel")
+            ->put("https://api.payfast.co.za/subscriptions/$payfast_token/cancel?$append")
             ->json();
 
         ray($response);
@@ -74,8 +78,8 @@ class PayFast implements BillingProvider
         ray("billingDate in createOnsitePayment: " . $billingDate);
 
         $data = [
-            'merchant_id' => config('payfast.merchant_id'),
-            'merchant_key' => config('payfast.merchant_key'),
+            'merchant_id' => $this->merchantId(),
+            'merchant_key' => $this->merchantKey(),
             'subscription_type' => 1,
             'm_payment_id' => Order::generate(),
             'amount' => $plan['initial_amount'],
@@ -111,7 +115,7 @@ class PayFast implements BillingProvider
 
         ray($data)->orange();
 
-        $signature = PayFast::generateApiSignature($data, config('payfast.passphrase'));
+        $signature = PayFast::generateApiSignature($data, $this->passphrase());
 
         $pfData = array_merge($data, ["signature" => $signature]);
 

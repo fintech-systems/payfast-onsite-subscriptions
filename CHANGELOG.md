@@ -4,8 +4,9 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 ## v1.0.2 - 2022-09-25
 
-- do a better implentation of test mode by expanding config variables
+- do a better implentation of test mode by expanding config variables and checking actual mode
 - modify generate payment identifier test to use new test mode
+- implement a callback test url for subscription callback testing
 
 ## v1.0.1 - 2022-06-06
 
