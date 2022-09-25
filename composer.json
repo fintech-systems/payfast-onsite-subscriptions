@@ -30,7 +30,7 @@
         "php": "^8.0",
         "symfony/dotenv": "^5.3",
         "illuminate/contracts": "^8.37",
-        "guzzlehttp/guzzle": "^7.4",
+        "guzzlehttp/guzzle": "^7.4.5",
         "livewire/livewire": "^2.8",
         "moneyphp/money": "^4.0",
         "spatie/ray": "^1.34"

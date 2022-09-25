@@ -9,20 +9,28 @@ use Tests\Feature\FeatureTestCase;
 
 class PayFastTest extends FeatureTestCase
 {
-    /** @test */
+    /** 
+     * @test 
+     * 
+     * This test fails when using test credentials. Instead of returning
+     * a UUID it returns HTML to the payment processing page.
+     * Set testmode in phpunit.xml to false to test.
+     * 
+     * Additionally Http::fake doesn't work in test mode
+    */
     public function it_can_fetch_a_unique_payment_identifier_for_a_new_subscription()
     {
         Http::fake([
-            'https://www.payfast.co.za/onsite/process' => Http::response(
+            PayFast::url() => Http::response(
                 [
-                    "uuid" => "12345678-9012-3456-7890-123456789012",
+                    "uuid" => "12345678-0123-5678-0123-567890123456",
                 ]
             ),
         ]);
-
+                
         $pfData = [
-            'merchant_id' => config('payfast.merchant_id'),
-            'merchant_key' => config('payfast.merchant_key'),
+            'merchant_id' => PayFast::merchantId(),
+            'merchant_key' => PayFast::merchantKey(),
             'subscription_type' => 1,
             'm_payment_id' => 2,
             'amount' => 300,
@@ -37,13 +45,15 @@ class PayFastTest extends FeatureTestCase
             'item_name' => config('app.name') . " Monthly Subscription",
             'email_address' => 'user@example.com',
         ];
-
-        $signature = PayFast::generateApiSignature($pfData, config('payfast.passphrase'));
+        
+        $signature = PayFast::generateApiSignature($pfData, PayFast::passphrase());
 
         $pfData = array_merge($pfData, ["signature" => $signature]);
 
         $identifier = PayFast::generatePaymentIdentifier($pfData);
 
+        ray("generatePaymentIdentifier result: $identifier");
+        
         $this->assertEquals(strlen($identifier), 36);
     }
 
@@ -81,14 +91,14 @@ class PayFastTest extends FeatureTestCase
                             'status' => 1,
                             "status_reason" => "",
                             "status_text" => "ACTIVE",
-                            "token" => "f89aac35-a817-48b6-9c7a-6d18cb7958d4",
+                            "token" => "667b8608-38bd-4513-8c49-250ce836876a",
                         ],
                     ],
                 ]
             ),
         ]);
-
-        $result = PayFast::fetchSubscription("f89aac35-a817-48b6-9c7a-6d18cb7958d4");
+        
+        $result = PayFast::fetchSubscription("667b8608-38bd-4513-8c49-250ce836876a");
 
         $this->assertEquals(Subscription::STATUS_ACTIVE, $result['data']['response']['status_text']);
     }

@@ -2,6 +2,11 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.0.2 - 2022-09-25
+
+- do a better implentation of test mode by expanding config variables
+- modify generate payment identifier test to use new test mode
+
 ## v1.0.1 - 2022-06-06
 
 - added some exceptions and much more testing

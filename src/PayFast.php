@@ -13,25 +13,33 @@ class PayFast implements BillingProvider
     private string $merchant_id;
     private string $merchant_key;
     private string $passphrase;
+    
     private string $testmode;
+
     private string $returnUrl;
     private string $cancelUrl;
     private string $notifyUrl;
 
     public function __construct($client)
     {
-        $this->merchant_id = $client['merchant_id'];
-
-        $this->merchant_key = $client['merchant_key'];
-
-        $this->passphrase = $client['passphrase'];
-
         $this->testmode = $client['testmode'];
+        
+        if ($this->testmode == true) {
+            $this->merchant_id = $client['merchant_id_test'];
+            $this->merchant_key = $client['merchant_key_test'];
+            $this->passphrase = $client['passphrase_test'];
+            $this->url = 'https://sandbox.payfast.co.za​/onsite/process';
+        } else {
+            $this->merchant_id = $client['merchant_id'];
+            $this->merchant_key = $client['merchant_key'];
+            $this->passphrase = $client['passphrase'];
+            $this->url = 'https://www.payfast.co.za/onsite/process';        
+        }
 
+        ray("In PayFast constructor, testmode: $this->testmode, URL: $this->url");
+            
         $this->returnUrl = $client['return_url'];
-
         $this->cancelUrl = $client['cancel_url'];
-
         $this->notifyUrl = $client['notify_url'];
 
         $this->urlCollection = [
@@ -42,12 +50,10 @@ class PayFast implements BillingProvider
     }
 
     public function cancelSubscription($payfast_token)
-    {
-        $headers = $this->getHeaders();
-
+    {        
         ray("cancelSubscription is called with this token", $payfast_token);
 
-        $response = Http::withHeaders($headers)
+        $response = Http::withHeaders($this->headers())
             ->put("https://api.payfast.co.za/subscriptions/$payfast_token/cancel")
             ->json();
 
@@ -117,30 +123,6 @@ class PayFast implements BillingProvider
         }
     }
 
-    public function fetchSubscription($token)
-    {
-        $headers = $this->getHeaders();
-
-        ray("fetchSubscription is called with this token", $token);
-
-        $response = Http::withHeaders($headers)
-        ->get("https://api.payfast.co.za/subscriptions/$token/fetch")
-        ->json();
-
-        ray($response);
-
-        return $response;
-    }
-
-    public function ping()
-    {
-        $headers = $this->getHeaders();
-
-        return Http::withHeaders($headers)
-            ->get('https://api.payfast.co.za/ping')
-            ->body();
-    }
-
     public function dataToString($dataArray)
     {
         // Create parameter string
@@ -156,15 +138,36 @@ class PayFast implements BillingProvider
         return substr($pfOutput, 0, -1);
     }
 
+    public function fetchSubscription($token)
+    {        
+        ray("fetchSubscription is called with this token", $token);
+        
+        $append = ($this->testmode == true ? 'testing=true' : "");
+
+        $response = Http::withHeaders($this->headers())
+        ->get("https://api.payfast.co.za/subscriptions/$token/fetch?$append")
+        ->json();
+
+        ray($response);
+
+        return $response;
+    }
+    
+    /**
+     * Generate Payment Identifier
+     * 
+     * Has different behavior in test versus live. In test
+     * mode it returns the HTML processing page, in live
+     * mode it returns a payment identifier.
+     */
     public function generatePaymentIdentifier($pfParameters)
-    {
-        $url = 'https://www.payfast.co.za/onsite/process';
+    {                        
+        $response = Http::post($this->url, $pfParameters);
+                
+        if (! isset($response['uuid'])) {            
+            ray("Unable to generate payment identifier with these parameters:", $pfParameters);
 
-        $response = Http::post($url, $pfParameters)->json();
-
-        if (! isset($response['uuid'])) {
-            ray("Unable to generate onsite payment identifier");
-            ray("generatePaymentIdentifier parameters:", $pfParameters);
+            ray($response->body());
 
             return null;
         }
@@ -178,16 +181,15 @@ class PayFast implements BillingProvider
             $pfData['passphrase'] = $passPhrase;
         }
 
-        // Sort the array by key, alphabetically
+        // Sort the array alphabetically by key
         ksort($pfData);
-
-        //create parameter string
+        
         $pfParamString = http_build_query($pfData);
 
         return md5($pfParamString);
     }
 
-    private function getHeaders()
+    private function headers()
     {
         $pfData = [
             'merchant-id' => $this->merchant_id,
@@ -203,11 +205,34 @@ class PayFast implements BillingProvider
         );
     }
 
+    public function merchantId() {
+        return $this->merchant_id;
+    }
+
+    public function merchantKey() {
+        return $this->merchant_key;
+    }
+
+    public function passphrase() {
+        return $this->passphrase;
+    }
+
+    public function url() {
+        return $this->url;
+    }
+
     /**
      * To ensure our tests are working, we do a dependency injection test and simply return true
      */
     public function di()
     {
         return true;
+    }
+
+    public function ping()
+    {        
+        return Http::withHeaders($this->headers())
+            ->get('https://api.payfast.co.za/ping')
+            ->body();
     }
 }
