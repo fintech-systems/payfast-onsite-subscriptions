@@ -49,8 +49,8 @@ class PayFastServiceProvider extends ServiceProvider
 
                 'merchant_id_test' => config('payfast.merchant_id_test'),
                 'merchant_key_test' => config('payfast.merchant_key_test'),
-                'passphrase_test' => config('payfast.passphrase_test'),                
-                
+                'passphrase_test' => config('payfast.passphrase_test'),
+
                 'return_url' => config('payfast.return_url'),
                 'cancel_url' => config('payfast.cancel_url'),
                 'notify_url' => config('payfast.notify_url'),
