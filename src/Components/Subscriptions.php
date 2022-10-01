@@ -48,12 +48,11 @@ class Subscriptions extends Component
 
     public function cancelSubscription()
     {
-        ray($this->user->subscriptions()->active()->first()->payfast_token);
+        Log::info('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token);
+        // ray($this->user->subscriptions()->active()->first()->payfast_token);
 
-        $result = PayFast::cancelSubscription(Auth::user()->subscriptions()->active()->first()->payfast_token);
-
-        ray("Result of cancel subscription", $result);
-
+        $this->user->subscription('default')->cancel2();
+        
         $this->emit('billingUpdated');
 
         $this->confirmingCancelSubscription = false;
@@ -95,6 +94,7 @@ class Subscriptions extends Component
     {
         if ($this->user->onGenericTrial()) {
             $subscriptionStartsAt = $this->user->trialEndsAt()->addDay()->format('Y-m-d');
+            
             $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
         }
 

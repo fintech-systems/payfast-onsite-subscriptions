@@ -37,10 +37,10 @@
             @else
                 @if ($user->subscription('default')->onGracePeriod())
                 {{-- Grace period --}}
-                    <h3 class="text-lg font-medium text-gray-900">
+                    {{-- <h3 class="text-lg font-medium text-gray-900">
                         Your subscription was cancelled on the 
-                        {{ $user->subscription('default')->cancelled_at->format('jS \o\f F Y \a\t H:i:s') }}.
-                    </h3>
+                        {{ $user->subscription('default')->cancelled_at->format('jS \o\f F Y \a\t H:i:s') ?? "Error" }}.
+                    </h3> --}}
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         @if (\Carbon\Carbon::now()->diffInDays(
                             $user->subscriptions()->active()->first()->ends_at->format('Y-m-d'),

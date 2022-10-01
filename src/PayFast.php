@@ -40,9 +40,9 @@ class PayFast implements BillingProvider
 
         ray("In PayFast constructor, testmode: $this->testmode, URL: $this->url");
 
-        $this->returnUrl = $client['return_url'];
-        $this->cancelUrl = $client['cancel_url'];
-        $this->notifyUrl = $client['notify_url'];
+        $this->returnUrl = $prependUrl . $client['return_url'];
+        $this->cancelUrl = $prependUrl . $client['cancel_url'];
+        $this->notifyUrl = $prependUrl . $client['notify_url'];
 
         $this->urlCollection = [
             'return_url' => $this->returnUrl,

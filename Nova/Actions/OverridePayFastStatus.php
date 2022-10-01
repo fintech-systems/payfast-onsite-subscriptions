@@ -40,7 +40,8 @@ class OverridePayFastStatus extends DestructiveAction
     
                 $subscription->cancelled_at = now();
 
-                $subscription->ended_at = now();
+                // 01 Oct 2022 - commented this out as data field does not exist
+                // $subscription->ended_at = now();
             }
 
             $subscription->save();

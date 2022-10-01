@@ -36,7 +36,7 @@ php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProv
 
 ### Nova Integration
 
-Optionally publish Laravel Nova Subscription and Receipts Resources
+Optionally publish Laravel Nova Subscription and Receipts Resources and Actions
 
 ```bash
 php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProvider" --tag="nova-resources"

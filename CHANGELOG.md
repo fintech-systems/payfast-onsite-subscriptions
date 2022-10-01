@@ -2,6 +2,14 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.0.3 - 2022-10-01
+
+- Refine subscription cancellations on the front-end and back-end
+- Removed ended_at as was not in use
+- Create cancel2() routine to bypass Paddle
+- Add test for cancel2()
+- Remove cancelled_at date on front-end as it fails when there is a non-existing subscription
+
 ## v1.0.2 - 2022-09-25
 
 - do a better implentation of test mode by expanding config variables and checking actual mode
