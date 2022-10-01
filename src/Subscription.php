@@ -2,14 +2,14 @@
 
 namespace FintechSystems\PayFast;
 
-use Exception;
 use Carbon\Carbon;
-use LogicException;
 use DateTimeInterface;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\Model;
-use FintechSystems\PayFast\Facades\PayFast;
+use Exception;
 use FintechSystems\PayFast\Concerns\Prorates;
+use FintechSystems\PayFast\Facades\PayFast;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use LogicException;
 
 /**
  * @property \FintechSystems\PayFast\Billable $billable
@@ -113,7 +113,7 @@ class Subscription extends Model
     public function active()
     {
         return (is_null($this->ends_at) || $this->onGracePeriod() || $this->onPausedGracePeriod()) &&
-            (!Cashier::$deactivatePastDue || $this->payfast_status !== self::STATUS_PAST_DUE) &&
+            (! Cashier::$deactivatePastDue || $this->payfast_status !== self::STATUS_PAST_DUE) &&
             $this->payfast_status !== self::STATUS_PAUSED;
     }
 
@@ -168,7 +168,7 @@ class Subscription extends Model
      */
     public function recurring()
     {
-        return !$this->onTrial() && !$this->paused() && !$this->onPausedGracePeriod() && !$this->cancelled();
+        return ! $this->onTrial() && ! $this->paused() && ! $this->onPausedGracePeriod() && ! $this->cancelled();
     }
 
     /**
@@ -253,7 +253,7 @@ class Subscription extends Model
      */
     public function cancelled()
     {
-        return !is_null($this->ends_at);
+        return ! is_null($this->ends_at);
     }
 
     /**
@@ -285,7 +285,7 @@ class Subscription extends Model
      */
     public function ended()
     {
-        return $this->cancelled() && !$this->onGracePeriod();
+        return $this->cancelled() && ! $this->onGracePeriod();
     }
 
     /**
@@ -587,7 +587,7 @@ class Subscription extends Model
 
         $subscription->next_bill_at = $result['data']['response']['run_date'];
 
-        if ($subscription->payfast_status == self::STATUS_DELETED && !$subscription->cancelled_at) {
+        if ($subscription->payfast_status == self::STATUS_DELETED && ! $subscription->cancelled_at) {
             $message = ("Subscription status at PayFast is cancelled but no cancelled_at exists. Adding now() as cancellation date.");
 
             Log::warning($message);
@@ -709,7 +709,7 @@ class Subscription extends Model
 
     /**
      * Cancel the subscription at a specific moment in time.
-     * 
+     *
      * Paddle version but shouldn't be in use anymore in lieu of cancelAt2
      *
      * @param  \DateTimeInterface  $endsAt
@@ -735,7 +735,7 @@ class Subscription extends Model
 
     /**
      * Cancel the subscription at a specific moment in time.
-     * 
+     *
      * This is the PayFast version. It calls the PayFast API instead of the Cashier::post method
      * and it also adds a cancelled_at field which is non-default to the standard Cashier
      * fields. This fields is useful for UI output to reminder user when they cancelled.
@@ -744,7 +744,7 @@ class Subscription extends Model
      * @return $this
      */
     public function cancelAt2(DateTimeInterface $endsAt)
-    {        
+    {
         PayFast::cancelSubscription($this->payfast_token);
 
         $this->forceFill([
@@ -782,17 +782,17 @@ class Subscription extends Model
 
     /**
      * Get the next payment for the subscription.
-     * 
+     *
      * This is the paddle version. Do not use.
-     * 
+     *
      * We're now using the PayFast version called 'runDate()'
      *
      * @return \Laravel\Paddle\Payment|null
-     * 
+     *
      */
     public function nextPayment()
     {
-        if (!isset($this->payfastInfo()['next_payment'])) {
+        if (! isset($this->payfastInfo()['next_payment'])) {
             return;
         }
 
@@ -803,23 +803,23 @@ class Subscription extends Model
 
     /**
      * Get the next payment for the subscription.
-     * 
-     * This is the PayFast version. In fixes the currency to ZAR and strips 
+     *
+     * This is the PayFast version. In fixes the currency to ZAR and strips
      * the date of the time portion which in normally returned like
      * this: 2022-11-01T00:00:00+02:00 for use in Payment
-     * 
+     *
      *
      * @return \FintechSystems\PayFast\Payment|null
      */
     public function runDate()
     {
-        if (!isset($this->payfastInfo()['run_date'])) {
+        if (! isset($this->payfastInfo()['run_date'])) {
             return;
         }
 
         $dateOnly = substr($this->payfastInfo()['run_date'], 0, 10);
-    
-        $payment['date'] = Carbon::createFromFormat('Y-m-d', $dateOnly)->toDateString();        
+
+        $payment['date'] = Carbon::createFromFormat('Y-m-d', $dateOnly)->toDateString();
         $payment['currency'] = 'ZAR';
         $payment['amount'] = $this->payfastInfo()['amount'];
 
@@ -878,11 +878,11 @@ class Subscription extends Model
 
     /**
      * Get raw information about the subscription from PayFast.
-     * 
+     *
      * This is based on paddleInfo() from the original Laravel Cashier code for Paddle. It calls the
      * PayFast API and then returns the 'response' array in the 'data' array of the response object
      * This will contain pertinent information about the subscription on record at PayFast
-     * 
+     *
      * @return array
      */
     public function payfastInfo()

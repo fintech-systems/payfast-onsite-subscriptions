@@ -2,11 +2,10 @@
 
 namespace FintechSystems\PayFast\Tests;
 
-use Carbon\Carbon;
-use Tests\Feature\FeatureTestCase;
-use Illuminate\Support\Facades\Http;
-use FintechSystems\PayFast\Subscription;
 use FintechSystems\PayFast\Facades\PayFast;
+use FintechSystems\PayFast\Subscription;
+use Illuminate\Support\Facades\Http;
+use Tests\Feature\FeatureTestCase;
 
 class PayFastTest extends FeatureTestCase
 {
@@ -145,9 +144,9 @@ class PayFastTest extends FeatureTestCase
             'name' => 'main',
             'payfast_token' => $token,
             'plan_id' => 2323,
-            'payfast_status' => Subscription::STATUS_ACTIVE,            
+            'payfast_status' => Subscription::STATUS_ACTIVE,
         ]);
-        
+
         $this->assertFalse($subscription->cancelled());
 
         // Fake fetch subscription
@@ -181,7 +180,7 @@ class PayFastTest extends FeatureTestCase
                     'status' => "failed",
                     'data' => [
                         'response' => false,
-                        'message' => "Failure - The subscription status is cancelled",                                                    
+                        'message' => "Failure - The subscription status is cancelled",
                     ],
                 ]
             ),
@@ -189,8 +188,7 @@ class PayFastTest extends FeatureTestCase
 
         // Cancel launches both subscription fetch and a status fetch API calls
         $billable->subscription('main')->cancel2();
-        
+
         $this->assertTrue($billable->subscription('main')->cancelled());
-               
     }
 }

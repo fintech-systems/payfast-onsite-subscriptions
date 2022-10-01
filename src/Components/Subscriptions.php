@@ -52,7 +52,7 @@ class Subscriptions extends Component
         // ray($this->user->subscriptions()->active()->first()->payfast_token);
 
         $this->user->subscription('default')->cancel2();
-        
+
         $this->emit('billingUpdated');
 
         $this->confirmingCancelSubscription = false;
@@ -94,7 +94,7 @@ class Subscriptions extends Component
     {
         if ($this->user->onGenericTrial()) {
             $subscriptionStartsAt = $this->user->trialEndsAt()->addDay()->format('Y-m-d');
-            
+
             $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
         }
 
