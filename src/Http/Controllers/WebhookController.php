@@ -3,23 +3,24 @@
 namespace FintechSystems\PayFast\Http\Controllers;
 
 use Exception;
-use FintechSystems\PayFast\Cashier;
-use FintechSystems\PayFast\Events\PaymentSucceeded;
-use FintechSystems\PayFast\Events\SubscriptionCancelled;
-use FintechSystems\PayFast\Events\SubscriptionCreated;
-use FintechSystems\PayFast\Events\SubscriptionFetched;
-use FintechSystems\PayFast\Events\SubscriptionPaymentSucceeded;
-use FintechSystems\PayFast\Events\WebhookHandled;
-use FintechSystems\PayFast\Events\WebhookReceived;
-use FintechSystems\PayFast\Exceptions\InvalidMorphModelInPayload;
-use FintechSystems\PayFast\Exceptions\MissingSubscription;
-use FintechSystems\PayFast\Facades\PayFast;
-use FintechSystems\PayFast\Receipt;
-use FintechSystems\PayFast\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use FintechSystems\PayFast\Cashier;
+use FintechSystems\PayFast\Payment;
+use FintechSystems\PayFast\Receipt;
 use Illuminate\Support\Facades\Log;
+use FintechSystems\PayFast\Subscription;
+use FintechSystems\PayFast\Facades\PayFast;
 use Symfony\Component\HttpFoundation\Response;
+use FintechSystems\PayFast\Events\WebhookHandled;
+use FintechSystems\PayFast\Events\WebhookReceived;
+use FintechSystems\PayFast\Events\PaymentSucceeded;
+use FintechSystems\PayFast\Events\SubscriptionCreated;
+use FintechSystems\PayFast\Events\SubscriptionFetched;
+use FintechSystems\PayFast\Events\SubscriptionCancelled;
+use FintechSystems\PayFast\Exceptions\MissingSubscription;
+use FintechSystems\PayFast\Events\SubscriptionPaymentSucceeded;
+use FintechSystems\PayFast\Exceptions\InvalidMorphModelInPayload;
 
 class WebhookController extends Controller
 {
@@ -47,30 +48,45 @@ class WebhookController extends Controller
 
         WebhookReceived::dispatch($payload);
 
+        Log::debug("Checking what kind of webhook received...");
+
         try {
             if (! isset($payload['token'])) {
                 $this->nonSubscriptionPaymentReceived($payload);
-                WebhookHandled::dispatch($payload);
 
-                return new Response('Webhook nonSubscriptionPaymentReceived handled');
+                WebhookHandled::dispatch([
+                    'action' => 'ad_hoc_payment_received',
+                    'payload' => $payload
+                ]);
+
+                return new Response('Webhook ad-hoc payment received (nonSubscriptionPaymentReceived) handled');
             }
 
             if (! $this->findSubscription($payload['token'])) {
                 $this->createSubscription($payload);
-                WebhookHandled::dispatch($payload);
+                
+                WebhookHandled::dispatch([
+                    'action' => 'subscription_created_payment_applied',
+                    'payload' => $payload
+                ]);
 
                 return new Response('Webhook createSubscription/applySubscriptionPayment handled');
             }
 
             if ($payload['payment_status'] == Subscription::STATUS_DELETED) {
                 $this->cancelSubscription($payload);
-                WebhookHandled::dispatch($payload);
+
+                WebhookHandled::dispatch([
+                    'action' => 'subscription_cancelled',
+                    'payload' => $payload
+                ]);
 
                 return new Response('Webhook cancelSubscription handled');
             }
 
-            if ($payload['payment_status'] == Subscription::STATUS_ACTIVE) {
+            if ($payload['payment_status'] == Payment::COMPLETE) {
                 $this->applySubscriptionPayment($payload);
+
                 WebhookHandled::dispatch($payload);
 
                 return new Response('Webhook applySubscriptionPayment handled');
@@ -84,6 +100,8 @@ class WebhookController extends Controller
 
             return response('An exception occurred in the PayFast webhook controller', 500);
         }
+
+        Log::error("Abnormal Webhook termination. No Webhook intepreter was found.");
     }
 
     /**
@@ -111,7 +129,7 @@ class WebhookController extends Controller
             'amount_net' => $payload['amount_net'],
             'billable_id' => $payload['custom_int1'],
             'billable_type' => $payload['custom_str1'],
-            'paid_at' => now(),
+            'received_at' => now(),
         ]);
 
         PaymentSucceeded::dispatch($receipt, $payload);
@@ -180,13 +198,14 @@ class WebhookController extends Controller
     protected function applySubscriptionPayment(array $payload)
     {
         if (is_null($payload['item_name'])) {
-            $payload['item_name'] = 'Card Information Updated';
-            $message = "Updating card information for " . $payload['token'] . "...";
+            $payload['item_name'] = 'Subscription Updated';
+            $message = "Updating subscription for " . $payload['token'] . "...";
         } else {
             $message = "Applying a subscription payment to " . $payload['token'] . "...";
         }
 
         Log::info($message);
+        
         ray($message)->orange();
 
         $billable = $this->findSubscription($payload['token'])->billable;
@@ -208,13 +227,14 @@ class WebhookController extends Controller
             'amount_net' => $payload['amount_net'],
             'billable_id' => $payload['custom_int1'],
             'billable_type' => $payload['custom_str1'],
-            'paid_at' => now(),
+            'billing_date' => $payload['billing_date'],
+            'received_at' => now(),
         ]);
 
         SubscriptionPaymentSucceeded::dispatch($billable, $receipt, $payload);
 
-        if ($payload['item_name'] == 'Card Information Updated') {
-            $message = "Updated the card information.";
+        if ($payload['item_name'] == 'Subscription Updated') {
+            $message = "Subscription updated.";
         } else {
             $message = "Applied the subscription payment.";
         }
@@ -246,24 +266,7 @@ class WebhookController extends Controller
         // PayFast requires a 200 response after a successful payment application
         return response('Subscription Payment Applied', 200);
     }
-
-    // Commmented out 23:48 of 6th of June 2022 due to find(1) statement - doesn't make sense
-    // protected function fetchSubscriptionInformation(array $payload)
-    // {
-    //     $message = "Fetching subscription information for " . $payload['token'] . "...";
-    //     Log::info($message);
-    //     ray($message)->orange();
-
-    //     $result = PayFast::fetchSubscription($payload['token']);
-
-    //     // Update or Create Subscription
-    //     $subscription = Subscription::find(1);
-
-    //     ray($result);
-
-    //     SubscriptionFetched::dispatch($subscription, $payload);
-    // }
-
+    
     /**
      * Handle subscription cancelled.
      *

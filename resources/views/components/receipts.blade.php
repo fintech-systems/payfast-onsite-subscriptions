@@ -17,7 +17,7 @@
                         <td><strong>Item</strong></td>
                         <td style="text-align:right"><strong>Amount</strong></th>
                         <td style="padding-left:10px"><strong>Status</strong></th>                        
-                        <td style="text-align:center"><strong>Date</strong></th>
+                        <td style="text-align:center"><strong>Billing Date</strong></th>
                     </tr>
                 </thead>
                 @foreach($receipts as $receipt)
@@ -26,7 +26,7 @@
                     <td nowrap>{{ $receipt->item_name }}</td>
                     <td style="text-align:right">R {{ $receipt->amount_gross }}</td>
                     <td style="padding-left:10px">{{ $receipt->payment_status }}</td>                    
-                    <td nowrap>{{ $receipt->paid_at }}</td>
+                    <td nowrap>{{ $receipt->billing_date->format('Y-m-d') }}</td>
                 </tr>
                 @endforeach
             </table>

@@ -2,6 +2,13 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.1.0 - 2022-10-01
+
+- Remove paid_at from receipts table
+- Add billing_date as received from PayFast to the receipts table
+- Add received_at to receipts table
+- Create Payment::COMPLETE Enum to better handle incoming payments
+
 ## v1.0.3 - 2022-10-01
 
 - Refine subscription cancellations on the front-end and back-end

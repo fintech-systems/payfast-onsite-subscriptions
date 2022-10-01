@@ -11,6 +11,11 @@ use Money\Currency;
 class Payment implements Arrayable, Jsonable, JsonSerializable
 {
     /**
+     * PayFast returns COMPLETE when a payment succeeded
+     */
+    public const COMPLETE = 'COMPLETE';
+
+    /**
      * The amount of the payment.
      *
      * @var string

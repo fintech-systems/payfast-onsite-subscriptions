@@ -17,8 +17,8 @@ use FintechSystems\PayFast\Concerns\Prorates;
 class Subscription extends Model
 {
     use Prorates;
-
-    public const STATUS_ACTIVE = 'ACTIVE';
+    
+    public const STATUS_ACTIVE = 'ACTIVE';    
     public const STATUS_TRIALING = 'trialing';
     public const STATUS_PAST_DUE = 'past_due';
     public const STATUS_PAUSED = 'PAUSED';

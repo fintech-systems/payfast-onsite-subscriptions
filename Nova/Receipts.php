@@ -4,8 +4,10 @@ namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -62,19 +64,28 @@ class Receipts extends Resource
 
             Text::make('Item Name')->readonly(),
 
-            Text::make('Item Description')->readonly(),
+            Text::make('Item Description')->readonly()->hideFromIndex(),
 
-            Number::make('Amount Gross')->readonly(),
+            Stack::make('Amounts',[
+                Number::make('Amount Gross')->readonly(),
 
-            Number::make('Amount Fee')->readonly(),
+                Number::make('Amount Fee')->readonly(),
+    
+                Number::make('Amount Net')->readonly(),
+            ]),
+            
+            Text::make('Subscriber', function() {
+                return $this->billable->email;
+            }),
 
-            Number::make('Amount Net')->readonly(),
+            Text::make('PayFast Token')->readonly()->hideFromIndex(),
 
-            Text::make('PayFast Token')->readonly(),
+            Text::make('Order ID')->readonly()->hideFromIndex(),
 
-            Text::make('Order ID')->readonly(),
+            Date::make('Billing Date')->readonly(),
 
-            DateTime::make('Paid At')->readonly(),
+            DateTime::make('Received At')->readonly(),
+
         ];
     }
 
