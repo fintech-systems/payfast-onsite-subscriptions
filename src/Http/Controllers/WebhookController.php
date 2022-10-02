@@ -46,7 +46,7 @@ class WebhookController extends Controller
         ray("Checking what kind of webhook received...");
 
         try {
-            if (!isset($payload['token'])) {
+            if (! isset($payload['token'])) {
                 $this->nonSubscriptionPaymentReceived($payload);
 
                 WebhookHandled::dispatch([
@@ -57,7 +57,7 @@ class WebhookController extends Controller
                 return new Response('Webhook ad-hoc payment received (nonSubscriptionPaymentReceived) handled');
             }
 
-            if (!$this->findSubscription($payload['token'])) {
+            if (! $this->findSubscription($payload['token'])) {
                 $this->createSubscription($payload);
 
                 WebhookHandled::dispatch([
@@ -179,7 +179,7 @@ class WebhookController extends Controller
         }
         ray($message)->purple();
 
-        if (!isset($payload['amount_gross'])) {
+        if (! isset($payload['amount_gross'])) {
             throw new Exception("Unable to apply a payment to an existing subscription because amount_gross is not set. Probably cause the subscription was deleted.");
         }
 
@@ -201,10 +201,10 @@ class WebhookController extends Controller
         ]);
 
         SubscriptionPaymentSucceeded::dispatch($billable, $receipt, $payload);
-        
+
         // Get the user's latest subscription using first()
         $subscription = Subscription::where('payfast_token', $payload['token'])->first();
-                                                
+
         $subscription->updatePayFastSubscription(PayFast::fetchSubscription($payload['token']));
 
         // PayFast requires a 200 response after a successful payment application
@@ -218,13 +218,13 @@ class WebhookController extends Controller
      * @return void
      */
     protected function cancelSubscription(array $payload)
-    {        
+    {
         ray("Cancelling subscription " . $payload['token'] . "...")->orange();
 
-        if (!$subscription = $this->findSubscription($payload['token'])) {
+        if (! $subscription = $this->findSubscription($payload['token'])) {
             throw new MissingSubscription();
         }
-                
+
         if (is_null($subscription->ends_at)) {
             $subscription->ends_at = $subscription->onTrial()
                 ? $subscription->trial_ends_at
@@ -234,11 +234,11 @@ class WebhookController extends Controller
         ray("The subscription will end at " . $subscription->ends_at->format('Y-m-d'));
 
         $subscription->cancelled_at = now();
-        $subscription->payfast_status = $payload['payment_status'];    
-        $subscription->paused_from = null;        
+        $subscription->payfast_status = $payload['payment_status'];
+        $subscription->paused_from = null;
         $subscription->save();
 
-        SubscriptionCancelled::dispatch($subscription, $payload);        
+        SubscriptionCancelled::dispatch($subscription, $payload);
     }
 
     private function findSubscription(string $subscriptionId)
@@ -263,7 +263,7 @@ class WebhookController extends Controller
      */
     private function findOrCreateCustomer(array $passthrough)
     {
-        if (!isset($passthrough['custom_str1'], $passthrough['custom_int1'])) {
+        if (! isset($passthrough['custom_str1'], $passthrough['custom_int1'])) {
             throw new InvalidMorphModelInPayload($passthrough['custom_str1'] . "|" . $passthrough['custom_int1']);
         }
 

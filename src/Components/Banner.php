@@ -22,7 +22,7 @@ class Banner extends Component
     /**
      * This is the God loop for subscription checks. It shows every possible iteration
      * of subscription combinations. It was copied from the Livewire subscriptions
-     * component. Checks: Trial or not a plan, or, in grace or subscribed     
+     * component. Checks: Trial or not a plan, or, in grace or subscribed
      */
     public function getMessage()
     {
@@ -31,7 +31,7 @@ class Banner extends Component
         $message = "";
 
         // <!-- Check if the current logged in user is subscribed to a plan -->
-        if (!$user->subscribed('default')) {
+        if (! $user->subscribed('default')) {
             // {{-- Trial --}}
             if ($user->onGenericTrial()) {
                 $message = "You are currently on trial till " . $user->trialEndsAt()->format('jS \o\f F Y');
@@ -51,7 +51,7 @@ class Banner extends Component
                 } else {
                     $message = "Today is the last day of your subscription.";
                 }
-            } else {                
+            } else {
                 $message = "You are subscribed to the "
                     . config('payfast.plans')[$user->subscription('default')->plan_id]['name']  . " plan.";
             }

@@ -15,7 +15,7 @@ class Receipts extends Component
 
     public function mount()
     {
-        $this->user = Auth::user();        
+        $this->user = Auth::user();
     }
 
     /**
@@ -26,7 +26,7 @@ class Receipts extends Component
     public function render()
     {
         $this->receipts = $this->user->receipts;
-        
+
         return view('vendor.payfast.components.receipts');
     }
 }
