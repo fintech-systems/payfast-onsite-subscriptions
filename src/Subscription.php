@@ -603,7 +603,7 @@ class Subscription extends Model
     }
 
     /**
-     * Get the Paddle update url.
+     * Get the PayFast update url. Not in use, copied from Laravel Cashier Paddle.
      *
      * @return array
      */
@@ -759,7 +759,7 @@ class Subscription extends Model
     }
 
     /**
-     * Get the Paddle cancellation url.
+     * Get the PayFast cancellation url. Not in use, copied from Laravel Cashier Paddle.
      *
      * @return array
      */

@@ -2,6 +2,22 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.1.1 - 2022-10-02
+
+- Add ability to create customer from Nova with trial days config variable
+- Add billing component that looks like and needs Jetstream to work
+- Add new DEBUG variable
+- Add a banner that displays current subscription information
+- Add new button that is just green
+- Add more subscriber information in Nova, e.g. on Receipts
+- Change description on item names to be consistent with subscription
+- Swap some buttons around for subscription cancellations
+- Simplify webhook ping test
+- The receipts table will now update post subscription changes
+- Remove lots of Log::debug() instead using Ray in the webhook controller
+- Remove more references from Paddle Subscription object
+
+
 ## v1.1.0 - 2022-10-01
 
 - Remove paid_at from receipts table

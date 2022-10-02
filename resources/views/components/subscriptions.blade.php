@@ -37,10 +37,10 @@
             @else
                 @if ($user->subscription('default')->onGracePeriod())
                 {{-- Grace period --}}
-                    {{-- <h3 class="text-lg font-medium text-gray-900">
-                        Your subscription was cancelled on the 
-                        {{ $user->subscription('default')->cancelled_at->format('jS \o\f F Y \a\t H:i:s') ?? "Error" }}.
-                    </h3> --}}
+                    <h3 class="text-lg font-medium text-gray-900">
+                        Your subscription was cancelled 
+                        {{ $user->subscription('default')->cancelled_at->format('j F Y \a\t H:i:s') }}.
+                    </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         @if (\Carbon\Carbon::now()->diffInDays(
                             $user->subscriptions()->active()->first()->ends_at->format('Y-m-d'),
@@ -64,13 +64,9 @@
                             {{ config('payfast.plans')[$user->subscription('default')->plan_id]['name'] }} plan.
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
-                        <p>
-                        @if($user->subscription('default')->next_bill_at) 
-                            The next payment is due on the                            
-                                {{ $user->subscription('default')->next_bill_at->format('jS \o\f F Y') }}.                            
-                        @else
-                            Cannot determine next_bill_at
-                        @endif
+                        <p>                        
+                            The next payment will go off on the 
+                                {{ $user->subscription('default')->next_bill_at->format('jS \o\f F Y') }}.                                                    
                         </p>
                     </div>
                 @endif        
@@ -79,14 +75,14 @@
 
         <!-- Subscription Action Buttons -->
         <div class="mt-5">
-            @if ($user->subscribed('default') && !$user->onGenericTrial() && !$user->subscription('default')->onGracePeriod())
-                <x-jet-secondary-button style="color: red;" wire:click="confirmCancelSubscription"
-                    wire:loading.attr="disabled">
-                    {{ __('Cancel') }}
+            @if ($user->subscribed('default') && !$user->onGenericTrial() && !$user->subscription('default')->onGracePeriod())                            
+                <x-jet-secondary-button style="color: blue;" wire:click="updateCard">
+                    {{ __('Update Card Information') }}
                 </x-jet-secondary-button>
 
-                <x-jet-secondary-button style="color: blue;" wire:click="updateCard">
-                    {{ __('Update Card') }}
+                <x-jet-secondary-button style="color: red;" wire:click="confirmCancelSubscription"
+                    wire:loading.attr="disabled">
+                    {{ __('Cancel Subscription') }}
                 </x-jet-secondary-button>
             @else
                 <div class="flex">
@@ -155,16 +151,17 @@
                 <div wire:loading class="mr-2 align-middle mt-3">
                     Please wait...
                 </div>
-
-                <x-jet-secondary-button wire:click="$toggle('confirmingCancelSubscription')"
+                
+                <x-green-button wire:click="$toggle('confirmingCancelSubscription')"
                     wire:loading.attr="disabled">
-                    {{ __('Nevermind') }}
-                </x-jet-secondary-button>
+                    {{ __('Keep Subscription') }}
+                </x-green-button>
 
                 <x-jet-danger-button class="ml-2" wire:click="cancelSubscription"
                     wire:loading.attr="disabled">
                     {{ __('Cancel Subscription') }}
                 </x-jet-danger-button>
+
             </x-slot>
 
         </x-jet-dialog-modal>

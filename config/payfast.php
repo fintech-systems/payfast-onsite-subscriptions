@@ -7,6 +7,10 @@ return [
 
     'testmode' => env('PAYFAST_TESTMODE'),
 
+    'debug' => env('PAYFAST_DEBUG', false),
+
+    'trial_days' => env('PAYFAST_TRIAL_DAYS', 30),
+
     'merchant_id_test' => env('PAYFAST_MERCHANT_ID_TEST'),
     'merchant_key_test' => env('PAYFAST_MERCHANT_KEY_TEST'),        
     'passphrase_test' => env('PAYFAST_PASSPHRASE_TEST'),

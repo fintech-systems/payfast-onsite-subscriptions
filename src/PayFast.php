@@ -53,15 +53,15 @@ class PayFast implements BillingProvider
 
     public function cancelSubscription($payfast_token)
     {
-        ray("cancelSubscription is called with this token", $payfast_token);
+        ray("cancelSubscription is called with this token: $payfast_token")->blue();
 
         $append = ($this->testmode == true ? 'testing=true' : "");
 
         $response = Http::withHeaders($this->headers())
             ->put("https://api.payfast.co.za/subscriptions/$payfast_token/cancel?$append")
-            ->json();
+            ->json();        
 
-        ray($response);
+        ray($response['data']['message'])->green();
 
         return $response;
     }
@@ -75,7 +75,7 @@ class PayFast implements BillingProvider
 
         $recurringType = Subscription::frequencies($planId);
 
-        ray("billingDate in createOnsitePayment: " . $billingDate);
+        ray("billingDate in createOnsitePayment: $billingDate");
 
         $data = [
             'merchant_id' => $this->merchantId(),
@@ -89,8 +89,8 @@ class PayFast implements BillingProvider
             'cycles' => $cycles,
             'custom_str1' => Auth::user()->getMorphClass(),
             'custom_int1' => Auth::user()->getKey(),
-            'custom_int2' => $planId,
             'custom_str2' => $plan['name'],
+            'custom_int2' => $planId,            
             'item_name' => config('app.name') . " $recurringType Subscription",
             'email_address' => Auth::user()->email,
         ];
@@ -100,31 +100,17 @@ class PayFast implements BillingProvider
         if ($mergeFields) {
             $data = array_merge($data, $mergeFields);
         }
+        
+        $message = "The PayFast onsite modal was invoked with these merged values and will now wait for user input:";
 
-        $message = "The callback URL defined in createOnsitePayment is " . $data['notify_url'];
-
-        ray($message);
-
-        $message = "PayFast onsite payment modal was invoked with these merged values:";
-
-        Log::debug($message);
-
-        ray($message)->orange();
-
-        Log::debug($data);
-
-        ray($data)->orange();
+        ray($message)->purple();
+        ray($data)->green();
 
         $signature = PayFast::generateApiSignature($data, $this->passphrase());
 
         $pfData = array_merge($data, ["signature" => $signature]);
-
-        // $identifier = $this->payment->onsite->generatePaymentIdentifier($data);
-        $identifier = $this->generatePaymentIdentifier($pfData);
-
-        if ($identifier !== null) {
-            return $identifier;
-        }
+        
+        return $this->generatePaymentIdentifier($pfData);                
     }
 
     public function dataToString($dataArray)
@@ -144,15 +130,15 @@ class PayFast implements BillingProvider
 
     public function fetchSubscription($token)
     {
-        ray("fetchSubscription is called with this token", $token);
+        ray("fetchSubscription is called with this token: $token")->blue();
 
         $append = ($this->testmode == true ? 'testing=true' : "");
 
         $response = Http::withHeaders($this->headers())
-        ->get("https://api.payfast.co.za/subscriptions/$token/fetch?$append")
-        ->json();
+            ->get("https://api.payfast.co.za/subscriptions/$token/fetch?$append")
+            ->json();
 
-        ray($response);
+        ray($response['data']['response'])->green();
 
         return $response;
     }
@@ -168,8 +154,8 @@ class PayFast implements BillingProvider
     {
         $response = Http::post($this->url, $pfParameters);
 
-        if (! isset($response['uuid'])) {
-            ray("Unable to generate payment identifier with these parameters:", $pfParameters);
+        if (!isset($response['uuid'])) {
+            ray("generatePaymentdentifier failed as response didn't have UUID. Output request parameters and response body(): ", $pfParameters);
 
             ray($response->body());
 
@@ -207,6 +193,16 @@ class PayFast implements BillingProvider
             $pfData,
             ["signature" => $signature]
         );
+    }
+
+    // Public getters
+
+    public function callbackUrl() {
+        if ($this->testmode == 'true') {
+            return config('payfast.callback_url_test');
+        } else {
+            return config('payfast.callback_url');
+        }
     }
 
     public function merchantId()

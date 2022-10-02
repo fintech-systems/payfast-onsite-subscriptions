@@ -25,33 +25,29 @@ use FintechSystems\PayFast\Exceptions\InvalidMorphModelInPayload;
 class WebhookController extends Controller
 {
     /**
-     * Handle a PayFast webhook call.
+     * Handle a PayFast webhook call and determine what to do with it.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function __invoke(Request $request)
     {
-        Log::info("Incoming Webhook from PayFast...");
-
-        ray('Incoming Webhook from PayFast')->purple();
+        ray('Incoming Webhook from PayFast')->blue();
 
         $payload = $request->all();
 
-        ray($payload)->blue();
+        ray($payload)->green();
 
-        Log::debug($payload);
-
-        if (isset($payload['event_time'])) { // Used by tests to see if endpoint is working
+        if (isset($payload['ping'])) {
             return new Response();
         }
 
         WebhookReceived::dispatch($payload);
 
-        Log::debug("Checking what kind of webhook received...");
+        ray("Checking what kind of webhook received...");
 
         try {
-            if (! isset($payload['token'])) {
+            if (!isset($payload['token'])) {
                 $this->nonSubscriptionPaymentReceived($payload);
 
                 WebhookHandled::dispatch([
@@ -62,9 +58,9 @@ class WebhookController extends Controller
                 return new Response('Webhook ad-hoc payment received (nonSubscriptionPaymentReceived) handled');
             }
 
-            if (! $this->findSubscription($payload['token'])) {
+            if (!$this->findSubscription($payload['token'])) {
                 $this->createSubscription($payload);
-                
+
                 WebhookHandled::dispatch([
                     'action' => 'subscription_created_payment_applied',
                     'payload' => $payload
@@ -143,29 +139,7 @@ class WebhookController extends Controller
 
     protected function createSubscription(array $payload)
     {
-        $message = "Creating a new subscription...";
-
-        Log::info($message);
-
-        ray($message)->orange();
-
-        $message = "findOrCreateCustomer...";
-
-        Log::info($message);
-
-        ray($message)->orange();
-
         $customer = $this->findOrCreateCustomer($payload);
-
-        $message = "Create a subscription for the new customer...";
-
-        Log::info($message);
-
-        ray($message)->orange();
-
-        if (! $customer) {
-            throw new Exception("findOrCreateCustomer returned false so a subscription can't be created");
-        }
 
         $subscription = $customer->subscriptions()->create([
             'name' => 'default',
@@ -178,39 +152,35 @@ class WebhookController extends Controller
 
         SubscriptionCreated::dispatch($customer, $subscription, $payload);
 
-        $message = "Created a new subscription " . $payload['token'] . ".";
-
-        Log::notice($message);
-
-        ray($message)->green();
+        ray("Subscription created/reactivated for $customer->email and now applying payment...")->green();
 
         $this->applySubscriptionPayment($payload);
     }
 
     /**
-     * Apply a subscription payment succeeded.
+     * Apply a subscription payment.
      *
-     * Gets triggered after first payment, and every subsequent payment that has a token
+     * Gets triggered after first payment, and every subsequent payment that has a token. If the
+     * payload item_name is empty we're working with an existing subscription that has been
+     * reactivated. Check status of subscription post payment to update next_bill_at.
      *
      * @param  array  $payload
      * @return void
      */
     protected function applySubscriptionPayment(array $payload)
     {
+        $billable = $this->findSubscription($payload['token'])->billable;
+
         if (is_null($payload['item_name'])) {
-            $payload['item_name'] = 'Subscription Updated';
-            $message = "Updating subscription for " . $payload['token'] . "...";
+            $payload['item_name'] = $this->getSubscriptionName($payload);
+
+            $message = "Reactivating subscription for $billable->email";
         } else {
             $message = "Applying a subscription payment to " . $payload['token'] . "...";
         }
+        ray($message)->purple();
 
-        Log::info($message);
-        
-        ray($message)->orange();
-
-        $billable = $this->findSubscription($payload['token'])->billable;
-
-        if (! isset($payload['amount_gross'])) {
+        if (!isset($payload['amount_gross'])) {
             throw new Exception("Unable to apply a payment to an existing subscription because amount_gross is not set. Probably cause the subscription was deleted.");
         }
 
@@ -232,41 +202,16 @@ class WebhookController extends Controller
         ]);
 
         SubscriptionPaymentSucceeded::dispatch($billable, $receipt, $payload);
-
-        if ($payload['item_name'] == 'Subscription Updated') {
-            $message = "Subscription updated.";
-        } else {
-            $message = "Applied the subscription payment.";
-        }
-        Log::notice($message);
-        ray($message)->green();
-
-        $message = "Fetching and updating API status for token " . $payload['token'] . "...";
-        Log::info($message);
-        ray($message)->orange();
-
-        // Dispatch a new API call to fetch the subscription information and update the status and next_bill_at
-        $result = PayFast::fetchSubscription($payload['token']);
-
-        Log::debug("Result of new API call to get current subscription status and next_bill_at");
-        Log::debug($result);
-        ray($result);
-
-        $subscription = Subscription::where(
-            'payfast_token',
-            $payload['token']
-        )->first();
-
-        $subscription->updatePayFastSubscription($result);
-
-        $message = "Fetched and updated API status for token " . $payload['token'] . ".";
-        Log::notice($message);
-        ray($message)->green();
+        
+        // Get the user's latest subscription using first()
+        $subscription = Subscription::where('payfast_token', $payload['token'])->first();
+                                                
+        $subscription->updatePayFastSubscription(PayFast::fetchSubscription($payload['token']));
 
         // PayFast requires a 200 response after a successful payment application
-        return response('Subscription Payment Applied', 200);
+        return response("Subscription payment applied or subscription reactivated for $billable->email", 200);
     }
-    
+
     /**
      * Handle subscription cancelled.
      *
@@ -274,54 +219,27 @@ class WebhookController extends Controller
      * @return void
      */
     protected function cancelSubscription(array $payload)
-    {
-        $message = "Cancelling subscription " . $payload['token'] . "...";
-        Log::info($message);
-        ray($message)->orange();
+    {        
+        ray("Cancelling subscription " . $payload['token'] . "...")->orange();
 
-        if (! $subscription = $this->findSubscription($payload['token'])) {
+        if (!$subscription = $this->findSubscription($payload['token'])) {
             throw new MissingSubscription();
         }
-
-        $message = "Looked for and found the subscription...";
-        Log::debug($message);
-        ray($message);
-
-        // ray($subscription);
-
-        $message = "About to adjust subscription ends_at either to trial_ends_at or next_bill_at...";
-        Log::debug($message);
-        ray($message);
-
-        // Cancellation date...
+                
         if (is_null($subscription->ends_at)) {
             $subscription->ends_at = $subscription->onTrial()
                 ? $subscription->trial_ends_at
                 : $subscription->next_bill_at->subMinutes(1);
         }
 
-        $message = "Date adjustment completed.";
-        Log::debug($message);
-        ray($message);
+        ray("The subscription will end at " . $subscription->ends_at->format('Y-m-d'));
 
         $subscription->cancelled_at = now();
-
-        $subscription->payfast_status = $payload['payment_status'];
-
-        // TBA why this code is here, which example was used
-        $subscription->paused_from = null;
-
-        $message = "Saving cancelled_at, payfast_status, and paused_from...";
-        Log::debug($message);
-        ray($message);
-
+        $subscription->payfast_status = $payload['payment_status'];    
+        $subscription->paused_from = null;        
         $subscription->save();
 
-        SubscriptionCancelled::dispatch($subscription, $payload);
-
-        $message = "Cancelled the subscription.";
-        Log::notice($message);
-        ray($message)->green();
+        SubscriptionCancelled::dispatch($subscription, $payload);        
     }
 
     private function findSubscription(string $subscriptionId)
@@ -329,20 +247,31 @@ class WebhookController extends Controller
         return Cashier::$subscriptionModel::firstWhere('payfast_token', $subscriptionId);
     }
 
+    /**
+     * Get plan frequency based on $payload custom_int2 converted to an integer
+     */
+    private function getSubscriptionName($payload)
+    {
+        $recurringType = Subscription::frequencies((int) $payload['custom_int2']);
+
+        return config('app.name') . " $recurringType Subscription";
+    }
+
+    /**
+     * Based on custom_str1 (e.g. App\Models\User) and custom_int1 which is the
+     * model ID go and find the billable model and either create a new one
+     * if it doesn't exist otherwise just retrieve the existing one.
+     */
     private function findOrCreateCustomer(array $passthrough)
     {
-        if (! isset($passthrough['custom_str1'], $passthrough['custom_int1'])) {
+        if (!isset($passthrough['custom_str1'], $passthrough['custom_int1'])) {
             throw new InvalidMorphModelInPayload($passthrough['custom_str1'] . "|" . $passthrough['custom_int1']);
         }
-
-        ray("findOrCreate customer is looking for this existing model / user ID " . $passthrough['custom_str1'] . " / " . $passthrough['custom_int1']);
 
         $customer = Cashier::$customerModel::firstOrCreate([
             'billable_id' => $passthrough['custom_int1'],
             'billable_type' => $passthrough['custom_str1'],
         ])->billable;
-
-        ray("The new customer to be returned now that was firstOrCreate is ", $customer);
 
         return $customer;
     }

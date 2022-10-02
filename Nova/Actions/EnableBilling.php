@@ -2,17 +2,15 @@
 
 namespace App\Nova\Actions;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Fields\ActionFields;
-use FintechSystems\PayFast\Subscription;
 use Illuminate\Queue\InteractsWithQueue;
-use FintechSystems\PayFast\Facades\PayFast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class FetchSubscriptionInformation extends Action
+class EnableBilling extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -24,11 +22,11 @@ class FetchSubscriptionInformation extends Action
      * @return mixed
      */
     public function handle(ActionFields $fields, Collection $models)
-    {        
-        foreach($models as $subscription) {            
-            $result = PayFast::fetchSubscription($subscription->payfast_token);
+    {
+        foreach($models as $user) {
+            $billingUser = User::find($user->id);
             
-            $subscription->updatePayFastSubscription($result);
+            $billingUser->createAsCustomer(['trial_ends_at' => now()->addDays(config('payfast.trial_days'))]);
         }
     }
 

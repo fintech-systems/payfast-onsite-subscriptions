@@ -59,11 +59,17 @@ class Subscription extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            Stack::make('User/Plan', [
-                Number::make('Billable ID'),
+            Text::make('Subscriber', function() {
+                $url = config('nova.path') . '/resources/users/' . $this->billable->id;
+                $url = "<a href='$url' class='no-underline dim text-primary font-bold'>{$this->billable->email}</a>";
+                return $url;
+            })->asHtml(),
 
-                Text::make('Name'),
-            ]),
+            // Stack::make('User/Plan', [
+            //     Number::make('Billable ID'),
+
+            //     Text::make('Name'),
+            // ]),
 
             Text::make('Merchant Payment ID'),
 
@@ -78,9 +84,9 @@ class Subscription extends Resource
 
             Date::make('Next Bill At'),
 
-            Date::make('Next Run At'),
+            // Date::make('Next Run At'),
 
-            DateTime::make('Ends At'),
+            Date::make('Ends At'),
 
             DateTime::make('Cancelled At'),
 
