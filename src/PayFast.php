@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use FintechSystems\PayFast\Contracts\BillingProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class PayFast implements BillingProvider
 {
@@ -59,7 +58,7 @@ class PayFast implements BillingProvider
 
         $response = Http::withHeaders($this->headers())
             ->put("https://api.payfast.co.za/subscriptions/$payfast_token/cancel?$append")
-            ->json();        
+            ->json();
 
         ray($response['data']['message'])->green();
 
@@ -90,7 +89,7 @@ class PayFast implements BillingProvider
             'custom_str1' => Auth::user()->getMorphClass(),
             'custom_int1' => Auth::user()->getKey(),
             'custom_str2' => $plan['name'],
-            'custom_int2' => $planId,            
+            'custom_int2' => $planId,
             'item_name' => config('app.name') . " $recurringType Subscription",
             'email_address' => Auth::user()->email,
         ];
@@ -100,7 +99,7 @@ class PayFast implements BillingProvider
         if ($mergeFields) {
             $data = array_merge($data, $mergeFields);
         }
-        
+
         $message = "The PayFast onsite modal was invoked with these merged values and will now wait for user input:";
 
         ray($message)->purple();
@@ -109,8 +108,8 @@ class PayFast implements BillingProvider
         $signature = PayFast::generateApiSignature($data, $this->passphrase());
 
         $pfData = array_merge($data, ["signature" => $signature]);
-        
-        return $this->generatePaymentIdentifier($pfData);                
+
+        return $this->generatePaymentIdentifier($pfData);
     }
 
     public function dataToString($dataArray)
@@ -154,7 +153,7 @@ class PayFast implements BillingProvider
     {
         $response = Http::post($this->url, $pfParameters);
 
-        if (!isset($response['uuid'])) {
+        if (! isset($response['uuid'])) {
             ray("generatePaymentdentifier failed as response didn't have UUID. Output request parameters and response body(): ", $pfParameters);
 
             ray($response->body());
@@ -197,7 +196,8 @@ class PayFast implements BillingProvider
 
     // Public getters
 
-    public function callbackUrl() {
+    public function callbackUrl()
+    {
         if ($this->testmode == 'true') {
             return config('payfast.callback_url_test');
         } else {

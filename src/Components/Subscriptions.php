@@ -23,7 +23,7 @@ class Subscriptions extends Component
 
     public $mergeFields;
 
-    protected $listeners = [        
+    protected $listeners = [
         'billingUpdated' => 'billingWasUpdated',
     ];
 
@@ -49,7 +49,7 @@ class Subscriptions extends Component
 
     public function cancelSubscription()
     {
-        ray('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token)->orange();        
+        ray('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token)->orange();
 
         $this->user->subscription('default')->cancel2();
 
@@ -66,7 +66,7 @@ class Subscriptions extends Component
         $payfast_token = $this->user->subscription('default')->payfast_token;
 
         ray("updateCard has been called with this token: $payfast_token");
-        
+
         // $url = "https://www.payfast.co.za/eng/recurring/update/$payfast_token?return=" . config('app.url') . "/user/profile?card_updated=true";
         $url = PayFast::url() . "/recurring/update/$payfast_token?return=" . PayFast::callbackUrl() . "/user/profile?card_updated=true";
 
@@ -93,7 +93,7 @@ class Subscriptions extends Component
 
     public function displayCreateSubscription()
     {
-        if ($this->user->onGenericTrial()) {            
+        if ($this->user->onGenericTrial()) {
             $subscriptionStartsAt = $this->user->trialEndsAt()->addDay()->format('Y-m-d');
 
             $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
