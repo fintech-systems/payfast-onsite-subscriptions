@@ -128,6 +128,9 @@ class PayFast implements BillingProvider
         return substr($pfOutput, 0, -1);
     }
 
+    /**
+     * Fetch subscription information information from the API.
+     */
     public function fetchSubscription($token)
     {
         ray("fetchSubscription is called with this token: $token")->blue();
@@ -141,6 +144,17 @@ class PayFast implements BillingProvider
         ray($response['data']['response'])->green();
 
         return $response;
+    }
+
+    /**
+     * Helper to determine current subscription state of a subscribed user.
+     */
+    public function getSubscriptionStatus($user) {
+        if ($user->subscribed('default')) {
+            return "Subscribed";
+        }
+
+        return "No data";
     }
 
     /**
