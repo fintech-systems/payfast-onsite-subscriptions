@@ -3,24 +3,23 @@
 namespace FintechSystems\PayFast\Http\Controllers;
 
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use FintechSystems\PayFast\Cashier;
-use FintechSystems\PayFast\Payment;
-use FintechSystems\PayFast\Receipt;
-use Illuminate\Support\Facades\Log;
-use FintechSystems\PayFast\Subscription;
-use FintechSystems\PayFast\Facades\PayFast;
-use Symfony\Component\HttpFoundation\Response;
+use FintechSystems\PayFast\Events\PaymentSucceeded;
+use FintechSystems\PayFast\Events\SubscriptionCancelled;
+use FintechSystems\PayFast\Events\SubscriptionCreated;
+use FintechSystems\PayFast\Events\SubscriptionPaymentSucceeded;
 use FintechSystems\PayFast\Events\WebhookHandled;
 use FintechSystems\PayFast\Events\WebhookReceived;
-use FintechSystems\PayFast\Events\PaymentSucceeded;
-use FintechSystems\PayFast\Events\SubscriptionCreated;
-use FintechSystems\PayFast\Events\SubscriptionFetched;
-use FintechSystems\PayFast\Events\SubscriptionCancelled;
-use FintechSystems\PayFast\Exceptions\MissingSubscription;
-use FintechSystems\PayFast\Events\SubscriptionPaymentSucceeded;
 use FintechSystems\PayFast\Exceptions\InvalidMorphModelInPayload;
+use FintechSystems\PayFast\Exceptions\MissingSubscription;
+use FintechSystems\PayFast\Facades\PayFast;
+use FintechSystems\PayFast\Payment;
+use FintechSystems\PayFast\Receipt;
+use FintechSystems\PayFast\Subscription;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
 {
@@ -52,7 +51,7 @@ class WebhookController extends Controller
 
                 WebhookHandled::dispatch([
                     'action' => 'ad_hoc_payment_received',
-                    'payload' => $payload
+                    'payload' => $payload,
                 ]);
 
                 return new Response('Webhook ad-hoc payment received (nonSubscriptionPaymentReceived) handled');
@@ -63,7 +62,7 @@ class WebhookController extends Controller
 
                 WebhookHandled::dispatch([
                     'action' => 'subscription_created_payment_applied',
-                    'payload' => $payload
+                    'payload' => $payload,
                 ]);
 
                 return new Response('Webhook createSubscription/applySubscriptionPayment handled');
@@ -74,7 +73,7 @@ class WebhookController extends Controller
 
                 WebhookHandled::dispatch([
                     'action' => 'subscription_cancelled',
-                    'payload' => $payload
+                    'payload' => $payload,
                 ]);
 
                 return new Response('Webhook cancelSubscription handled');
