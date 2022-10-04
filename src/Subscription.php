@@ -826,7 +826,7 @@ class Subscription extends Model
         if (! isset($this->payfastInfo()['run_date'])) {
             return;
         }
-        
+
         // echo "\nDone checking for payfastInfo()...\n";
 
         // echo $this->payfastInfo()['run_date'];
