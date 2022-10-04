@@ -821,11 +821,7 @@ class Subscription extends Model
             return;
         }
 
-        $paymentDate = $this->payfastInfo()['run_date'];
-
-        // $dateOnly = substr($this->payfastInfo()['run_date'], 0, 10);
-
-        $payment['date'] = $paymentDate;
+        $payment['date'] = $this->payfastInfo()['run_date'];
         $payment['currency'] = 'ZAR';
         $payment['amount'] = $this->payfastInfo()['amount'];
 
@@ -899,7 +895,11 @@ class Subscription extends Model
             return $this->payfastInfo;
         }
 
-        return $this->payfastInfo = PayFast::fetchSubscription($this->payfast_token)['data']['response'];
+        $payfastInfo = PayFast::fetchSubscription($this->payfast_token)['data']['response'];
+
+        ray($payfastInfo);
+
+        return $this->payfastInfo = $payfastInfo;
 
         // return $this->payfastInfo = Cashier::post('/subscription/users', array_merge([
         //     'subscription_id' => $this->paddle_id,
