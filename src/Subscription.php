@@ -683,7 +683,7 @@ class Subscription extends Model
             return $this;
         }
 
-        
+
 
         ray($this->runDate()->date());
 

@@ -100,7 +100,7 @@ class Payment implements Arrayable, Jsonable, JsonSerializable
     public function date()
     {
         echo $this->date();
-        
+
         // return Carbon::createFromFormat('Y-m-d', $this->date, 'UTC')->startOfDay();
         return Carbon::createFromFormat('Y-m-d\TH:i:sP', $this->date, 'UTC')->startOfDay();
     }
