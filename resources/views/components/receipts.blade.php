@@ -27,7 +27,7 @@
                             <td>{{ $receipt->item_name }}</td>
                             <td style="text-align:right">R {{ $receipt->amount_gross }}</td>
                             <td style="padding-left:10px">{{ $receipt->payment_status }}</td>                    
-                            <td nowrap>{{ $receipt->billing_date->format('Y-m-d') ?? 'n/a'}}</td>
+                            <td nowrap>{{ $receipt->billing_date->format('Y-m-d') ?? 'n/a' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
