@@ -2,6 +2,10 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.1.3 - 2022-10-04
+
+- Bugfix in receipts blade allow for null on PayFast field billing_date
+
 ## v1.1.2 - 2022-10-04
 
 - Release
