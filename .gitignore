@@ -33,3 +33,6 @@ coverage.xml
 
 ## phpunit.xml contains sensitive info
 phpunit.xml
+
+##
+.php-cs-fixer.cache
