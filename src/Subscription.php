@@ -557,7 +557,7 @@ class Subscription extends Model
 
     /**
      * Update the underlying PayFast subscription information for the model.
-     * 
+     *
      * TODO Duplicate code also exists in Override Status
      */
     public function updatePayFastSubscription(array $result)
