@@ -3,9 +3,10 @@
 namespace FintechSystems\PayFast;
 
 use Carbon\Carbon;
-use FintechSystems\PayFast\Contracts\BillingProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use FintechSystems\PayFast\SubscriptionStatus;
+use FintechSystems\PayFast\Contracts\BillingProvider;
 
 class PayFast implements BillingProvider
 {
@@ -37,8 +38,10 @@ class PayFast implements BillingProvider
             $prependUrl = config('payfast.callback_url');
         }
 
-        ray("In PayFast constructor, testmode: $this->testmode, URL: $this->url");
-
+        if (config('payfast.debug') == true) {
+            ray("In PayFast constructor, testmode: $this->testmode, URL: $this->url");
+        }
+        
         $this->returnUrl = $prependUrl . $client['return_url'];
         $this->cancelUrl = $prependUrl . $client['cancel_url'];
         $this->notifyUrl = $prependUrl . $client['notify_url'];
@@ -149,11 +152,7 @@ class PayFast implements BillingProvider
      * Helper to determine current subscription state of a subscribed user.
      */
     public function getSubscriptionStatus($user) {
-        if ($user->subscribed('default')) {
-            return "Subscribed";
-        }
-
-        return "No data";
+        return SubscriptionStatus::for($user);
     }
 
     /**

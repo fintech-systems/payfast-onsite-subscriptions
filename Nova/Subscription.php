@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\ChangeEndsAt;
 use App\Nova\Actions\CancelSubscription;
 use App\Nova\Actions\FetchSubscriptionInformation;
 use App\Nova\Actions\OverridePayFastStatus;
@@ -65,26 +66,13 @@ class Subscription extends Resource
                 return $url;
             })->asHtml(),
 
-            // Stack::make('User/Plan', [
-            //     Number::make('Billable ID'),
-
-            //     Text::make('Name'),
-            // ]),
-
             Text::make('Merchant Payment ID'),
 
             Text::make('PayFast Token'),
 
-            // Stack::make('Status/Payment', [
-            Stack::make('PayFast Status', [
-                Text::make('PayFast Status'),
-
-                // Text::make('Payment Status'),
-            ]),
+            Text::make('PayFast Status'),
 
             Date::make('Next Bill At'),
-
-            // Date::make('Next Run At'),
 
             Date::make('Ends At'),
 
@@ -136,6 +124,7 @@ class Subscription extends Resource
     public function actions(Request $request)
     {
         return [
+            new ChangeEndsAt,
             new FetchSubscriptionInformation,
             new CancelSubscription,
             new OverridePayFastStatus,
