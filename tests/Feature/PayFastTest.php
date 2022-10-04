@@ -133,14 +133,14 @@ class PayFastTest extends FeatureTestCase
         $this->assertEquals(Subscription::STATUS_PAUSED, $result['data']['response']['status_text']);
     }
 
-    /** 
+    /**
      * @test
-     * 
+     *
      * This test fails on GitHub with date() null.
      * Then it starting hanging on localhost.
      * Spent hours trying to fix it and then aborted.
-     * 
-     * 
+     *
+     *
      */
     // public function it_can_create_a_subscription_and_then_cancel_it()
     // {
