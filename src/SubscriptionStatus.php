@@ -11,7 +11,7 @@ class SubscriptionStatus
      */
     public static function for($user)
     {
-        if (!$user->subscribed('default')) {
+        if (! $user->subscribed('default')) {
             if ($user->onGenericTrial()) {
                 // On generic trial, which is similar to createCustomer on a fresh user
                 $status = ["on_trial" => $user->trialEndsAt()];
