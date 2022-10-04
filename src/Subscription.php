@@ -684,14 +684,7 @@ class Subscription extends Model
         if ($this->onGracePeriod()) {
             return $this;
         }
-
-        // echo $this;
-        // ray($this);
-
-        // ray($this->runDate()->date());
-
-        // echo($this->runDate()->date());
-
+       
         if ($this->onPausedGracePeriod() || $this->paused()) {
             $endsAt = $this->paused_from->isFuture()
                 ? $this->paused_from
@@ -821,24 +814,15 @@ class Subscription extends Model
      * @return \FintechSystems\PayFast\Payment|null
      */
     public function runDate()
-    {
-        // echo "\nChecking for payfastInfo()...\n";
-        // ray("Checking for payfastInfo()...\n");
-
+    {        
         if (! isset($this->payfastInfo()['run_date'])) {
             return;
         }
 
-        // echo "\nDone checking for payfastInfo()...\n";
-
-        // echo $this->payfastInfo()['run_date'];
-
         $payment['date'] = $this->payfastInfo()['run_date'];
         $payment['currency'] = 'ZAR';
         $payment['amount'] = $this->payfastInfo()['amount'];
-
-        // ray($payment);
-
+        
         return new Payment($payment['amount'], $payment['currency'], $payment['date']);
     }
 
