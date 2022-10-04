@@ -19,6 +19,8 @@ class OverridePayFastStatus extends DestructiveAction
 
     /**
      * Perform the action on the given models.
+     * 
+     * TODO Beware duplicate code also exists in Subscription.php
      *
      * @param  \Laravel\Nova\Fields\ActionFields  $fields
      * @param  \Illuminate\Support\Collection  $models
@@ -39,9 +41,8 @@ class OverridePayFastStatus extends DestructiveAction
                 ray($message)->orange();
     
                 $subscription->cancelled_at = now();
-
-                // 01 Oct 2022 - commented this out as data field does not exist
-                // $subscription->ended_at = now();
+                
+                $subscription->ends_at = now();
             }
 
             $subscription->save();
