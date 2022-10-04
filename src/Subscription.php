@@ -819,9 +819,15 @@ class Subscription extends Model
      */
     public function runDate()
     {
+        echo "Checking for payfastInfo()...\n";
+
         if (! isset($this->payfastInfo()['run_date'])) {
             return;
         }
+
+        echo "Done checking for payfastInfo()...\n";
+
+        echo $this->payfastInfo()['run_date'];
 
         $payment['date'] = $this->payfastInfo()['run_date'];
         $payment['currency'] = 'ZAR';
