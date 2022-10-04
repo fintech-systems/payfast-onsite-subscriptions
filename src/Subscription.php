@@ -684,7 +684,7 @@ class Subscription extends Model
         if ($this->onGracePeriod()) {
             return $this;
         }
-       
+
         if ($this->onPausedGracePeriod() || $this->paused()) {
             $endsAt = $this->paused_from->isFuture()
                 ? $this->paused_from
@@ -814,7 +814,7 @@ class Subscription extends Model
      * @return \FintechSystems\PayFast\Payment|null
      */
     public function runDate()
-    {        
+    {
         if (! isset($this->payfastInfo()['run_date'])) {
             return;
         }
@@ -822,7 +822,7 @@ class Subscription extends Model
         $payment['date'] = $this->payfastInfo()['run_date'];
         $payment['currency'] = 'ZAR';
         $payment['amount'] = $this->payfastInfo()['amount'];
-        
+
         return new Payment($payment['amount'], $payment['currency'], $payment['date']);
     }
 
