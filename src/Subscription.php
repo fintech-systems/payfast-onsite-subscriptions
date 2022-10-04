@@ -683,6 +683,10 @@ class Subscription extends Model
             return $this;
         }
 
+        ray($this->runDate()->date());
+
+        echo($this->runDate()->date());
+
         if ($this->onPausedGracePeriod() || $this->paused()) {
             $endsAt = $this->paused_from->isFuture()
                 ? $this->paused_from
