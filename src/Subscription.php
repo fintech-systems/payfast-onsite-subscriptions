@@ -804,9 +804,9 @@ class Subscription extends Model
     /**
      * Get the next payment for the subscription.
      *
-     * This is the PayFast version. In fixes the currency to ZAR and strips
-     * the date of the time portion which in normally returned like
-     * this: 2022-11-01T00:00:00+02:00 for use in Payment
+     * This is the PayFast version. In fixes the currency to ZAR and strips the
+     * date of the time portion which in normally returned like this:
+     * 2022-11-01T00:00:00+02:00 for use in Payment date() method
      *
      *
      * @return \FintechSystems\PayFast\Payment|null
@@ -817,11 +817,15 @@ class Subscription extends Model
             return;
         }
 
-        $dateOnly = substr($this->payfastInfo()['run_date'], 0, 10);
+        $paymentDate = $this->payfastInfo()['run_date'];
 
-        $payment['date'] = Carbon::createFromFormat('Y-m-d', $dateOnly)->toDateString();
+        // $dateOnly = substr($this->payfastInfo()['run_date'], 0, 10);
+
+        $payment['date'] = $paymentDate;
         $payment['currency'] = 'ZAR';
         $payment['amount'] = $this->payfastInfo()['amount'];
+
+        ray($payment);
 
         return new Payment($payment['amount'], $payment['currency'], $payment['date']);
     }
