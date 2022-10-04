@@ -58,7 +58,7 @@ class Subscription extends Model
     ];
 
     /**
-     * The cached Paddle info for the subscription.
+     * The cached PayFast info for the subscription.
      *
      * @var array
      */
@@ -683,11 +683,12 @@ class Subscription extends Model
             return $this;
         }
 
-        echo $this;
+        // echo $this;
+        // ray($this);
 
-        ray($this->runDate()->date());
+        // ray($this->runDate()->date());
 
-        echo($this->runDate()->date());
+        // echo($this->runDate()->date());
 
         if ($this->onPausedGracePeriod() || $this->paused()) {
             $endsAt = $this->paused_from->isFuture()
@@ -819,21 +820,22 @@ class Subscription extends Model
      */
     public function runDate()
     {
-        echo "Checking for payfastInfo()...\n";
+        // echo "\nChecking for payfastInfo()...\n";
+        // ray("Checking for payfastInfo()...\n");
 
         if (! isset($this->payfastInfo()['run_date'])) {
             return;
         }
+        
+        // echo "\nDone checking for payfastInfo()...\n";
 
-        echo "Done checking for payfastInfo()...\n";
-
-        echo $this->payfastInfo()['run_date'];
+        // echo $this->payfastInfo()['run_date'];
 
         $payment['date'] = $this->payfastInfo()['run_date'];
         $payment['currency'] = 'ZAR';
         $payment['amount'] = $this->payfastInfo()['amount'];
 
-        ray($payment);
+        // ray($payment);
 
         return new Payment($payment['amount'], $payment['currency'], $payment['date']);
     }
