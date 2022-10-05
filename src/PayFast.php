@@ -3,10 +3,10 @@
 namespace FintechSystems\PayFast;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
+use FintechSystems\PayFast\Contracts\BillingProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use FintechSystems\PayFast\Contracts\BillingProvider;
+use Illuminate\Support\Facades\Log;
 
 class PayFast implements BillingProvider
 {
@@ -37,7 +37,7 @@ class PayFast implements BillingProvider
             $this->url = 'https://www.payfast.co.za/onsite/process';
             $prependUrl = config('payfast.callback_url');
         }
-        
+
         if (config('payfast.debug') == true) {
             $this->debug("In PayFast API constructor, testmode: $this->testmode, URL: $this->url");
         }
@@ -78,7 +78,7 @@ class PayFast implements BillingProvider
         $plan = config('payfast.plans')[$planId];
 
         $recurringType = Subscription::frequencies($planId);
-        
+
         $data = [
             'merchant_id' => $this->merchantId(),
             'merchant_key' => $this->merchantKey(),
@@ -135,14 +135,14 @@ class PayFast implements BillingProvider
      * Defaults to debug and purple if logging is anything except the defaults.
      * Won't log to local in the application isn't in production.
      */
-    function debug($message, $level = 'debug')
-    {        
-        $color = match($level) {
+    public function debug($message, $level = 'debug')
+    {
+        $color = match ($level) {
             'debug' => 'gray',
             'info' => 'blue',
             'notice' => 'green',
             'warning' => 'orange',
-            'error' => 'red',            
+            'error' => 'red',
             'critical' => 'red',
             'alert' => 'red',
             'emergency' => 'red',
@@ -159,14 +159,14 @@ class PayFast implements BillingProvider
 
             $message = $caller . "#$line|" . $message;
         }
-        
+
         if ($level == 'debug' && config('payfast.debug') == false) {
             return;
         }
-        
+
         if (config('app.env') == 'production') {
             Log::$level($message);
-        }        
+        }
     }
 
     /**

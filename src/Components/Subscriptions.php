@@ -33,7 +33,7 @@ class Subscriptions extends Component
      * or the receipt that was updated when a paying also came in.
      */
     public function billingWasUpdated()
-    {        
+    {
         $this->emitTo('receipts', 'refreshComponent');
 
         $this->displayingCreateSubscription = false;
