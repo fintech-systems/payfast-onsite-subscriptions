@@ -20,9 +20,10 @@ class Banner extends Component
     }
 
     /**
-     * This is the God loop for subscription checks. It shows every possible iteration
+     * This is a big loop for subscription checks. It shows every possible iteration
      * of subscription combinations. It was copied from the Livewire subscriptions
      * component. Checks: Trial or not a plan, or, in grace or subscribed
+     * There is a duplicate more abbreviated function.
      */
     public function getMessage()
     {

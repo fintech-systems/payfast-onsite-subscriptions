@@ -177,7 +177,7 @@ class WebhookController extends Controller
         } else {
             $message = "Applying a subscription payment to " . $payload['token'] . "...";
         }
-        ray($message)->purple();
+        PayFast::debug($message, 'applySubscriptionPayment()');
 
         if (! isset($payload['amount_gross'])) {
             throw new Exception("Unable to apply a payment to an existing subscription because amount_gross is not set. Probably cause the subscription was deleted.");

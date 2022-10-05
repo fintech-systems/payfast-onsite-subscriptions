@@ -151,7 +151,13 @@ class PayFast implements BillingProvider
         ray($message)->$color();
 
         if ($color == 'purple') {
+            $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,2)[1]['function'];
+
+            $line = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,2)[1]['line'];
+
             $level = 'debug';
+
+            $message = $caller . "#$line|" . $message;
         }
         
         if ($level == 'debug' && config('payfast.debug') == false) {
