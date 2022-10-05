@@ -3,9 +3,10 @@
 namespace FintechSystems\PayFast;
 
 use Carbon\Carbon;
-use FintechSystems\PayFast\Contracts\BillingProvider;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use FintechSystems\PayFast\Contracts\BillingProvider;
 
 class PayFast implements BillingProvider
 {
@@ -36,9 +37,9 @@ class PayFast implements BillingProvider
             $this->url = 'https://www.payfast.co.za/onsite/process';
             $prependUrl = config('payfast.callback_url');
         }
-
+        
         if (config('payfast.debug') == true) {
-            ray("In PayFast constructor, testmode: $this->testmode, URL: $this->url");
+            $this->debug("In PayFast API constructor, testmode: $this->testmode, URL: $this->url");
         }
 
         $this->returnUrl = $prependUrl . $client['return_url'];
@@ -68,16 +69,16 @@ class PayFast implements BillingProvider
     }
 
     /**
-     * Create a new subscription using PayFast Onsite Payments
+     * Create a new subscription using PayFast Onsite Payments. One of the most
+     * important aspect is ensuring that the correct billing date is sent
+     * with the order, and also on renewals the initial amount is zero
      */
     public function createOnsitePayment($planId, $billingDate = null, $mergeFields = [], $cycles = 0)
     {
         $plan = config('payfast.plans')[$planId];
 
         $recurringType = Subscription::frequencies($planId);
-
-        ray("billingDate in createOnsitePayment: $billingDate");
-
+        
         $data = [
             'merchant_id' => $this->merchantId(),
             'merchant_key' => $this->merchantKey(),
@@ -104,8 +105,8 @@ class PayFast implements BillingProvider
 
         $message = "The PayFast onsite modal was invoked with these merged values and will now wait for user input:";
 
-        ray($message)->purple();
-        ray($data)->green();
+        $this->debug($message, 'displayPayFastModal');
+        $this->debug($data, 'notice');
 
         $signature = PayFast::generateApiSignature($data, $this->passphrase());
 
@@ -127,6 +128,39 @@ class PayFast implements BillingProvider
 
         // Remove last ampersand
         return substr($pfOutput, 0, -1);
+    }
+
+    /**
+     * A simple debugger that combines what Ray can do and built-in Laravel logging.
+     * Defaults to debug and purple if logging is anything except the defaults.
+     * Won't log to local in the application isn't in production.
+     */
+    function debug($message, $level = 'debug')
+    {        
+        $color = match($level) {
+            'debug' => 'gray',
+            'info' => 'blue',
+            'notice' => 'green',
+            'warning' => 'orange',
+            'error' => 'red',            
+            'critical' => 'red',
+            'alert' => 'red',
+            'emergency' => 'red',
+            default => 'purple',
+        };
+        ray($message)->$color();
+
+        if ($color == 'purple') {
+            $level = 'debug';
+        }
+        
+        if ($level == 'debug' && config('payfast.debug') == false) {
+            return;
+        }
+        
+        if (config('app.env') == 'production') {
+            Log::$level($message);
+        }        
     }
 
     /**

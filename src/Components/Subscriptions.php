@@ -27,10 +27,13 @@ class Subscriptions extends Component
         'billingUpdated' => 'billingWasUpdated',
     ];
 
+    /**
+     * After billing is updated, that means when PayFast onsite subscription modal goes
+     * away, the front-end must reflect the changes that could be a new subscription
+     * or the receipt that was updated when a paying also came in.
+     */
     public function billingWasUpdated()
-    {
-        ray("billingUpdated event fired, refreshing receipts and removing subscription display");
-
+    {        
         $this->emitTo('receipts', 'refreshComponent');
 
         $this->displayingCreateSubscription = false;
@@ -49,7 +52,7 @@ class Subscriptions extends Component
 
     public function cancelSubscription()
     {
-        ray('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token)->orange();
+        PayFast::debug('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token, 'warning');
 
         $this->user->subscription('default')->cancel2();
 
