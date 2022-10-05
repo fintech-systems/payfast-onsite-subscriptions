@@ -52,7 +52,7 @@ class PayFastServiceProvider extends ServiceProvider
                 'passphrase' => config('payfast.passphrase'),
 
                 'testmode' => config('payfast.testmode'),
-                
+
                 'merchant_id_test' => config('payfast.merchant_id_test'),
                 'merchant_key_test' => config('payfast.merchant_key_test'),
                 'passphrase_test' => config('payfast.passphrase_test'),
