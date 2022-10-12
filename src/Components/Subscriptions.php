@@ -93,16 +93,16 @@ class Subscriptions extends Component
     {
         $this->plan = $planId;
     }
-    
+
     public function displayCreateSubscription()
     {
         // User's trial has been activated but they have never been a subscriber
-        if ($this->user->onGenericTrial() && !$this->user->subscribed('default')) {            
-            $billingDate = $this->user->trialEndsAt()->addMonth()->addDay()->format('Y-m-d');            
+        if ($this->user->onGenericTrial() && ! $this->user->subscribed('default')) {
+            $billingDate = $this->user->trialEndsAt()->addMonth()->addDay()->format('Y-m-d');
         }
 
         // User has or has had an active subscription but is still in a trial period
-        if ($this->user->subscribed('default') && $this->user->subscription('default')->onGracePeriod()) {            
+        if ($this->user->subscribed('default') && $this->user->subscription('default')->onGracePeriod()) {
             $billingDate = $this->user->subscription('default')->ends_at->addDay()->format('Y-m-d');
         }
 
