@@ -19,8 +19,8 @@
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>
-                            If you subscribe now the first payment is due on the
-                            {{ $user->trialEndsAt()->addDay()->format('jS \o\f F Y') }}.
+                            If you subscribe now next payment will be due on the
+                            {{ $user->trialEndsAt()->addMonth()->addDay()->format('jS \o\f F Y') }}.
                         </p>
                     </div>
                 @else
@@ -75,7 +75,8 @@
 
         <!-- Subscription Action Buttons -->
         <div class="mt-5">
-            @if ($user->subscribed('default') && !$user->onGenericTrial() && !$user->subscription('default')->onGracePeriod())                            
+            {{-- @if ($user->subscribed('default') && !$user->onGenericTrial() && !$user->subscription('default')->onGracePeriod())                             --}}
+            @if ($user->subscribed('default')  && !$user->subscription('default')->onGracePeriod())
                 <x-jet-secondary-button style="color: blue;" wire:click="updateCard">
                     {{ __('Update Card Information') }}
                 </x-jet-secondary-button>

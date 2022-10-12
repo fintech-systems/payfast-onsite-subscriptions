@@ -93,21 +93,21 @@ class Subscriptions extends Component
     {
         $this->plan = $planId;
     }
-
+    
     public function displayCreateSubscription()
     {
-        if ($this->user->onGenericTrial()) {
-            $subscriptionStartsAt = $this->user->trialEndsAt()->addDay()->format('Y-m-d');
-
-            $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
+        // User's trial has been activated but they have never been a subscriber
+        if ($this->user->onGenericTrial() && !$this->user->subscribed('default')) {            
+            $billingDate = $this->user->trialEndsAt()->addMonth()->addDay()->format('Y-m-d');            
         }
 
-        if ($this->user->subscribed('default') && $this->user->subscription('default')->onGracePeriod()) {
-            $subscriptionStartsAt = $this->user->subscription('default')->ends_at->addDay()->format('Y-m-d');
+        // User has or has had an active subscription but is still in a trial period
+        if ($this->user->subscribed('default') && $this->user->subscription('default')->onGracePeriod()) {            
+            $billingDate = $this->user->subscription('default')->ends_at->addDay()->format('Y-m-d');
         }
 
-        if (! isset($subscriptionStartsAt)) {
-            $subscriptionStartsAt = \Carbon\Carbon::now()->format('Y-m-d');
+        if (! isset($billingDate)) {
+            $billingDate = \Carbon\Carbon::now()->format('Y-m-d');
         }
 
         if ($this->user->subscribed('default') && $this->user->subscription('default')->onGracePeriod()) {
@@ -116,7 +116,7 @@ class Subscriptions extends Component
 
         $this->identifier = PayFast::createOnsitePayment(
             (int) $this->plan,
-            $subscriptionStartsAt,
+            $billingDate,
             $this->mergeFields
         );
 

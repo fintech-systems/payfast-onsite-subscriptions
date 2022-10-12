@@ -2,6 +2,11 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.2.0 - 2022-10-12
+
+- Bugfix: When a user is on trial, they must be able to cancel. Update Livewire component.
+- Bugfix: When a user is still on trial, and they pay, then date must be added to end of trial date
+
 ## v1.1.3 - 2022-10-04
 
 - Bugfix in receipts blade allow for null on PayFast field billing_date
