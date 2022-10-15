@@ -12,8 +12,11 @@ Requirements:
 
 - PHP 8.1
 - Laravel 9.x
+
 - A [PayFast Sandbox account](https://sandbox.payfast.co.za/)
 - A [PayFast account](https://www.payfast.co.za/registration)
+
+If you want to use Laravel Nova, version 4 is required for the `Subscription` and `Receipt` resources.
 
 ## Installation
 

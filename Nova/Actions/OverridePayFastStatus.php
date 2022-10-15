@@ -12,6 +12,7 @@ use FintechSystems\PayFast\Subscription;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Actions\DestructiveAction;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class OverridePayFastStatus extends DestructiveAction
 {
@@ -54,7 +55,7 @@ class OverridePayFastStatus extends DestructiveAction
      *
      * @return array
      */
-    public function fields()
+    public function fields(NovaRequest $request)
     {
         return [
             Select::make('Payfast Status')

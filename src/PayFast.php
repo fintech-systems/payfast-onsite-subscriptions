@@ -22,7 +22,7 @@ class PayFast implements BillingProvider
 
     public function __construct($client)
     {
-        $this->testmode = $client['testmode'];
+        $this->testmode = $client['testmode'] ?? false;
 
         if ($this->testmode == true) {
             $this->merchant_id = $client['merchant_id_test'];

@@ -11,7 +11,7 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Receipts extends Resource
+class Receipt extends Resource
 {
     /**
      * The model the resource corresponds to.

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Actions\DestructiveAction;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ChangeEndsAt extends DestructiveAction
 {
@@ -37,7 +38,7 @@ class ChangeEndsAt extends DestructiveAction
      *
      * @return array
      */
-    public function fields()
+    public function fields(NovaRequest $request)
     {
         return [
             Date::make('Ends At')

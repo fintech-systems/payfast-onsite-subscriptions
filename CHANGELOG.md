@@ -2,6 +2,19 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.4.1 - 2022-10-15
+
+- Remove illuminate contracts as dependency
+- Add normal logging back to webhook controller again
+- If testmode variable isn't set it will not fail on merchant_id giving the user a bigger clue as to .env variables that haven't been added
+- If the model doesn't have a first name or last name then just use name
+
+## v1.4.0 - 2022-10-13
+
+- Bump Nova minimum to version 4 by adding NovaRequest classes to actions
+- Update readme to specify Nova 4
+- Fix plural problem with the `Receipt[s]` resource name
+
 ## v1.3.0 - 2022-10-12
 
 - Bump PHP to 8.1

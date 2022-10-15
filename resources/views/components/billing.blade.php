@@ -11,8 +11,8 @@
             <!-- Subscriptions -->            
             <div class="mt-10 sm:mt-0">                
                 @livewire('subscriptions', ['mergeFields' => [
-                        'name_first' => Auth()->user()->first_name,
-                        'name_last' => Auth()->user()->last_name,
+                        'name_first' => Auth()->user()->first_name ?? Auth()->user()->name,
+                        'name_last' => Auth()->user()->last_name ?? Auth()->user()->name,
                         'item_description' => config('app.name') . " Subscription",
                     ]] )                    
             </div>        

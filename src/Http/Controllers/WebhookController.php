@@ -31,10 +31,13 @@ class WebhookController extends Controller
      */
     public function __invoke(Request $request)
     {
-        ray('Incoming Webhook from PayFast')->blue();
+        $message = 'Incoming Webhook from PayFast';
+        Log::info($message);
+        ray($message)->blue();
 
         $payload = $request->all();
 
+        Log::debug($payload);
         ray($payload)->green();
 
         if (isset($payload['ping'])) {

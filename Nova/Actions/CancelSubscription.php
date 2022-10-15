@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\ActionFields;
 use Illuminate\Queue\InteractsWithQueue;
 use FintechSystems\PayFast\Facades\PayFast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class CancelSubscription extends Action
 {
@@ -35,7 +36,7 @@ class CancelSubscription extends Action
      *
      * @return array
      */
-    public function fields()
+    public function fields(NovaRequest $request)
     {
         return [];
     }

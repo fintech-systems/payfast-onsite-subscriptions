@@ -11,6 +11,7 @@ use FintechSystems\PayFast\Subscription;
 use Illuminate\Queue\InteractsWithQueue;
 use FintechSystems\PayFast\Facades\PayFast;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class FetchSubscriptionInformation extends Action
 {
@@ -37,7 +38,7 @@ class FetchSubscriptionInformation extends Action
      *
      * @return array
      */
-    public function fields()
+    public function fields(NovaRequest $request)
     {
         return [];
     }
