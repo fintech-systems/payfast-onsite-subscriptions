@@ -2,6 +2,12 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.5.0 - 2022-10-21
+
+- Helper for status renamed from on_trial to on_generic_trial
+- Helper now outputs days left of trial and the plan name
+- ManagesSubscriptions trait can now return trial days left ->trialDaysLeft
+
 ## v1.4.1 - 2022-10-15
 
 - Remove illuminate contracts as dependency

@@ -2,6 +2,7 @@
 
 namespace FintechSystems\PayFast\Concerns;
 
+use Carbon\Carbon;
 use FintechSystems\PayFast\Cashier;
 use FintechSystems\PayFast\Subscription;
 use FintechSystems\PayFast\SubscriptionBuilder;
@@ -79,6 +80,21 @@ trait ManagesSubscriptions
         }
 
         return $this->customer->trial_ends_at;
+    }
+
+    /**
+     * Get the ending date of the trial.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Support\Carbon|null
+     */
+    public function trialDaysLeft($name = 'default')
+    {
+        if ($subscription = $this->subscription($name)) {
+            return - ($subscription->trial_ends_at->diffInDays( Carbon::now(), false));
+        }
+
+        return - ($this->customer->trial_ends_at->diffInDays( Carbon::now(), false));
     }
 
     /**

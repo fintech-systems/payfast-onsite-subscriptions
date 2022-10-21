@@ -12,9 +12,8 @@ class SubscriptionStatus
     public static function for($user)
     {
         if (! $user->subscribed('default')) {
-            if ($user->onGenericTrial()) {
-                // On generic trial, which is similar to createCustomer on a fresh user
-                $status = ["on_trial" => $user->trialEndsAt()];
+            if ($user->onGenericTrial()) {                
+                $status = ["on_generic_trial" => $user->trialDaysLeft()];
             } else {
                 // User has never been created as a customer
                 $status = ["no_subscription" => ''];
@@ -24,7 +23,9 @@ class SubscriptionStatus
                 // Subscription is within its grace period after cancellation.
                 $status = ["cancelled" => $user->subscription('default')->ends_at->format('Y-m-d')];
             } else {
-                $status = ["subscribed" => $user->subscription('default')->plan_id];
+                $status = [
+                    "subscribed" => config('payfast.plans')[$user->subscription('default')->plan_id]['name']
+                ];
             }
         }
 

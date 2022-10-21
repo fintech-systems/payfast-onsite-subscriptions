@@ -38,4 +38,53 @@ return [
             'recurring_amount' => 1089,
         ]
     ],
+
+    'billables' => [
+        'user' => [
+            'model' => User::class,
+            'trial_days' => 30,
+            'type' => 'subscription', // or sponsorship. Will be appended to PayFast description
+            'plans' => [
+                [
+                    'name' => 'Personal',
+                    'short_description' => "Keep track of up to 3 accounts.",
+                    'monthly' => 99,
+                    'yearly' => 1089,
+                    'features' => [
+                        'Import up to 3 accounts',
+                        'Export data and tags',                        
+                    ],
+                    'cta' => 'Start Free Trial',
+                    'mostPopular' => false,
+                ],
+                [
+                    'name' => 'Business',
+                    'short_description' => "Keep track of up to 10 accounts.",
+                    'monthly' => 199,
+                    'yearly' => 2189,
+                    'features' => [
+                        'Import up to 10 accounts',
+                        'Export data and tags',
+                        'Access data using an API',
+                    ],
+                    'cta' => 'Start Free Trial',
+                    'mostPopular' => true,
+                ],
+                [
+                    'name' => 'Provider',
+                    'short_description' => "Ideal when you're doing work for others.",
+                    'monthly' => env('SPARK_STANDARD_MONTHLY_PLAN', 1000),
+                    'yearly' => env('SPARK_STANDARD_YEARLY_PLAN', 1001),
+                    'features' => [
+                        'Import up to 100 accounts',
+                        'Export data and tags',
+                        'Access data using an API',
+                        'Central console for tag sharing',
+                    ],
+                    'cta' => 'Start Free Trial',
+                    'mostPopular' => false,
+                ],
+            ],
+        ],
+    ],
 ];
