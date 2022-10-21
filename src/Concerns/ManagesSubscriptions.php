@@ -91,10 +91,10 @@ trait ManagesSubscriptions
     public function trialDaysLeft($name = 'default')
     {
         if ($subscription = $this->subscription($name)) {
-            return - ($subscription->trial_ends_at->diffInDays( Carbon::now(), false));
+            return -($subscription->trial_ends_at->diffInDays(Carbon::now(), false));
         }
 
-        return - ($this->customer->trial_ends_at->diffInDays( Carbon::now(), false));
+        return -($this->customer->trial_ends_at->diffInDays(Carbon::now(), false));
     }
 
     /**

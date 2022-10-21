@@ -12,7 +12,7 @@ class SubscriptionStatus
     public static function for($user)
     {
         if (! $user->subscribed('default')) {
-            if ($user->onGenericTrial()) {                
+            if ($user->onGenericTrial()) {
                 $status = ["on_generic_trial" => $user->trialDaysLeft()];
             } else {
                 // User has never been created as a customer
@@ -24,7 +24,7 @@ class SubscriptionStatus
                 $status = ["cancelled" => $user->subscription('default')->ends_at->format('Y-m-d')];
             } else {
                 $status = [
-                    "subscribed" => config('payfast.plans')[$user->subscription('default')->plan_id]['name']
+                    "subscribed" => config('payfast.plans')[$user->subscription('default')->plan_id]['name'],
                 ];
             }
         }
