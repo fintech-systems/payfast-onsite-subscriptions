@@ -19,6 +19,9 @@
         </testsuite>
     </testsuites>
     <php>
-        <env name="DB_CONNECTION" value="testing"/>        
+        <env name="DB_CONNECTION" value="testing"/>
+        <env name="PAYFAST_MERCHANT_ID" value="1"/>
+        <env name="PAYFAST_MERCHANT_KEY" value="2"/>
+        <env name="PAYFAST_PASSPHRASE" value="3"/>
     </php>
 </phpunit>
