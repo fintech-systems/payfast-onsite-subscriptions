@@ -6,7 +6,6 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 - Removed index.php file in root which was related to an unrelated WHMCS module
 - Added "ExpiredTrial" helpers as per updated Paddle code and added a the official test for it as well
 - Tests were failing so added ENV variables in phpunit.xml.dist for merchant ID, key, and passphrase
-- 
 
 ## v1.5.0 - 2022-10-21
 
