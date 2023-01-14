@@ -23,6 +23,16 @@
                             {{ $user->trialEndsAt()->addMonth()->addDay()->format('jS \o\f F Y') }}.
                         </p>
                     </div>
+                @elseif($user->hasExpiredGenericTrial())
+                {{-- Expired Generic Trial --}}
+                    <h3 class="text-lg font-medium text-gray-900">
+                        Your trial has expired.
+                    </h3>
+                    <div class="mt-3 max-w-xl text-sm text-gray-600">
+                        <p>
+                            {{ __('Please select from our list of plans below') }}
+                        </p>
+                    </div>
                 @else
                 {{-- No Subscription --}}
                 <h3 class="text-lg font-medium text-gray-900">

@@ -20,7 +20,7 @@ class Banner extends Component
     }
 
     /**
-     * This is a big loop for subscription checks. It shows every possible iteration
+     * This is the god loop for subscription checks. It shows every possible iteration
      * of subscription combinations. It was copied from the Livewire subscriptions
      * component. Checks: Trial or not a plan, or, in grace or subscribed
      *
@@ -37,6 +37,8 @@ class Banner extends Component
             // {{-- Trial --}}
             if ($user->onGenericTrial()) {
                 $message = "You are currently on trial till " . $user->trialEndsAt()->format('jS \o\f F Y');
+            } elseif ($user->hasExpiredGenericTrial('default')) {
+                $message = "Your trial has expired.";
             } else {
                 $message = "You are not currently subscribed to a plan.";
             }
