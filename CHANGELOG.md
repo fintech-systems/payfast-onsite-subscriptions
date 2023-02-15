@@ -2,6 +2,11 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.5.3 - 2023-02-15
+
+- Bumped collission from version 6.3 to version 7.0
+- Did composer update
+
 ## v1.5.2 - 2023-01-14
 
 - Add UI conditionals for $user->hasExpiredGenericTrial and $user->onGenericTrial 
