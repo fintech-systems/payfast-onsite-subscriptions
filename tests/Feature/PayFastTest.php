@@ -124,5 +124,4 @@ class PayFastTest extends FeatureTestCase
 
         $this->assertEquals(Subscription::STATUS_PAUSED, $result['data']['response']['status_text']);
     }
-    
 }

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Dotenv\Dotenv;
 use FintechSystems\PayFast\PayFastServiceProvider;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Livewire\LivewireServiceProvider;
@@ -61,5 +60,4 @@ abstract class FeatureTestCase extends TestCase
             LivewireServiceProvider::class,
         ];
     }
-    
 }
