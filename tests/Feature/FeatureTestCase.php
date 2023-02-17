@@ -61,15 +61,5 @@ abstract class FeatureTestCase extends TestCase
             LivewireServiceProvider::class,
         ];
     }
-
-    // protected function loadEnvironmentVariables(): void
-    // {
-    //     if (! file_exists(__DIR__ . '/../.env')) {
-    //         return;
-    //     }
-
-    //     $dotEnv = Dotenv::createImmutable(__DIR__ . '/..');
-
-    //     $dotEnv->load();
-    // }
+    
 }

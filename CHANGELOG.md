@@ -4,6 +4,8 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 ## v1.5.4 - 2023-02-17
 
+- Remove a lot of commented code from tests
+- Remove a placeholder for Unit test directory as there is an actual test now
 - Remove 'jet' part of x-jet namespacing
 - Add screenshot for menu
 

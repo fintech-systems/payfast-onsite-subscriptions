@@ -12,16 +12,11 @@ class ReceiptsTest extends FeatureTestCase
         $receipt = new Receipt([
             'amount' => '12.45',
             'tax' => '4.36',
-            'currency' => 'EUR',
+            'currency' => 'ZAR',
         ]);
-
-        // $this->assertSame('€12,45', $receipt->amount());
-        // TODO this assert fails with Github workflows - locale issue ...
+        
         $this->assertSame('12.45', $receipt->amount);
-        // $this->assertSame('€4,36', $receipt->tax());
-        // TODO Sort out weird locale issue whereby it doesn't get a "." but a comma
-        // $this->assertSame('€4.36', $receipt->tax());
         $this->assertInstanceOf(Currency::class, $receipt->currency());
-        $this->assertSame('EUR', $receipt->currency()->getCode());
+        $this->assertSame('ZAR', $receipt->currency()->getCode());
     }
 }
