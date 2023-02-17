@@ -2,6 +2,11 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.5.4 - 2023-02-17
+
+- Remove 'jet' part of x-jet namespacing
+- Add screenshot for menu
+
 ## v1.5.3 - 2023-02-15
 
 - Bumped collission from version 6.3 to version 7.0
