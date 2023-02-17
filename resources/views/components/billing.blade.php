@@ -8,24 +8,24 @@
     <div>
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
 
-            <!-- Subscriptions -->            
-            <div class="mt-10 sm:mt-0">                
+            <!-- Subscriptions -->
+            <div class="mt-10 sm:mt-0">
                 @livewire('subscriptions', ['mergeFields' => [
                         'name_first' => Auth()->user()->first_name ?? Auth()->user()->name,
                         'name_last' => Auth()->user()->last_name ?? Auth()->user()->name,
                         'item_description' => config('app.name') . " Subscription",
-                    ]] )                    
-            </div>        
+                    ]] )
+            </div>
             <!-- End Subscriptions -->
 
-            <x-jet-section-border />
+            <x-section-border />
 
-            <!-- Receipts -->            
+            <!-- Receipts -->
             <div class="mt-10 sm:mt-0">
                 @livewire('receipts')
-            </div>                        
+            </div>
             <!-- End Receipts -->
-            
+
         </div>
     </div>
 </div>

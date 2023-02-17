@@ -96,11 +96,31 @@ return [
 ];
 ```
 
-## Livewire Setup
+## Livewire setup
 
 ### Views
 
-I have modelled some Livewire views to fit into a [Laravel Jetstream](https://jetstream.laravel.com) user profile page.
+The Livewire views are modelled to blend into a [Laravel Jetstream](https://jetstream.laravel.com) user profile page.
+
+#### Adding a billing menu
+
+In `app.blade.php` below in the Account Management sections (e.g. below profile):
+
+```html
+<x-dropdown-link href="/user/billing">
+    Billing
+</x-dropdown-link>
+```
+
+Also look for the responsive part and add this:
+
+```html
+<x-responsive-nav-link href="/user/billing" :active="request()->routeIs('profile.billing')">
+    Billing
+</x-responsive-nav-link>
+```
+
+#### Adding the subscriptions and receipts views
 
 When calling the Livewire component, you can override any [PayFast form field](https://developers.payfast.co.za/docs#step_1_form_fields) by specifying a `mergeFields` array.
 
@@ -118,7 +138,7 @@ Replace `$user->name` with your first name and last name fields.
         ]] )        
 </div>
 
-<x-jet-section-border />
+<x-section-border />
 <!-- End Subscriptions -->
 
 <!-- Receipts -->
@@ -126,7 +146,7 @@ Replace `$user->name` with your first name and last name fields.
         @livewire('receipts')
     </div>
 
-<x-jet-section-border />
+<x-section-border />
 <!-- End Receipts -->
 ```
 
@@ -177,7 +197,22 @@ Route::get('/update-card', function() {
 vendor/bin/phpunit
 ```
 
+In your main project add this:
 
+```
+"repositories": [
+        {
+            "type": "path",
+            "url": "../payfast-onsite-subscriptions"
+        }
+],
+```
+
+Then do this to symlink the library:
+
+```
+composer require fintechsystems/payfast-onsite-subscriptions:dev-main
+```
 
 ## Changelog
 

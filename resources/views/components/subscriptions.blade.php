@@ -1,4 +1,4 @@
-<x-jet-action-section>
+<x-action-section>
     <x-slot name="title">
         {{ __('Subscription Information') }}
     </x-slot>
@@ -48,7 +48,7 @@
                 @if ($user->subscription('default')->onGracePeriod())
                 {{-- Grace period --}}
                     <h3 class="text-lg font-medium text-gray-900">
-                        Your subscription was cancelled 
+                        Your subscription was cancelled
                         {{ $user->subscription('default')->cancelled_at->format('j F Y \a\t H:i:s') }}.
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
@@ -70,16 +70,16 @@
                 @else
                     {{-- Subscribed --}}
                     <h3 class="text-lg font-medium text-gray-900">
-                        You are subscribed to the                         
+                        You are subscribed to the
                             {{ config('payfast.plans')[$user->subscription('default')->plan_id]['name'] }} plan.
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
-                        <p>                        
-                            The next payment will go off on the 
-                                {{ $user->subscription('default')->next_bill_at->format('jS \o\f F Y') }}.                                                    
+                        <p>
+                            The next payment will go off on the
+                                {{ $user->subscription('default')->next_bill_at->format('jS \o\f F Y') }}.
                         </p>
                     </div>
-                @endif        
+                @endif
             @endif
         </div>
 
@@ -87,14 +87,14 @@
         <div class="mt-5">
             {{-- @if ($user->subscribed('default') && !$user->onGenericTrial() && !$user->subscription('default')->onGracePeriod())                             --}}
             @if ($user->subscribed('default')  && !$user->subscription('default')->onGracePeriod())
-                <x-jet-secondary-button style="color: blue;" wire:click="updateCard">
+                <x-secondary-button style="color: blue;" wire:click="updateCard">
                     {{ __('Update Card Information') }}
-                </x-jet-secondary-button>
+                </x-secondary-button>
 
-                <x-jet-secondary-button style="color: red;" wire:click="confirmCancelSubscription"
+                <x-secondary-button style="color: red;" wire:click="confirmCancelSubscription"
                     wire:loading.attr="disabled">
                     {{ __('Cancel Subscription') }}
-                </x-jet-secondary-button>
+                </x-secondary-button>
             @else
                 <div class="flex">
                     <select wire:model="plan" name="plan"
@@ -104,14 +104,14 @@
                         @endforeach
                     </select>
 
-                    <x-jet-secondary-button class="ml-2 align-middle h-9 mt-2" style="color: green;"
+                    <x-secondary-button class="ml-2 align-middle h-9 mt-2" style="color: green;"
                         wire:click="displayCreateSubscription">
                         @if ($user->subscribed('default') && $user->subscription('default')->onGracePeriod())
                             {{ __('Resubscribe') }}
                         @else
                             {{ __('Subscribe') }}
                         @endif
-                    </x-jet-secondary-button>
+                    </x-secondary-button>
 
                     <div wire:loading class="ml-2 align-middle mt-3">
                         Please wait...
@@ -148,35 +148,35 @@
         @endpush
 
         <!-- Start Cancel Subscription Confirmation Modal -->
-        <x-jet-dialog-modal wire:model="confirmingCancelSubscription">
+        <x-dialog-modal wire:model="confirmingCancelSubscription">
 
             <x-slot name="title">
                 {{ __('Cancel Subscription') }}
             </x-slot>
 
             <x-slot name="content">
-                {{ __('Are you sure you want to cancel your subscription?') }}                
+                {{ __('Are you sure you want to cancel your subscription?') }}
             </x-slot>
 
             <x-slot name="footer">
                 <div wire:loading class="mr-2 align-middle mt-3">
                     Please wait...
                 </div>
-                
-                <x-green-button wire:click="$toggle('confirmingCancelSubscription')"
+
+                <x-button wire:click="$toggle('confirmingCancelSubscription')"
                     wire:loading.attr="disabled">
                     {{ __('Keep Subscription') }}
-                </x-green-button>
+                </x-button>
 
-                <x-jet-danger-button class="ml-2" wire:click="cancelSubscription"
+                <x-danger-button class="ml-2" wire:click="cancelSubscription"
                     wire:loading.attr="disabled">
                     {{ __('Cancel Subscription') }}
-                </x-jet-danger-button>
+                </x-danger-button>
 
             </x-slot>
 
-        </x-jet-dialog-modal>
+        </x-dialog-modal>
         <!-- End Cancel Subscription Confirmation Modal -->
 
     </x-slot>
-</x-jet-action-section>
+</x-action-section>
