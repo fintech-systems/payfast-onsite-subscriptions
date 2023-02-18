@@ -9,5 +9,5 @@ class WebhooksTest extends FeatureTestCase
         $this->postJson('payfast/webhook', [
             'ping' => now(),
         ])->assertOk();
-    }    
+    }
 }

@@ -177,5 +177,4 @@ class SubscriptionsTest extends FeatureTestCase
         $this->assertFalse($subscription->recurring());
         $this->assertFalse($subscription->ended());
     }
-
 }
