@@ -114,8 +114,8 @@ class Subscriptions extends Component
     public function displayCreateSubscription()
     {
         // User's trial has been activated but they have never been a subscriber
-        if ($this->user->onGenericTrial() && !$this->user->subscribed('default')) {
-            $billingDate = $this->user->trialEndsAt()->addDay();            
+        if ($this->user->onGenericTrial() && ! $this->user->subscribed('default')) {
+            $billingDate = $this->user->trialEndsAt()->addDay();
 
             if ((int) $this->plan == 3) {
                 $billingDate = $billingDate->addMonth();
@@ -125,7 +125,7 @@ class Subscriptions extends Component
                 $billingDate = $billingDate->addYear();
             }
 
-            $billingDate = $billingDate->format('Y-m-d');            
+            $billingDate = $billingDate->format('Y-m-d');
         }
 
         // User has or has had an active subscription but is still in a trial period
@@ -133,7 +133,7 @@ class Subscriptions extends Component
             $billingDate = $this->user->subscription('default')->ends_at->addDay()->format('Y-m-d');
         }
 
-        if (!isset($billingDate)) {
+        if (! isset($billingDate)) {
             $billingDate = \Carbon\Carbon::now()->format('Y-m-d');
         }
 
