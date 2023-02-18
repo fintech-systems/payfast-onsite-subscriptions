@@ -17,7 +17,7 @@
                         <td><strong>Item</strong></td>
                         <td style="text-align:right"><strong>Amount</strong></th>
                         <td style="padding-left:10px"><strong>Status</strong></th>
-                        <td style="text-align:center"><strong>Billing Date</strong></th>
+                        <td style="padding-left:10px"><strong>Billing Date</strong></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,7 +29,7 @@
                             <td style="padding-left:10px">{{ $receipt->payment_status }}</td>
                             {{-- After publish to live, weird problem --}}
                             {{-- <td nowrap>{{ $receipt->billing_date->format('Y-m-d') ?? 'n/a' }}</td> --}}
-                            <td nowrap>{{ $receipt->billing_date }}</td>
+                            <td nowrap>{{ isset($receipt->billing_date) ? $receipt->billing_date->format('Y-m-d') : '' }}</td>
                         </tr>
                     @endforeach
                 </tbody>

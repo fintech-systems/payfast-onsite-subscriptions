@@ -20,7 +20,7 @@
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>
                             If you subscribe now next payment will be due on the
-                            {{ $user->trialEndsAt()->addMonth()->addDay()->format('jS \o\f F Y') }}.
+                            {{ $this->afterTrialNextDueDate }}                            
                         </p>
                     </div>
                 @elseif($user->hasExpiredGenericTrial())

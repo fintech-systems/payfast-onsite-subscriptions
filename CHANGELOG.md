@@ -2,6 +2,11 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v1.6.0 - 2023-02-18
+
+- Fix bug if you have a trial activated and you choose a yearly plan. The next due date was wrong
+- Fix display bug that output 0000-00-00 on receipts
+
 ## v1.5.4 - 2023-02-17
 
 - Remove a lot of commented code from tests
