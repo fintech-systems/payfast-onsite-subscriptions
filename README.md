@@ -4,15 +4,10 @@
 
 A [PayFast Onsite Payments](https://developers.payfast.co.za/docs#onsite_payments) implementation for Laravel designed to ease subscription billing. [Livewire](https://laravel-livewire.com/) views are included.
 
-**THIS IS BETA SOFTWARE**
-
-- There may be some bugs but the core functionality should work.
-
 Requirements:
 
 - PHP 8.1
-- Laravel 9.x
-
+- Laravel 9.x or higher
 - A [PayFast Sandbox account](https://sandbox.payfast.co.za/)
 - A [PayFast account](https://www.payfast.co.za/registration)
 
@@ -212,6 +207,12 @@ Then do this to symlink the library:
 
 ```
 composer require fintechsystems/payfast-onsite-subscriptions:dev-main
+```
+
+If you want to test trials, use this one liner to activate a billable user and a trial using Tinker:
+
+```php
+$user = User::find(x)->createAsCustomer(['trial_ends_at' => now()->addDays(30)]);
 ```
 
 ## Changelog
