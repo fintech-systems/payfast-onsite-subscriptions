@@ -11,7 +11,7 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 ## v1.6.0 - 2023-02-18
 
-- Fix bug if you have a trial activated and you choose a yearly plan. The next due date was wrong
+- Fix the bug if you have a trial activated, and you choose a yearly plan. The next due date was wrong
 - Fix display bug that output 0000-00-00 on receipts
 
 ## v1.5.4 - 2023-02-17
@@ -19,11 +19,11 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 - Remove a lot of commented code from tests
 - Remove a placeholder for Unit test directory as there is an actual test now
 - Remove 'jet' part of x-jet namespacing
-- Add screenshot for menu
+- Add screenshot for the menu
 
 ## v1.5.3 - 2023-02-15
 
-- Bumped collission from version 6.3 to version 7.0
+- Bumped collision from version 6.3 to version 7.0
 - Did composer update
 
 ## v1.5.2 - 2023-01-14
@@ -32,7 +32,7 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 ## v1.5.1 - 2023-01-11
 - Removed index.php file in root which was related to an unrelated WHMCS module
-- Added "ExpiredTrial" helpers as per updated Paddle code and added a the official test for it as well
+- Added "ExpiredTrial" helpers as per updated Paddle code and added an official test for it as well
 - Tests were failing so added ENV variables in phpunit.xml.dist for merchant ID, key, and passphrase
 
 ## v1.5.0 - 2022-10-21
@@ -45,14 +45,14 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 - Remove illuminate contracts as dependency
 - Add normal logging back to webhook controller again
-- If testmode variable isn't set it will not fail on merchant_id giving the user a bigger clue as to .env variables that haven't been added
-- If the model doesn't have a first name or last name then just use name
+- If test mode variable isn't set, it will not fail on merchant_id giving the user a bigger clue as to .env variables that haven't been added
+- If the model doesn't have a first name or last name, then just use name
 
 ## v1.4.0 - 2022-10-13
 
-- Bump Nova minimum to version 4 by adding NovaRequest classes to actions
+- Bump the Nova minimum to version 4 by adding NovaRequest classes to actions
 - Update readme to specify Nova 4
-- Fix plural problem with the `Receipt[s]` resource name
+- Fix a plural problem with the `Receipt[s]` resource name
 
 ## v1.3.0 - 2022-10-12
 
@@ -61,12 +61,12 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 ## v1.2.0 - 2022-10-12
 
-- Bugfix: When a user is on trial, they must be able to cancel. Update Livewire component.
-- Bugfix: When a user is still on trial, and they pay, then next billing date date must be added to end of trial date
+- Bugfix: When a user is on trial, they must be able to cancel. Update the Livewire component.
+- Bugfix: When a user is still on trial, and they pay, then the next billing date must be added to the end of trial date
 
 ## v1.1.3 - 2022-10-04
 
-- Bugfix in receipts blade allow for null on PayFast field billing_date
+- Bugfix in a receipt blade allows for null on PayFast field billing_date
 
 ## v1.1.2 - 2022-10-04
 
@@ -74,24 +74,24 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 ## v1.1.1 - 2022-10-02
 
-- Add ability to create customer from Nova with trial days config variable
-- Add billing component that looks like and needs Jetstream to work
+- Add the ability to create customer from Nova with trial days config variable
+- Add a billing component that looks like and needs Jetstream to work
 - Add new DEBUG variable
 - Add a banner that displays current subscription information
-- Add new button that is just green
+- Add a new button that is just green
 - Add more subscriber information in Nova, e.g. on Receipts
 - Change description on item names to be consistent with subscription
 - Swap some buttons around for subscription cancellations
 - Simplify webhook ping test
-- The receipts table will now update post subscription changes
+- The receipt table will now update post-subscription changes
 - Remove lots of Log::debug() instead using Ray in the webhook controller
-- Remove more references from Paddle Subscription object
+- Remove more references from a Paddle Subscription object
 
 
 ## v1.1.0 - 2022-10-01
 
-- Remove paid_at from receipts table
-- Add billing_date as received from PayFast to the receipts table
+- Remove paid_at from receipt table
+- Add billing_date as received from PayFast to the receipt table
 - Add received_at to receipts table
 - Create Payment::COMPLETE Enum to better handle incoming payments
 
@@ -105,7 +105,7 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 ## v1.0.2 - 2022-09-25
 
-- do a better implentation of test mode by expanding config variables and checking actual mode
+- do a better implementation of test mode by expanding config variables and checking actual mode
 - modify generate payment identifier test to use new test mode
 - implement a callback test url for subscription callback testing
 
@@ -123,5 +123,5 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 ## v0.0.1 - 2022-06-02
 
-- added many more tests - basically got all the tests from laravel-payfast-onsite across
+- added many more tests—basically got all the tests from laravel-payfast-onsite across
 - added test for dependency injection and ping to PayFast API
