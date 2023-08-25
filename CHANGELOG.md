@@ -2,6 +2,13 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v2 BETA
+
+- Updated Orchestra Testbench to version 8 for Laravel 10 compatibility
+- Installed Livewire Beta 3
+- Marked all other Composer packages "*"
+- Some cleaning up of banner.blade.php
+
 ## v1.6.0 - 2023-02-18
 
 - Fix bug if you have a trial activated and you choose a yearly plan. The next due date was wrong
