@@ -192,7 +192,7 @@ Route::get('/update-card', function() {
 vendor/bin/phpunit
 ```
 
-In your main project add this:
+In your main project, add this:
 
 ```
 "repositories": [
@@ -209,7 +209,7 @@ Then do this to symlink the library:
 composer require fintechsystems/payfast-onsite-subscriptions:dev-main
 ```
 
-If you want to test trials, use this one liner to activate a billable user and a trial using Tinker:
+If you want to test trials, use this one-liner to activate a billable user and a trial using Tinker:
 
 ```php
 $user = User::find(x)->createAsCustomer(['trial_ends_at' => now()->addDays(30)]);
