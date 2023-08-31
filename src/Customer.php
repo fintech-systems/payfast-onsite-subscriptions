@@ -1,11 +1,11 @@
 <?php
 
-namespace FintechSystems\PayFast;
+namespace FintechSystems\Payfast;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property \FintechSystems\PayFast\Billable $billable
+ * @property \FintechSystems\Payfast\Billable $billable
  */
 class Customer extends Model
 {
@@ -36,7 +36,7 @@ class Customer extends Model
     }
 
     /**
-     * Determine if the PayFast model is on a "generic" trial at the model level.
+     * Determine if the Payfast model is on a "generic" trial at the model level.
      *
      * @return bool
      */
@@ -46,7 +46,7 @@ class Customer extends Model
     }
 
     /**
-     * Determine if the PayFast model has an expired "generic" trial at the model level.
+     * Determine if the Payfast model has an expired "generic" trial at the model level.
      *
      * @return bool
      */

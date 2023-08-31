@@ -1,21 +1,21 @@
 <?php
 
-namespace FintechSystems\PayFast\Http\Controllers;
+namespace FintechSystems\Payfast\Http\Controllers;
 
 use Exception;
-use FintechSystems\PayFast\Cashier;
-use FintechSystems\PayFast\Events\PaymentSucceeded;
-use FintechSystems\PayFast\Events\SubscriptionCancelled;
-use FintechSystems\PayFast\Events\SubscriptionCreated;
-use FintechSystems\PayFast\Events\SubscriptionPaymentSucceeded;
-use FintechSystems\PayFast\Events\WebhookHandled;
-use FintechSystems\PayFast\Events\WebhookReceived;
-use FintechSystems\PayFast\Exceptions\InvalidMorphModelInPayload;
-use FintechSystems\PayFast\Exceptions\MissingSubscription;
-use FintechSystems\PayFast\Facades\PayFast;
-use FintechSystems\PayFast\Payment;
-use FintechSystems\PayFast\Receipt;
-use FintechSystems\PayFast\Subscription;
+use FintechSystems\Payfast\Cashier;
+use FintechSystems\Payfast\Events\PaymentSucceeded;
+use FintechSystems\Payfast\Events\SubscriptionCancelled;
+use FintechSystems\Payfast\Events\SubscriptionCreated;
+use FintechSystems\Payfast\Events\SubscriptionPaymentSucceeded;
+use FintechSystems\Payfast\Events\WebhookHandled;
+use FintechSystems\Payfast\Events\WebhookReceived;
+use FintechSystems\Payfast\Exceptions\InvalidMorphModelInPayload;
+use FintechSystems\Payfast\Exceptions\MissingSubscription;
+use FintechSystems\Payfast\Facades\Payfast;
+use FintechSystems\Payfast\Payment;
+use FintechSystems\Payfast\Receipt;
+use FintechSystems\Payfast\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
@@ -24,14 +24,14 @@ use Symfony\Component\HttpFoundation\Response;
 class WebhookController extends Controller
 {
     /**
-     * Handle a PayFast webhook call and determine what to do with it.
+     * Handle a Payfast webhook call and determine what to do with it.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @return Response
      */
     public function __invoke(Request $request)
     {
-        $message = 'Incoming Webhook from PayFast';
+        $message = 'Incoming Webhook from Payfast';
         Log::info($message);
         ray($message)->blue();
 
@@ -96,10 +96,10 @@ class WebhookController extends Controller
 
             ray($e)->red();
 
-            return response('An exception occurred in the PayFast webhook controller', 500);
+            return response('An exception occurred in the Payfast webhook controller', 500);
         }
 
-        Log::error("Abnormal Webhook termination. No Webhook intepreter was found.");
+        Log::error("Abnormal Webhook termination. No Webhook interpreter was found.");
     }
 
     /**
@@ -166,8 +166,9 @@ class WebhookController extends Controller
      * payload item_name is empty we're working with an existing subscription that has been
      * reactivated. Check status of subscription post payment to update next_bill_at.
      *
-     * @param  array  $payload
-     * @return void
+     * @param array $payload
+     * @return \Illuminate\Http\Response
+     * @throws Exception
      */
     protected function applySubscriptionPayment(array $payload)
     {
@@ -180,7 +181,7 @@ class WebhookController extends Controller
         } else {
             $message = "Applying a subscription payment to " . $payload['token'] . "...";
         }
-        PayFast::debug($message, 'applySubscriptionPayment()');
+        Payfast::debug($message, 'applySubscriptionPayment()');
 
         if (! isset($payload['amount_gross'])) {
             throw new Exception("Unable to apply a payment to an existing subscription because amount_gross is not set. Probably cause the subscription was deleted.");
@@ -208,9 +209,9 @@ class WebhookController extends Controller
         // Get the user's latest subscription using first()
         $subscription = Subscription::where('payfast_token', $payload['token'])->first();
 
-        $subscription->updatePayFastSubscription(PayFast::fetchSubscription($payload['token']));
+        $subscription->updatePayfastSubscription(Payfast::fetchSubscription($payload['token']));
 
-        // PayFast requires a 200 response after a successful payment application
+        // Payfast requires a 200 response after a successful payment application
         return response("Subscription payment applied or subscription reactivated for $billable->email", 200);
     }
 

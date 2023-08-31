@@ -1,27 +1,28 @@
 <?php
 
-namespace FintechSystems\PayFast\Concerns;
+namespace FintechSystems\Payfast\Concerns;
 
 use Carbon\Carbon;
-use FintechSystems\PayFast\Cashier;
-use FintechSystems\PayFast\Subscription;
-use FintechSystems\PayFast\SubscriptionBuilder;
+use FintechSystems\Payfast\Cashier;
+use FintechSystems\Payfast\Subscription;
+use FintechSystems\Payfast\SubscriptionBuilder;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait ManagesSubscriptions
 {
-    public function newSubscription($name, $plan)
+    public function newSubscription($name, $plan): SubscriptionBuilder
     {
         return new SubscriptionBuilder($this, $name, $plan);
     }
 
     /**
-     * Get all of the subscriptions for the Billable model.
+     * Get all the subscriptions for the Billable model.
      *
      * Important: Sorted by `created_at` meaning the latest subscription will always be returned.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return MorphMany
      */
-    public function subscriptions()
+    public function subscriptions() : MorphMany
     {
         return $this->morphMany(Cashier::$subscriptionModel, 'billable')->orderByDesc('created_at');
     }

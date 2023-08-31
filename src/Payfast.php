@@ -1,14 +1,16 @@
 <?php
 
-namespace FintechSystems\PayFast;
+namespace FintechSystems\Payfast;
 
 use Carbon\Carbon;
-use FintechSystems\PayFast\Contracts\BillingProvider;
+use DOMDocument;
+use DOMXPath;
+use FintechSystems\Payfast\Contracts\BillingProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class PayFast implements BillingProvider
+class Payfast implements BillingProvider
 {
     private string $merchant_id;
     private string $merchant_key;
@@ -39,7 +41,7 @@ class PayFast implements BillingProvider
         }
 
         if (config('payfast.debug') == true) {
-            $this->debug("In PayFast API constructor, testmode: $this->testmode, URL: $this->url");
+            $this->debug("In Payfast API constructor, testmode: $this->testmode, URL: $this->url");
         }
 
         $this->returnUrl = $prependUrl . $client['return_url'];
@@ -69,8 +71,8 @@ class PayFast implements BillingProvider
     }
 
     /**
-     * Create a new subscription using PayFast Onsite Payments. One of the most
-     * important aspect is ensuring that the correct billing date is sent
+     * Create a new subscription using Payfast Onsite Payments. One of the most
+     * important aspects is ensuring that the correct billing date is sent
      * with the order, and also on renewals the initial amount is zero
      */
     public function createOnsitePayment($planId, $billingDate = null, $mergeFields = [], $cycles = 0)
@@ -103,19 +105,19 @@ class PayFast implements BillingProvider
             $data = array_merge($data, $mergeFields);
         }
 
-        $message = "The PayFast onsite modal was invoked with these merged values and will now wait for user input:";
+        $message = "The Payfast onsite modal was invoked with these merged values and will now wait for user input:";
 
-        $this->debug($message, 'displayPayFastModal');
+        $this->debug($message, 'displayPayfastModal');
         $this->debug($data, 'notice');
 
-        $signature = PayFast::generateApiSignature($data, $this->passphrase());
+        $signature = Payfast::generateApiSignature($data, $this->passphrase());
 
         $pfData = array_merge($data, ["signature" => $signature]);
 
         return $this->generatePaymentIdentifier($pfData);
     }
 
-    public function dataToString($dataArray)
+    public function dataToString($dataArray): string
     {
         // Create parameter string
         $pfOutput = '';
@@ -135,7 +137,7 @@ class PayFast implements BillingProvider
      * Defaults to debug and purple if logging is anything except the defaults.
      * Won't log to local in the application isn't in production.
      */
-    public function debug($message, $level = 'debug')
+    public function debug($message, $level = 'debug'): void
     {
         $color = match ($level) {
             'debug' => 'gray',
@@ -170,13 +172,13 @@ class PayFast implements BillingProvider
     }
 
     /**
-     * Fetch subscription information information from the API.
+     * Fetch subscription information from the API.
      */
     public function fetchSubscription($token)
     {
         ray("fetchSubscription is called with this token: $token")->blue();
 
-        $append = ($this->testmode == true ? 'testing=true' : "");
+        $append = ($this->testmode ? 'testing=true' : "");
 
         $response = Http::withHeaders($this->headers())
             ->get("https://api.payfast.co.za/subscriptions/$token/fetch?$append")
@@ -188,9 +190,31 @@ class PayFast implements BillingProvider
     }
 
     /**
-     * Helper to determine current subscription state of a subscribed user.
+     * When the Payfast Onsite Payments modal fails to load with a 404, the underlying HTML
+     * often contains an error message. By investigating the response body from the
+     * Laravel HTTP Post request, we can traverse the DOM to obtain the error.
+     *
+     * @param $html
+     * @return string|false
      */
-    public function getSubscriptionStatus($user)
+    private function extractErrorMessageFromHtml($html): string|bool
+    {
+        $doc = new DOMDocument();
+        $doc->loadHTML($html);
+        $xpath = new DOMXPath($doc);
+        $result = $xpath->query('//span[@class="err-msg"]');
+
+        if ($result->length > 0) {
+            return $result->item(0)->nodeValue;
+        }
+
+        return false;
+    }
+
+    /**
+     * Helper to determine the current subscription state of a subscribed user.
+     */
+    public function getSubscriptionStatus($user): array
     {
         return SubscriptionStatus::for($user);
     }
@@ -201,15 +225,33 @@ class PayFast implements BillingProvider
      * Has different behavior in test versus live. In test
      * mode it returns the HTML processing page, in live
      * mode it returns a payment identifier.
+     *
+     * @throws \Exception
      */
     public function generatePaymentIdentifier($pfParameters)
     {
         $response = Http::post($this->url, $pfParameters);
 
         if (! isset($response['uuid'])) {
-            ray("generatePaymentdentifier failed as response didn't have UUID. Output request parameters and response body(): ", $pfParameters);
+            ray("generatePaymentIdentifier failed as response didn't have UUID. Output request parameters and response body(): ", $pfParameters);
 
             ray($response->body());
+
+            $html = $response->body();
+
+            ray(strlen($html));
+
+            if ($result = $this->extractErrorMessageFromHtml($html)) {
+                throw new \Exception($result);
+            }
+
+
+            $result = str_contains($html, 'recurring');
+            if ($result) {
+                throw new \Exception("recurring_amount is invalid.");
+            }
+
+            throw new \Exception("generatePaymentIdentifier failed as response didn't have UUID. Output request parameters and response body(): ");
 
             return null;
         }

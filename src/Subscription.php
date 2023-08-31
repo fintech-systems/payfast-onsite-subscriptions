@@ -1,18 +1,18 @@
 <?php
 
-namespace FintechSystems\PayFast;
+namespace FintechSystems\Payfast;
 
 use Carbon\Carbon;
 use DateTimeInterface;
 use Exception;
-use FintechSystems\PayFast\Concerns\Prorates;
-use FintechSystems\PayFast\Facades\PayFast;
+use FintechSystems\Payfast\Concerns\Prorates;
+use FintechSystems\Payfast\Facades\Payfast;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use LogicException;
 
 /**
- * @property \FintechSystems\PayFast\Billable $billable
+ * @property Billable $billable
  */
 class Subscription extends Model
 {
@@ -768,7 +768,7 @@ class Subscription extends Model
      */
     public function cancelAt2(DateTimeInterface $endsAt)
     {
-        PayFast::cancelSubscription($this->payfast_token);
+        Payfast::cancelSubscription($this->payfast_token);
 
         $this->forceFill([
             'payfast_status' => self::STATUS_DELETED,
@@ -912,7 +912,7 @@ class Subscription extends Model
             return $this->payfastInfo;
         }
 
-        $payfastInfo = PayFast::fetchSubscription($this->payfast_token)['data']['response'];
+        $payfastInfo = Payfast::fetchSubscription($this->payfast_token)['data']['response'];
 
         ray($payfastInfo);
 

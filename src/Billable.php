@@ -1,11 +1,11 @@
 <?php
 
-namespace FintechSystems\PayFast;
+namespace FintechSystems\Payfast;
 
-use FintechSystems\PayFast\Concerns\ManagesCustomer;
-use FintechSystems\PayFast\Concerns\ManagesReceipts;
-use FintechSystems\PayFast\Concerns\ManagesSubscriptions;
-use FintechSystems\PayFast\Concerns\PerformsCharges;
+use FintechSystems\Payfast\Concerns\ManagesCustomer;
+use FintechSystems\Payfast\Concerns\ManagesReceipts;
+use FintechSystems\Payfast\Concerns\ManagesSubscriptions;
+use FintechSystems\Payfast\Concerns\PerformsCharges;
 
 trait Billable
 {
@@ -15,13 +15,13 @@ trait Billable
     use PerformsCharges;
 
     /**
-     * Get the default PayFast API options for the current Billable model.
+     * Get the default Payfast API options for the current Billable model.
      *
      * @param  array  $options
      * @return array
      */
-    public function payFastOptions(array $options = [])
+    public function payfastOptions(array $options = []): array
     {
-        return Cashier::payFastOptions($options);
+        return Cashier::payfastOptions($options);
     }
 }

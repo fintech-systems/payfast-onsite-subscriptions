@@ -1,15 +1,15 @@
-## About PayFast Onsite Subscriptions
+## About Payfast Onsite Subscriptions
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fintech-systems/payfast-onsite-subscriptions) ![Tests](https://github.com/fintech-systems/payfast-onsite-subscriptions/actions/workflows/tests.yml/badge.svg)
  ![GitHub](https://img.shields.io/github/license/fintech-systems/payfast-onsite-subscriptions)
 
-A [PayFast Onsite Payments](https://developers.payfast.co.za/docs#onsite_payments) implementation for Laravel designed to ease subscription billing. [Livewire](https://laravel-livewire.com/) views are included.
+A [Payfast Onsite Payments](https://developers.payfast.co.za/docs#onsite_payments) implementation for Laravel designed to ease subscription billing. [Livewire](https://laravel-livewire.com/) views are included.
 
 Requirements:
 
 - PHP 8.1
 - Laravel 9.x or higher
-- A [PayFast Sandbox account](https://sandbox.payfast.co.za/)
-- A [PayFast account](https://www.payfast.co.za/registration)
+- A [Payfast Sandbox account](https://sandbox.payfast.co.za/)
+- A [Payfast account](https://www.payfast.co.za/registration)
 
 If you want to use Laravel Nova, version 4 is required for the `Subscription` and `Receipt` resources.
 
@@ -25,12 +25,12 @@ composer require fintech-systems/payfast-onsite-subscriptions
 
 Publish the config file with:
 ```bash
-php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProvider" --tag="config"
+php artisan vendor:publish --provider="FintechSystems\Payfast\PayfastServiceProvider" --tag="config"
 ```
 
 Publish the Success and Cancelled views and the Livewire components for subscriptions and receipts.
 ```bash
-php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProvider" --tag="views"
+php artisan vendor:publish --provider="FintechSystems\Payfast\PayfastServiceProvider" --tag="views"
 ```
 
 These files are:
@@ -65,7 +65,7 @@ You'll end up with a page looking like this:
 Optionally publish Laravel Nova Subscription and Receipts Resources and Actions
 
 ```bash
-php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProvider" --tag="nova-resources"
+php artisan vendor:publish --provider="FintechSystems\Payfast\PayfastServiceProvider" --tag="nova-resources"
 ```
 
 ## Migrations
@@ -181,18 +181,18 @@ Replace `$user->name` with your first name and last name fields.
 - Update a card
 
 ```php
-use FintechSystems\PayFast\Facades\PayFast;
+use FintechSystems\PayFast\Facades\Payfast;
 
 Route::get('/payment', function() {
-    return PayFast::payment(5,'Order #1');
+    return Payfast::payment(5,'Order #1');
 });
 
 Route::get('/cancel-subscription', function() {
-    return PayFast::cancelSubscription('73d2a218-695e-4bb5-9f62-383e53bef68f');
+    return Payfast::cancelSubscription('73d2a218-695e-4bb5-9f62-383e53bef68f');
 });
 
 Route::get('/create-subscription', function() {
-    return PayFast::createSubscription(
+    return Payfast::createSubscription(
         Carbon::now()->addDay()->format('Y-m-d'),
         5, // Amount
         6 // Frequency (6 = annual, 3 = monthly)
@@ -200,15 +200,15 @@ Route::get('/create-subscription', function() {
 });
 
 Route::get('/create-adhoc-token', function() {
-    return PayFast::createAdhocToken(5);
+    return Payfast::createAdhocToken(5);
 });
 
 Route::get('/fetch-subscription', function() {
-    return PayFast::fetchSubscription('21189d52-12eb-4108-9c0e-53343c7ac692');
+    return Payfast::fetchSubscription('21189d52-12eb-4108-9c0e-53343c7ac692');
 });
 
 Route::get('/update-card', function() {
-    return PayFast::updateCardLink('40ab3194-20f0-4814-8c89-4d2a6b5462ed');
+    return Payfast::updateCardLink('40ab3194-20f0-4814-8c89-4d2a6b5462ed');
 });
 ```
 

@@ -1,17 +1,18 @@
 <?php
 
-namespace FintechSystems\PayFast\Concerns;
+namespace FintechSystems\Payfast\Concerns;
 
-use FintechSystems\PayFast\Cashier;
+use FintechSystems\Payfast\Cashier;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait ManagesReceipts
 {
     /**
-     * Get all of the receipts for the Billable model.
+     * Get all the receipts for the Billable model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return MorphMany
      */
-    public function receipts()
+    public function receipts() : MorphMany
     {
         return $this->morphMany(Cashier::$receiptModel, 'billable')->orderByDesc('created_at');
     }

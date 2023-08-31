@@ -66,7 +66,7 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 
 ## v1.1.3 - 2022-10-04
 
-- Bugfix in a receipt blade allows for null on PayFast field billing_date
+- Bugfix in a receipt blade allows for null on Payfast field billing_date
 
 ## v1.1.2 - 2022-10-04
 
@@ -91,7 +91,7 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 ## v1.1.0 - 2022-10-01
 
 - Remove paid_at from receipt table
-- Add billing_date as received from PayFast to the receipt table
+- Add billing_date as received from Payfast to the receipt table
 - Add received_at to receipts table
 - Create Payment::COMPLETE Enum to better handle incoming payments
 
@@ -124,4 +124,4 @@ All notable changes to `payfast-onsite-subscriptions` will be documented in this
 ## v0.0.1 - 2022-06-02
 
 - added many more tests—basically got all the tests from laravel-payfast-onsite across
-- added test for dependency injection and ping to PayFast API
+- added test for dependency injection and ping to Payfast API
