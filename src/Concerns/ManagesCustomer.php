@@ -24,7 +24,7 @@ trait ManagesCustomer
      *
      * @return MorphOne
      */
-    public function customer() : MorphOne
+    public function customer(): MorphOne
     {
         return $this->morphOne(Customer::class, 'billable');
     }

@@ -22,7 +22,7 @@ trait ManagesSubscriptions
      *
      * @return MorphMany
      */
-    public function subscriptions() : MorphMany
+    public function subscriptions(): MorphMany
     {
         return $this->morphMany(Cashier::$subscriptionModel, 'billable')->orderByDesc('created_at');
     }
