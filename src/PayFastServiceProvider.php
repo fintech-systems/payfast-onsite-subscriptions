@@ -21,6 +21,8 @@ class PayFastServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/views' => resource_path('views/vendor/payfast'),
         ], 'views');
 
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'payfast');
+
         $this->publishes([
             __DIR__ . '/../Nova' => app_path('Nova'),
         ], 'nova-resources');

@@ -29,10 +29,36 @@ php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProv
 ```
 
 Publish the Success and Cancelled views and the Livewire components for subscriptions and receipts.
-
 ```bash
 php artisan vendor:publish --provider="FintechSystems\PayFast\PayFastServiceProvider" --tag="views"
 ```
+
+These files are:
+```bash
+banner.blade.php
+billing.blade.php
+cancel.blade.php
+pricing.blade.php
+receipts.blade.php
+subscriptions.blade.php
+success.blade.php
+```
+
+To include the pricing component on a page, do this:
+
+In your header:
+```php
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+```
+
+In your view:
+
+```php
+@include('payfast::components.pricing')
+```
+
+You'll end up with a page looking like this:
+![Pricing Component](../../blob/main/screenshots/pricing.png)
 
 ### Nova Integration
 
@@ -150,7 +176,7 @@ Replace `$user->name` with your first name and last name fields.
 ### Examples
 
 - Generate a payment link
-- Create an ad-hoc token optionally specifying the amount
+- Create an adhoc token optionally specifying the amount
 - Cancel a subscription
 - Update a card
 
@@ -213,6 +239,12 @@ If you want to test trials, use this one-liner to activate a billable user and a
 
 ```php
 $user = User::find(x)->createAsCustomer(['trial_ends_at' => now()->addDays(30)]);
+```
+
+To see if a user is on trial as used in the subscriptions blade, do this:
+
+```php
+
 ```
 
 ## Changelog
