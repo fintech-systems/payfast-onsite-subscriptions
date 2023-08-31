@@ -12,7 +12,7 @@ trait ManagesReceipts
      *
      * @return MorphMany
      */
-    public function receipts() : MorphMany
+    public function receipts(): MorphMany
     {
         return $this->morphMany(Cashier::$receiptModel, 'billable')->orderByDesc('created_at');
     }
