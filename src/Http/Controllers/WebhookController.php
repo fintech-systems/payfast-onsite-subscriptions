@@ -181,7 +181,8 @@ class WebhookController extends Controller
         } else {
             $message = "Applying a subscription payment to " . $payload['token'] . "...";
         }
-        Payfast::debug($message, 'applySubscriptionPayment()');
+
+        Log::debug($message . ' applySubscriptionPayment()');
 
         if (! isset($payload['amount_gross'])) {
             throw new Exception("Unable to apply a payment to an existing subscription because amount_gross is not set. Probably cause the subscription was deleted.");
@@ -203,6 +204,8 @@ class WebhookController extends Controller
             'billing_date' => $payload['billing_date'],
             'received_at' => now(),
         ]);
+
+        ray("A receipt was created");
 
         SubscriptionPaymentSucceeded::dispatch($billable, $receipt, $payload);
 

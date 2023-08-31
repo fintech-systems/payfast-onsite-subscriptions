@@ -3,6 +3,7 @@
 namespace FintechSystems\PayFast\Components;
 
 use FintechSystems\PayFast\Facades\Payfast;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -52,13 +53,13 @@ class Subscriptions extends Component
         $this->confirmingCancelSubscription = true;
     }
 
-    public function cancelSubscription()
+    public function cancelSubscription(): void
     {
         Payfast::debug('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token, 'warning');
 
         $this->user->subscription('default')->cancel2();
 
-        $this->emit('billingUpdated');
+        $this->dispatch('billingUpdated');
 
         $this->confirmingCancelSubscription = false;
     }
@@ -66,7 +67,7 @@ class Subscriptions extends Component
     /**
      * Update card
      */
-    public function updateCard()
+    public function updateCard(): RedirectResponse
     {
         $payfast_token = $this->user->subscription('default')->payfast_token;
 

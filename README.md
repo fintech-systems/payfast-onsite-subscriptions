@@ -87,7 +87,7 @@ return [
     'merchant_id' => env('PAYFAST_MERCHANT_ID', '10004002'),
     'merchant_key' => env('PAYFAST_MERCHANT_KEY', 'q1cd2rdny4a53'),
     'passphrase' => env('PAYFAST_PASSPHRASE', 'payfast'),
-    'testmode' => env('PAYFAST_TESTMODE', true),        
+    'test_mode' => env('PAYFAST_TEST_MODE', true),        
     'return_url' => env('PAYFAST_RETURN_URL', config('app.url') . '/payfast/return'),
     'cancel_url' => env('PAYFAST_CANCEL_URL', config('app.url') . '/payfast/cancel'),
     'notify_url' => env('PAYFAST_NOTIFY_URL', config('app.url') . '/payfast/notify'),
@@ -125,7 +125,7 @@ The Livewire views are modelled to blend into a [Laravel Jetstream](https://jets
 
 #### Adding a billing menu
 
-In `app.blade.php` below in the Account Management sections (e.g. below profile):
+In `app.blade.php` below in the Account Management sections (e.g., below profile):
 
 ```html
 <x-dropdown-link href="/user/billing">

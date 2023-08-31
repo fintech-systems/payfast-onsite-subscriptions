@@ -5,6 +5,7 @@ namespace FintechSystems\Payfast;
 use Carbon\Carbon;
 use DOMDocument;
 use DOMXPath;
+use Exception;
 use FintechSystems\Payfast\Contracts\BillingProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -16,7 +17,7 @@ class Payfast implements BillingProvider
     private string $merchant_key;
     private string $passphrase;
 
-    private string $testmode;
+    private string $test_mode;
 
     private string $returnUrl;
     private string $cancelUrl;
@@ -24,9 +25,9 @@ class Payfast implements BillingProvider
 
     public function __construct($client)
     {
-        $this->testmode = $client['testmode'] ?? false;
+        $this->test_mode = $client['test_mode'] ?? false;
 
-        if ($this->testmode == true) {
+        if ($this->test_mode) {
             $this->merchant_id = $client['merchant_id_test'];
             $this->merchant_key = $client['merchant_key_test'];
             $this->passphrase = $client['passphrase_test'];
@@ -40,26 +41,26 @@ class Payfast implements BillingProvider
             $prependUrl = config('payfast.callback_url');
         }
 
-        if (config('payfast.debug') == true) {
-            $this->debug("In Payfast API constructor, testmode: $this->testmode, URL: $this->url");
-        }
+//        if (config('payfast.debug') == true) {
+//            $this->debug("In Payfast API constructor, test_mode: $this->test_mode, URL: $this->url");
+//        }
 
-        $this->returnUrl = $prependUrl . $client['return_url'];
-        $this->cancelUrl = $prependUrl . $client['cancel_url'];
-        $this->notifyUrl = $prependUrl . $client['notify_url'];
+//        $this->returnUrl = $prependUrl . $client['return_url'];
+//        $this->cancelUrl = $prependUrl . $client['cancel_url'];
+//        $this->notifyUrl = $prependUrl . $client['notify_url'];
 
-        $this->urlCollection = [
-            'return_url' => $this->returnUrl,
-            'cancel_url' => $this->cancelUrl,
-            'notify_url' => $this->notifyUrl,
-        ];
+//        $this->urlCollection = [
+//            'return_url' => $this->returnUrl,
+//            'cancel_url' => $this->cancelUrl,
+//            'notify_url' => $this->notifyUrl,
+//        ];
     }
 
     public function cancelSubscription($payfast_token)
     {
         ray("cancelSubscription is called with this token: $payfast_token")->blue();
 
-        $append = ($this->testmode == true ? 'testing=true' : "");
+        $append = ($this->test_mode == true ? 'testing=true' : "");
 
         $response = Http::withHeaders($this->headers())
             ->put("https://api.payfast.co.za/subscriptions/$payfast_token/cancel?$append")
@@ -74,6 +75,8 @@ class Payfast implements BillingProvider
      * Create a new subscription using Payfast Onsite Payments. One of the most
      * important aspects is ensuring that the correct billing date is sent
      * with the order, and also on renewals the initial amount is zero
+     *
+     * @throws Exception
      */
     public function createOnsitePayment($planId, $billingDate = null, $mergeFields = [], $cycles = 0)
     {
@@ -99,7 +102,7 @@ class Payfast implements BillingProvider
             'email_address' => Auth::user()->email,
         ];
 
-        $data = array_merge($data, $this->urlCollection);
+//        $data = array_merge($data, $this->urlCollection);
 
         if ($mergeFields) {
             $data = array_merge($data, $mergeFields);
@@ -107,8 +110,8 @@ class Payfast implements BillingProvider
 
         $message = "The Payfast onsite modal was invoked with these merged values and will now wait for user input:";
 
-        $this->debug($message, 'displayPayfastModal');
-        $this->debug($data, 'notice');
+//        $this->debug($message, 'displayPayfastModal');
+//        $this->debug($data, 'notice');
 
         $signature = Payfast::generateApiSignature($data, $this->passphrase());
 
@@ -137,39 +140,36 @@ class Payfast implements BillingProvider
      * Defaults to debug and purple if logging is anything except the defaults.
      * Won't log to local in the application isn't in production.
      */
-    public function debug($message, $level = 'debug'): void
-    {
-        $color = match ($level) {
-            'debug' => 'gray',
-            'info' => 'blue',
-            'notice' => 'green',
-            'warning' => 'orange',
-            'error' => 'red',
-            'critical' => 'red',
-            'alert' => 'red',
-            'emergency' => 'red',
-            default => 'purple',
-        };
-        ray($message)->$color();
-
-        if ($color == 'purple') {
-            $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
-
-            $line = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['line'];
-
-            $level = 'debug';
-
-            $message = $caller . "#$line|" . $message;
-        }
-
-        if ($level == 'debug' && config('payfast.debug') == false) {
-            return;
-        }
-
-        if (config('app.env') == 'production') {
-            Log::$level($message);
-        }
-    }
+//    public function debug($message, $level = 'debug'): void
+//    {
+//        $color = match ($level) {
+//            'debug' => 'gray',
+//            'info' => 'blue',
+//            'notice' => 'green',
+//            'warning' => 'orange',
+//            'error', 'critical', 'alert', 'emergency' => 'red',
+//            default => 'purple',
+//        };
+//        ray($message)->$color();
+//
+//        if ($color == 'purple') {
+//            $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
+//
+//            $line = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['line'];
+//
+//            $level = 'debug';
+//
+//            $message = $caller . "#$line|" . $message;
+//        }
+//
+//        if ($level == 'debug' && !config('payfast.debug')) {
+//            return;
+//        }
+//
+//        if (config('app.env') == 'production') {
+//            Log::$level($message);
+//        }
+//    }
 
     /**
      * Fetch subscription information from the API.
@@ -178,7 +178,7 @@ class Payfast implements BillingProvider
     {
         ray("fetchSubscription is called with this token: $token")->blue();
 
-        $append = ($this->testmode ? 'testing=true' : "");
+        $append = ($this->test_mode ? 'testing=true' : "");
 
         $response = Http::withHeaders($this->headers())
             ->get("https://api.payfast.co.za/subscriptions/$token/fetch?$append")
@@ -191,7 +191,7 @@ class Payfast implements BillingProvider
 
     /**
      * When the Payfast Onsite Payments modal fails to load with a 404, the underlying HTML
-     * often contains an error message. By investigating the response body from the
+     * sometimes contains an error message. By investigating the response body from the
      * Laravel HTTP Post request, we can traverse the DOM to obtain the error.
      *
      * @param $html
@@ -226,11 +226,14 @@ class Payfast implements BillingProvider
      * mode it returns the HTML processing page, in live
      * mode it returns a payment identifier.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function generatePaymentIdentifier($pfParameters)
     {
-        $response = Http::post($this->url, $pfParameters);
+        ray("generatePaymentIdentifier will be using this URL: ",$this->url);
+
+        $response = Http::withOptions(["verify"=>false])
+        ->post($this->url, $pfParameters);
 
         if (! isset($response['uuid'])) {
             ray("generatePaymentIdentifier failed as response didn't have UUID. Output request parameters and response body(): ", $pfParameters);
@@ -242,24 +245,25 @@ class Payfast implements BillingProvider
             ray(strlen($html));
 
             if ($result = $this->extractErrorMessageFromHtml($html)) {
-                throw new \Exception($result);
+                throw new Exception($result);
             }
-
 
             $result = str_contains($html, 'recurring');
             if ($result) {
-                throw new \Exception("recurring_amount is invalid.");
+                throw new Exception("recurring_amount is invalid.");
             }
 
-            throw new \Exception("generatePaymentIdentifier failed as response didn't have UUID. Output request parameters and response body(): ");
+            throw new Exception("generatePaymentIdentifier failed as response didn't have UUID. Output request parameters and response body(): ");
 
             return null;
         }
 
+        ray("generatePaymentIdentifier result: $response[uuid]");
+
         return $response['uuid'];
     }
 
-    public function generateApiSignature($pfData, $passPhrase = null)
+    public function generateApiSignature($pfData, $passPhrase = null): string
     {
         if ($passPhrase !== null) {
             $pfData['passphrase'] = $passPhrase;
@@ -273,7 +277,7 @@ class Payfast implements BillingProvider
         return md5($pfParamString);
     }
 
-    private function headers()
+    private function headers(): array
     {
         $pfData = [
             'merchant-id' => $this->merchant_id,
@@ -293,7 +297,7 @@ class Payfast implements BillingProvider
 
     public function callbackUrl()
     {
-        if ($this->testmode == 'true') {
+        if ($this->test_mode == 'true') {
             return config('payfast.callback_url_test');
         } else {
             return config('payfast.callback_url');
@@ -315,7 +319,7 @@ class Payfast implements BillingProvider
         return $this->passphrase;
     }
 
-    public function url()
+    public function url(): string
     {
         return $this->url;
     }
@@ -323,12 +327,12 @@ class Payfast implements BillingProvider
     /**
      * To ensure our tests are working, we do a dependency injection test and simply return true
      */
-    public function di()
+    public function di(): bool
     {
         return true;
     }
 
-    public function ping()
+    public function ping(): string
     {
         return Http::withHeaders($this->headers())
             ->get('https://api.payfast.co.za/ping')
