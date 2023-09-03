@@ -214,6 +214,10 @@ Route::get('/update-card', function() {
 
 ## Testing
 
+### How to determine when a user's subscription ends
+
+$user->subscription('default')->ends_at = [date in the past]
+
 ```bash
 vendor/bin/phpunit
 ```

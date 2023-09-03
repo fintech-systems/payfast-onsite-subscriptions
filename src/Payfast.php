@@ -41,19 +41,19 @@ class Payfast implements BillingProvider
             $prependUrl = config('payfast.callback_url');
         }
 
-//        if (config('payfast.debug') == true) {
-//            $this->debug("In Payfast API constructor, test_mode: $this->test_mode, URL: $this->url");
-//        }
+        if (config('payfast.debug') == true) {
+            $this->debug("In Payfast API constructor, test_mode: $this->test_mode, URL: $this->url");
+        }
 
-//        $this->returnUrl = $prependUrl . $client['return_url'];
-//        $this->cancelUrl = $prependUrl . $client['cancel_url'];
-//        $this->notifyUrl = $prependUrl . $client['notify_url'];
+        $this->returnUrl = $prependUrl . $client['return_url'];
+        $this->cancelUrl = $prependUrl . $client['cancel_url'];
+        $this->notifyUrl = $prependUrl . $client['notify_url'];
 
-//        $this->urlCollection = [
-//            'return_url' => $this->returnUrl,
-//            'cancel_url' => $this->cancelUrl,
-//            'notify_url' => $this->notifyUrl,
-//        ];
+        $this->urlCollection = [
+            'return_url' => $this->returnUrl,
+            'cancel_url' => $this->cancelUrl,
+            'notify_url' => $this->notifyUrl,
+        ];
     }
 
     public function cancelSubscription($payfast_token)
@@ -76,9 +76,16 @@ class Payfast implements BillingProvider
      * important aspects is ensuring that the correct billing date is sent
      * with the order, and also on renewals the initial amount is zero
      *
+     * @param $planId
+     * @param null $billingDate
+     * @param array $mergeFields
+     * @param int $cycles
+     *
+     * $mergeFields may be used to overwrite values, for example, to make the amount R 0 for subscription renewals
+     *
      * @throws Exception
      */
-    public function createOnsitePayment($planId, $billingDate = null, $mergeFields = [], $cycles = 0)
+    public function createOnsitePayment($planId, $billingDate = null, array $mergeFields = [], int $cycles = 0)
     {
         $plan = config('payfast.plans')[$planId];
 
@@ -102,7 +109,7 @@ class Payfast implements BillingProvider
             'email_address' => Auth::user()->email,
         ];
 
-//        $data = array_merge($data, $this->urlCollection);
+        $data = array_merge($data, $this->urlCollection);
 
         if ($mergeFields) {
             $data = array_merge($data, $mergeFields);
@@ -110,8 +117,8 @@ class Payfast implements BillingProvider
 
         $message = "The Payfast onsite modal was invoked with these merged values and will now wait for user input:";
 
-//        $this->debug($message, 'displayPayfastModal');
-//        $this->debug($data, 'notice');
+        $this->debug($message, 'displayPayfastModal');
+        $this->debug($data, 'notice');
 
         $signature = Payfast::generateApiSignature($data, $this->passphrase());
 
@@ -140,36 +147,36 @@ class Payfast implements BillingProvider
      * Defaults to debug and purple if logging is anything except the defaults.
      * Won't log to local in the application isn't in production.
      */
-//    public function debug($message, $level = 'debug'): void
-//    {
-//        $color = match ($level) {
-//            'debug' => 'gray',
-//            'info' => 'blue',
-//            'notice' => 'green',
-//            'warning' => 'orange',
-//            'error', 'critical', 'alert', 'emergency' => 'red',
-//            default => 'purple',
-//        };
-//        ray($message)->$color();
-//
-//        if ($color == 'purple') {
-//            $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
-//
-//            $line = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['line'];
-//
-//            $level = 'debug';
-//
-//            $message = $caller . "#$line|" . $message;
-//        }
-//
-//        if ($level == 'debug' && !config('payfast.debug')) {
-//            return;
-//        }
-//
-//        if (config('app.env') == 'production') {
-//            Log::$level($message);
-//        }
-//    }
+    public function debug($message, $level = 'debug'): void
+    {
+        $color = match ($level) {
+            'debug' => 'gray',
+            'info' => 'blue',
+            'notice' => 'green',
+            'warning' => 'orange',
+            'error', 'critical', 'alert', 'emergency' => 'red',
+            default => 'purple',
+        };
+        ray($message)->$color();
+
+        if ($color == 'purple') {
+            $caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
+
+            $line = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['line'];
+
+            $level = 'debug';
+
+            $message = $caller . "#$line|" . $message;
+        }
+
+        if ($level == 'debug' && !config('payfast.debug')) {
+            return;
+        }
+
+        if (config('app.env') == 'production') {
+            Log::$level($message);
+        }
+    }
 
     /**
      * Fetch subscription information from the API.
@@ -230,7 +237,7 @@ class Payfast implements BillingProvider
      */
     public function generatePaymentIdentifier($pfParameters)
     {
-        ray("generatePaymentIdentifier will be using this URL: ",$this->url);
+        ray("generatePaymentIdentifier() URL: $this->url");
 
         $response = Http::withOptions(["verify"=>false])
         ->post($this->url, $pfParameters);
@@ -248,14 +255,7 @@ class Payfast implements BillingProvider
                 throw new Exception($result);
             }
 
-            $result = str_contains($html, 'recurring');
-            if ($result) {
-                throw new Exception("recurring_amount is invalid.");
-            }
-
             throw new Exception("generatePaymentIdentifier failed as response didn't have UUID. Output request parameters and response body(): ");
-
-            return null;
         }
 
         ray("generatePaymentIdentifier result: $response[uuid]");
@@ -295,7 +295,7 @@ class Payfast implements BillingProvider
 
     // Public getters
 
-    public function callbackUrl()
+    public function updateCardCallbackUrl()
     {
         if ($this->test_mode == 'true') {
             return config('payfast.callback_url_test');

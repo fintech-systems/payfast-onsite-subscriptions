@@ -107,10 +107,10 @@ trait ManagesSubscriptions
     /**
      * Get the ending date of the trial.
      *
-     * @param  string  $name
+     * @param string $name
      * @return \Illuminate\Support\Carbon|null
      */
-    public function trialEndsAt($name = 'default')
+    public function trialEndsAt(string $name = 'default'): ?\Illuminate\Support\Carbon
     {
         if ($subscription = $this->subscription($name)) {
             return $subscription->trial_ends_at;
@@ -137,11 +137,11 @@ trait ManagesSubscriptions
     /**
      * Determine if the Billable model has a given subscription.
      *
-     * @param  string  $name
-     * @param  int|null  $plan
+     * @param string $name
+     * @param int|null $plan
      * @return bool
      */
-    public function subscribed($name = 'default', $plan = null)
+    public function subscribed(string $name = 'default', int $plan = null): bool
     {
         $subscription = $this->subscription($name);
 
@@ -155,11 +155,11 @@ trait ManagesSubscriptions
     /**
      * Determine if the Billable model is actively subscribed to one of the given plans.
      *
-     * @param  int  $plan
-     * @param  string  $name
+     * @param int $plan
+     * @param string $name
      * @return bool
      */
-    public function subscribedToPlan($plan, $name = 'default')
+    public function subscribedToPlan(int $plan, string $name = 'default'): bool
     {
         $subscription = $this->subscription($name);
 

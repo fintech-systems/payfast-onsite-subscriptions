@@ -205,7 +205,8 @@ class WebhookController extends Controller
             'received_at' => now(),
         ]);
 
-        ray("A receipt was created");
+        ray("A new receipt was created");
+        ray($receipt);
 
         SubscriptionPaymentSucceeded::dispatch($billable, $receipt, $payload);
 

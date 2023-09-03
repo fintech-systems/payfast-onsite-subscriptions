@@ -73,8 +73,7 @@ class Subscriptions extends Component
 
         ray("updateCard has been called with this token: $payfast_token");
 
-        // $url = "https://www.payfast.co.za/eng/recurring/update/$payfast_token?return=" . config('app.url') . "/user/profile?card_updated=true";
-        $url = Payfast::url() . "/recurring/update/$payfast_token?return=" . Payfast::callbackUrl() . "/user/profile?card_updated=true";
+        $url = Payfast::url() . "/recurring/update/$payfast_token?return=" . Payfast::updateCardCallbackUrl() . "/user/profile?card_updated=true";
 
         $message = "updateCard is going to redirect()->to this URL: " . $url;
 
