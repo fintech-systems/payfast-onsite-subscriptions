@@ -169,7 +169,7 @@ class Payfast implements BillingProvider
             $message = $caller . "#$line|" . $message;
         }
 
-        if ($level == 'debug' && !config('payfast.debug')) {
+        if ($level == 'debug' && ! config('payfast.debug')) {
             return;
         }
 
@@ -239,7 +239,7 @@ class Payfast implements BillingProvider
     {
         ray("generatePaymentIdentifier() URL: $this->url");
 
-        $response = Http::withOptions(["verify"=>false])
+        $response = Http::withOptions(["verify" => false])
         ->post($this->url, $pfParameters);
 
         if (! isset($response['uuid'])) {
