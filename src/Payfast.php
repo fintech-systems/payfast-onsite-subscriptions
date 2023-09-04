@@ -32,7 +32,7 @@ class Payfast implements BillingProvider
             $this->merchant_key = $client['merchant_key_test'];
             $this->passphrase = $client['passphrase_test'];
             $this->url = 'https://sandbox.payfast.co.za​/onsite/process';
-            $prependUrl = config('payfast.callback_url_test');
+            $prependUrl = config('payfast.test_mode_callback_url');
         } else {
             $this->merchant_id = $client['merchant_id'];
             $this->merchant_key = $client['merchant_key'];
@@ -83,16 +83,12 @@ class Payfast implements BillingProvider
      *
      * $mergeFields may be used to overwrite values, for example, to make the amount R 0 for subscription renewals
      *
+     * @return mixed
      * @throws Exception
      */
     public function createOnsitePayment($planId, $billingDate = null, array $mergeFields = [], int $cycles = 0)
     {
         $plan = $this->getPlanDetail($planId);
-        dd($plan);
-        //        dd($planId);
-        //        $plan = config('payfast.plans')[$planId];
-
-
 
         $data = [
             'merchant_id' => $this->merchantId(),
@@ -102,13 +98,13 @@ class Payfast implements BillingProvider
             'amount' => $plan['initial_amount'],
             'recurring_amount' => $plan['recurring_amount'],
             'billing_date' => $billingDate,
-            'frequency' => $planId,
+            'frequency' => $plan['frequency'],
             'cycles' => $cycles,
             'custom_str1' => Auth::user()->getMorphClass(),
             'custom_int1' => Auth::user()->getKey(),
             'custom_str2' => $plan['name'],
-            'custom_int2' => $planId,
-            'item_name' => config('app.name') . " $recurringType Subscription",
+            'custom_int2' => $planId + 1, // Array index starts at zero but this might be plan #1
+            'item_name' => $plan['item_name'],
             'email_address' => Auth::user()->email,
         ];
 
@@ -231,20 +227,35 @@ class Payfast implements BillingProvider
      */
     public function getPlanDetail($planId): array
     {
-        $plan = config('payfast.billables.user.plans')[(int) $planId / 2];
+        $id = (int) $planId / 3;
 
-        if ($planId % 2 == 0) {
+        $plan = config('payfast.billables.user.plans')[$id];
+
+        $planDetail = [];
+        $recurringType = "";
+
+        if ($planId % 3 == 0) {
+            $recurringType = "Daily";
+            $planDetail['frequency'] = 3;
+            $planDetail['initial_amount'] = $plan['daily']['setup_amount'] ?? 0;
+            $planDetail['recurring_amount'] = $plan['daily']['recurring_amount'];
+        }
+
+        if ($planId % 3 == 1) {
             $recurringType = "Monthly";
-            $planDetail['initial_amount'] = $plan['monthly_setup'] ?? 0;
-            $planDetail['recurring_amount'] = $plan['monthly'];
-        } else {
+            $planDetail['frequency'] = 3;
+            $planDetail['initial_amount'] = $plan['monthly']['setup_amount'] ?? 0;
+            $planDetail['recurring_amount'] = $plan['monthly']['recurring_amount'];
+        }
+
+        if ($planId % 3 == 2) {
             $recurringType = "Yearly";
-            $planDetail['initial_amount'] = $plan['yearly_setup'] ?? 0;
-            $planDetail['recurring_amount'] = $plan['yearly'];
+            $planDetail['frequency'] = 6;
+            $planDetail['initial_amount'] = $plan['yearly']['setup_amount'] ?? 0;
+            $planDetail['recurring_amount'] = $plan['yearly']['recurring_amount'];
         }
 
         $planDetail['name'] = $plan['name'];
-
         $planDetail['item_name'] = config('app.name') . " $recurringType Subscription";
 
         return $planDetail;

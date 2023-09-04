@@ -917,13 +917,7 @@ class Subscription extends Model
 
         $payfastInfo = Payfast::fetchSubscription($this->payfast_token)['data']['response'];
 
-        ray($payfastInfo);
-
         return $this->payfastInfo = $payfastInfo;
-
-        // return $this->payfastInfo = Cashier::post('/subscription/users', array_merge([
-        //     'subscription_id' => $this->paddle_id,
-        // ], $this->billable->payfastOptions()))['response'][0];
     }
 
     /**
