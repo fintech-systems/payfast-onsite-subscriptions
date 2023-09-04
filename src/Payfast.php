@@ -27,6 +27,8 @@ class Payfast implements BillingProvider
     {
         $this->test_mode = $client['test_mode'] ?? false;
 
+        $prependUrl = "";
+
         if ($this->test_mode) {
             $this->merchant_id = $client['merchant_id_test'];
             $this->merchant_key = $client['merchant_key_test'];
