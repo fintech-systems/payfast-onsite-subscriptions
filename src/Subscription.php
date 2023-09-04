@@ -954,11 +954,15 @@ class Subscription extends Model
     }
 
     /**
-     * PayFast frequencies
+     * PayFast frequencies - required for subscriptions
+     *
+     * See https://developers.payfast.co.za/docs#subscriptions
      */
-    public static function frequencies($frequency)
+    public static function frequencies($frequency): string
     {
         return match ($frequency) {
+            1 => 'Daily',
+            2 => 'Weekly',
             3 => 'Monthly',
             4 => 'Quarterly',
             5 => 'Biannually',

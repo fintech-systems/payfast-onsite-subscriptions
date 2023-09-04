@@ -38,11 +38,11 @@ class Payfast implements BillingProvider
             $this->merchant_key = $client['merchant_key'];
             $this->passphrase = $client['passphrase'];
             $this->url = 'https://www.payfast.co.za/onsite/process';
-            $prependUrl = config('payfast.callback_url');
+//            $prependUrl = config('payfast.callback_url');
         }
 
         if (config('payfast.debug') == true) {
-            $this->debug("In Payfast API constructor, test_mode: $this->test_mode, URL: $this->url");
+//            Log::debug("In Payfast API constructor, test_mode: $this->test_mode, URL: $this->url");
         }
 
         $this->returnUrl = $prependUrl . $client['return_url'];
@@ -87,14 +87,17 @@ class Payfast implements BillingProvider
      */
     public function createOnsitePayment($planId, $billingDate = null, array $mergeFields = [], int $cycles = 0)
     {
-        $plan = config('payfast.plans')[$planId];
+        $plan = $this->getPlanDetail($planId);
+        dd($plan);
+//        dd($planId);
+//        $plan = config('payfast.plans')[$planId];
 
-        $recurringType = Subscription::frequencies($planId);
+
 
         $data = [
             'merchant_id' => $this->merchantId(),
             'merchant_key' => $this->merchantKey(),
-            'subscription_type' => 1,
+            'subscription_type' => 1, // required for subscriptions - sets type to a subscription
             'm_payment_id' => Order::generate(),
             'amount' => $plan['initial_amount'],
             'recurring_amount' => $plan['recurring_amount'],
@@ -219,6 +222,35 @@ class Payfast implements BillingProvider
     }
 
     /**
+     * To use a Spark compatible configuration, we need to convert the UI select box
+     * plan ID to the correct setup and recurring amounts. We do this by dividing
+     * the ID of the plan by two and then choosing the monthly or yearly values.
+     *
+     * @param $planId
+     * @return array
+     */
+    public function getPlanDetail($planId): array
+    {
+        $plan = config('payfast.billables.user.plans')[(int) $planId / 2];
+
+        if ($planId % 2 == 0) {
+            $recurringType = "Monthly";
+            $planDetail['initial_amount'] = $plan['monthly_setup'] ?? 0;
+            $planDetail['recurring_amount'] = $plan['monthly'];
+        } else {
+            $recurringType = "Yearly";
+            $planDetail['initial_amount'] = $plan['yearly_setup'] ?? 0;
+            $planDetail['recurring_amount'] = $plan['yearly'];
+        }
+
+        $planDetail['name'] = $plan['name'];
+
+        $planDetail['item_name'] = config('app.name') . " $recurringType Subscription";
+
+        return $planDetail;
+    }
+
+    /**
      * Helper to determine the current subscription state of a subscribed user.
      */
     public function getSubscriptionStatus($user): array
@@ -338,4 +370,5 @@ class Payfast implements BillingProvider
             ->get('https://api.payfast.co.za/ping')
             ->body();
     }
+
 }

@@ -6,38 +6,36 @@ return [
     'passphrase' => env('PAYFAST_PASSPHRASE'),
 
     'test_mode' => env('PAYFAST_TEST_MODE'),
+    'test_mode_callback_url' => env('PAYFAST_TEST_MODE_CALLBACK_URL', ''),
 
-    'debug' => env('PAYFAST_DEBUG', false),
-
-    'trial_days' => env('PAYFAST_TRIAL_DAYS', 30),
+//    'trial_days' => env('PAYFAST_TRIAL_DAYS', 30),
 
     'merchant_id_test' => env('PAYFAST_MERCHANT_ID_TEST'),
     'merchant_key_test' => env('PAYFAST_MERCHANT_KEY_TEST'),
     'passphrase_test' => env('PAYFAST_PASSPHRASE_TEST'),
 
-    'return_url' => env('PAYFAST_RETURN_URL', '/payfast/return'),
-    'cancel_url' => env('PAYFAST_CANCEL_URL', '/payfast/cancel'),
-    'notify_url' => env('PAYFAST_NOTIFY_URL', '/payfast/notify'),
+    'debug' => env('PAYFAST_DEBUG', false),
 
-    'callback_url' => env('PAYFAST_CALLBACK_URL', config('app.url')),
-    'callback_url_test' => env('PAYFAST_CALLBACK_URL_TEST', ''),
+//    'return_url' => env('PAYFAST_RETURN_URL', '/payfast/return'),
+//    'cancel_url' => env('PAYFAST_CANCEL_URL', '/payfast/cancel'),
+//    'notify_url' => env('PAYFAST_NOTIFY_URL', '/payfast/notify'),
 
-    'plans' => [
-        3 => [
-            'name' => 'Monthly R 99',
-            'start_date' => \Carbon\Carbon::now()->format('Y-m-d'),
-            'payfast_frequency' => 3, // 3 = monthly
-            'initial_amount' => 99, // For card updates or subscription reactivatitions, this should be zero
-            'recurring_amount' => 99,
-        ],
-        6 => [
-            'name' => 'Yearly R 1089',
-            'start_date' => \Carbon\Carbon::now()->format('Y-m-d'),
-            'payfast_frequency' => 6, // 6 = yearly
-            'initial_amount' => 1089, // For card updates or subscription reactivatitions, this should be zero
-            'recurring_amount' => 1089,
-        ]
-    ],
+//    'plans' => [
+//        3 => [
+//            'name' => 'Monthly R 99',
+//            'start_date' => \Carbon\Carbon::now()->format('Y-m-d'),
+//            'payfast_frequency' => 3, // 3 = monthly
+//            'initial_amount' => 99, // For card updates or subscription reactivatitions, this should be zero
+//            'recurring_amount' => 99,
+//        ],
+//        6 => [
+//            'name' => 'Yearly R 1089',
+//            'start_date' => \Carbon\Carbon::now()->format('Y-m-d'),
+//            'payfast_frequency' => 6, // 6 = yearly
+//            'initial_amount' => 1089, // For card updates or subscription reactivatitions, this should be zero
+//            'recurring_amount' => 1089,
+//        ]
+//    ],
 
     'billables' => [
         'user' => [
