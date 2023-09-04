@@ -38,11 +38,11 @@ class Payfast implements BillingProvider
             $this->merchant_key = $client['merchant_key'];
             $this->passphrase = $client['passphrase'];
             $this->url = 'https://www.payfast.co.za/onsite/process';
-//            $prependUrl = config('payfast.callback_url');
+            //            $prependUrl = config('payfast.callback_url');
         }
 
         if (config('payfast.debug') == true) {
-//            Log::debug("In Payfast API constructor, test_mode: $this->test_mode, URL: $this->url");
+            //            Log::debug("In Payfast API constructor, test_mode: $this->test_mode, URL: $this->url");
         }
 
         $this->returnUrl = $prependUrl . $client['return_url'];
@@ -89,8 +89,8 @@ class Payfast implements BillingProvider
     {
         $plan = $this->getPlanDetail($planId);
         dd($plan);
-//        dd($planId);
-//        $plan = config('payfast.plans')[$planId];
+        //        dd($planId);
+        //        $plan = config('payfast.plans')[$planId];
 
 
 
@@ -370,5 +370,4 @@ class Payfast implements BillingProvider
             ->get('https://api.payfast.co.za/ping')
             ->body();
     }
-
 }
