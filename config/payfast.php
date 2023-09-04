@@ -8,7 +8,8 @@ return [
     'test_mode' => env('PAYFAST_TEST_MODE'),
     'test_mode_callback_url' => env('PAYFAST_TEST_MODE_CALLBACK_URL', ''),
 
-//    'trial_days' => env('PAYFAST_TRIAL_DAYS', 30),
+    // Before deleting this, do global search
+    // 'trial_days' => env('PAYFAST_TRIAL_DAYS', 30),
 
     'merchant_id_test' => env('PAYFAST_MERCHANT_ID_TEST'),
     'merchant_key_test' => env('PAYFAST_MERCHANT_KEY_TEST'),
