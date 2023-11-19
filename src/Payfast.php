@@ -99,11 +99,11 @@ class Payfast implements BillingProvider
 
         $data = array_merge($data, $this->urlCollection);
 
-//        ray($data)->pause();
+        //        ray($data)->pause();
 
-//        if ($mergeFields) {
-//            $data = array_merge($data, $mergeFields);
-//        }
+        //        if ($mergeFields) {
+        //            $data = array_merge($data, $mergeFields);
+        //        }
 
         $message = "Payfast Create Custom Payment was invoked with these merged values and will now wait for user input:";
 
@@ -115,19 +115,18 @@ class Payfast implements BillingProvider
         $pfData = array_merge($data, ["signature" => $signature]);
 
         // If in testing mode make use of either sandbox.payfast.co.za or www.payfast.co.za
-//        $testingMode = true;
+        //        $testingMode = true;
         $pfHost = $this->test_mode ? 'sandbox.payfast.co.za' : 'www.payfast.co.za';
         $htmlForm = '<form action="https://'.$pfHost.'/eng/process" method="post">';
-        foreach($data as $name=> $value)
-        {
+        foreach($data as $name => $value) {
             $htmlForm .= '<input name="'.$name.'" type="hidden" value=\''.$value.'\' />';
         }
         $htmlForm .= '<input type="submit" value="Pay Now" /></form>';
         echo $htmlForm;
 
-//        return $pfData;
+        //        return $pfData;
 
-//        $paymentIdentifier = $this->generatePaymentIdentifier($pfData);
+        //        $paymentIdentifier = $this->generatePaymentIdentifier($pfData);
 
 
     }
