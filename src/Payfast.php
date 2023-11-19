@@ -16,9 +16,7 @@ class Payfast implements BillingProvider
     private string $merchant_id;
     private string $merchant_key;
     private string $passphrase;
-
     private string $test_mode;
-
     private string $returnUrl;
     private string $cancelUrl;
     private string $notifyUrl;
@@ -62,7 +60,7 @@ class Payfast implements BillingProvider
     {
         ray("cancelSubscription is called with this token: $payfast_token")->blue();
 
-        $append = ($this->test_mode == true ? 'testing=true' : "");
+        $append = $this->test_mode ? 'testing=true' : "";
 
         $response = Http::withHeaders($this->headers())
             ->put("https://api.payfast.co.za/subscriptions/$payfast_token/cancel?$append")
@@ -74,9 +72,70 @@ class Payfast implements BillingProvider
     }
 
     /**
+     * Create a "custom" payment link. This is in contrast to creating a "subscription" payment.
+     * This is the simplest form of payment and is used for once-off payments. For complete
+     * documentation go here: https://developers.payfast.co.za/docs#quickstart
+     *
+     * To develop this method, we tried to stick to the order carefully as per the Payfast
+     * documentation. The method ends up outputting a "Pay" link.
+     *
+     */
+    public function createCustomPayment($amount, $item, $user = [])
+    {
+        $data = [
+            'merchant_id' => $this->merchantId(), // Required
+            'merchant_key' => $this->merchantKey(), // Required
+
+            'name_first' => $user['first_name'] ?? '', // Optional
+            'name_last' => $user['last_name'] ?? '', // Optional
+            'email_address' => $user['email'] ?? '', // Required
+            'cell_number' => $user['mobile_phone_number'] ?? '', // Optional
+
+            'm_payment_id' => Order::generate(), // Optional
+            'amount' => $amount, // Required
+            'item_name' => $item['name'], // Required
+            'item_description' => $item['description'] ?? '', // Optional
+        ];
+
+        $data = array_merge($data, $this->urlCollection);
+
+//        ray($data)->pause();
+
+//        if ($mergeFields) {
+//            $data = array_merge($data, $mergeFields);
+//        }
+
+        $message = "Payfast Create Custom Payment was invoked with these merged values and will now wait for user input:";
+
+        $this->debug($message, 'createCustomPayment');
+        $this->debug($data, 'notice');
+
+        $signature = Payfast::generateApiSignature($data, $this->passphrase());
+
+        $pfData = array_merge($data, ["signature" => $signature]);
+
+        // If in testing mode make use of either sandbox.payfast.co.za or www.payfast.co.za
+//        $testingMode = true;
+        $pfHost = $this->test_mode ? 'sandbox.payfast.co.za' : 'www.payfast.co.za';
+        $htmlForm = '<form action="https://'.$pfHost.'/eng/process" method="post">';
+        foreach($data as $name=> $value)
+        {
+            $htmlForm .= '<input name="'.$name.'" type="hidden" value=\''.$value.'\' />';
+        }
+        $htmlForm .= '<input type="submit" value="Pay Now" /></form>';
+        echo $htmlForm;
+
+//        return $pfData;
+
+//        $paymentIdentifier = $this->generatePaymentIdentifier($pfData);
+
+
+    }
+
+    /**
      * Create a new subscription using Payfast Onsite Payments. One of the most
      * important aspects is ensuring that the correct billing date is sent
-     * with the order, and also on renewals the initial amount is zero
+     * with the order, and also on renewals the initial amount is zero.
      *
      * @param $planId
      * @param null $billingDate
@@ -293,8 +352,6 @@ class Payfast implements BillingProvider
             ray($response->body());
 
             $html = $response->body();
-
-            ray(strlen($html));
 
             if ($result = $this->extractErrorMessageFromHtml($html)) {
                 throw new Exception($result);
