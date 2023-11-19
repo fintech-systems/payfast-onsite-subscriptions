@@ -1,8 +1,9 @@
 <?php
 
-namespace FintechSystems\PayFast\Concerns;
+namespace FintechSystems\Payfast\Concerns;
 
-use FintechSystems\PayFast\Cashier;
+use Exception;
+use FintechSystems\Payfast\Cashier;
 use InvalidArgumentException;
 use LogicException;
 
@@ -11,14 +12,16 @@ trait PerformsCharges
     /**
      * Generate a pay link for a "one off" charge on the customer for the given amount.
      *
+     * TODO This method most likely does not exist in Payfast
+     *
      * @param  float|array  $amount
      * @param  string  $title
      * @param  array  $options
      * @return string
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function charge($amount, $title, array $options = [])
+    public function charge($amount, $title, array $options = []): string
     {
         if (strlen($title) > 200) {
             throw new InvalidArgumentException('Charge title has a maximum length of 200 characters.');

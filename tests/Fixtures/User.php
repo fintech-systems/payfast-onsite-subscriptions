@@ -2,7 +2,7 @@
 
 namespace Tests\Fixtures;
 
-use FintechSystems\PayFast\Billable;
+use FintechSystems\Payfast\Billable;
 use Illuminate\Foundation\Auth\User as Model;
 
 class User extends Model

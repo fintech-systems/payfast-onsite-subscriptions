@@ -20,7 +20,7 @@
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>
                             If you subscribe now next payment will be due on the
-                            {{ $this->afterTrialNextDueDate }}                            
+                            {{ $this->afterTrialNextDueDate }}
                         </p>
                     </div>
                 @elseif($user->hasExpiredGenericTrial())
@@ -30,7 +30,7 @@
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>
-                            {{ __('Please select from our list of plans below') }}
+                            {{ __('Please select from our plans below:') }}
                         </p>
                     </div>
                 @else
@@ -40,7 +40,7 @@
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>
-                            {{ __('Please select from our list of plans below') }}
+                            {{ __('Please select from our plans below:') }}
                         </p>
                     </div>
                 @endif

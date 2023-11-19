@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\PayFast\Events;
+namespace FintechSystems\Payfast\Events;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;

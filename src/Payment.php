@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\PayFast;
+namespace FintechSystems\Payfast;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
@@ -11,7 +11,7 @@ use Money\Currency;
 class Payment implements Arrayable, Jsonable, JsonSerializable
 {
     /**
-     * PayFast returns COMPLETE when a payment succeeded
+     * Payfast returns COMPLETE when a payment succeeded
      */
     public const COMPLETE = 'COMPLETE';
 
@@ -20,14 +20,16 @@ class Payment implements Arrayable, Jsonable, JsonSerializable
      *
      * @var string
      */
-    public $amount;
+    public string $amount;
 
     /**
      * The currency of the payment.
      *
+     * TODO This most likely doesn't exist in Payfast
+     *
      * @var string
      */
-    public $currency;
+    public string $currency;
 
     /**
      * The payment date.

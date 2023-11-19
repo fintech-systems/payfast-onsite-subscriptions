@@ -1,9 +1,10 @@
 <?php
 
-namespace FintechSystems\PayFast\Concerns;
+namespace FintechSystems\Payfast\Concerns;
 
-// use Laravel\Paddle\Cashier;
-use FintechSystems\PayFast\Customer;
+use FintechSystems\Payfast\Customer;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Collection;
 
 trait ManagesCustomer
 {
@@ -11,9 +12,9 @@ trait ManagesCustomer
      * Create a customer record for the billable model.
      *
      * @param  array  $attributes
-     * @return \FintechSystems\PayFast\Customer
+     * @return Customer
      */
-    public function createAsCustomer(array $attributes = [])
+    public function createAsCustomer(array $attributes = []): Customer
     {
         return $this->customer()->create($attributes);
     }
@@ -21,9 +22,9 @@ trait ManagesCustomer
     /**
      * Get the customer related to the billable model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     * @return MorphOne
      */
-    public function customer()
+    public function customer(): MorphOne
     {
         return $this->morphOne(Customer::class, 'billable');
     }
@@ -33,7 +34,7 @@ trait ManagesCustomer
      *
      * @param  array|int  $products
      * @param  array  $options
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     // public function productPrices($products, array $options = [])
     // {
@@ -49,7 +50,7 @@ trait ManagesCustomer
      *
      * @return string|null
      */
-    public function payfastEmail()
+    public function payfastEmail(): ?string
     {
         return $this->email;
     }
@@ -57,9 +58,11 @@ trait ManagesCustomer
     /**
      * Get the billable model's country to associate with Paddle.
      *
-     * This needs to be a 2 letter code. See the link below for supported countries.
+     * This needs to be a 2-letter code. See the link below for supported countries.
      *
-     * @return string|null
+     * TODO This isn't relevant to Payfast
+     *
+     * @return void
      *
      * @link https://developer.paddle.com/reference/platform-parameters/supported-countries
      */
@@ -73,7 +76,9 @@ trait ManagesCustomer
      *
      * See the link below for countries which require this.
      *
-     * @return string|null
+     * TODO This isn't relevant to Payfast
+     *
+     * @return void
      *
      * @link https://developer.paddle.com/reference/platform-parameters/supported-countries#countries-requiring-postcode
      */

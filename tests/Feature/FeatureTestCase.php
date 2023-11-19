@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use FintechSystems\PayFast\PayFastServiceProvider;
+use FintechSystems\Payfast\PayfastServiceProvider;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase;

@@ -1,17 +1,17 @@
 <?php
 
-namespace FintechSystems\PayFast;
+namespace FintechSystems\Payfast;
 
-use FintechSystems\PayFast\Components\Banner;
-use FintechSystems\PayFast\Components\Billing;
-use FintechSystems\PayFast\Components\Receipts;
-use FintechSystems\PayFast\Components\Subscriptions;
+use FintechSystems\Payfast\Components\Banner;
+use FintechSystems\Payfast\Components\Billing;
+use FintechSystems\Payfast\Components\Receipts;
+use FintechSystems\Payfast\Components\Subscriptions;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
-class PayFastServiceProvider extends ServiceProvider
+class PayfastServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
             __DIR__ . '/../config/payfast.php' => config_path('payfast.php'),
@@ -20,6 +20,8 @@ class PayFastServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/payfast'),
         ], 'views');
+
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'payfast');
 
         $this->publishes([
             __DIR__ . '/../Nova' => app_path('Nova'),
@@ -46,12 +48,12 @@ class PayFastServiceProvider extends ServiceProvider
         );
 
         $this->app->bind('payfast', function () {
-            return new PayFast([
+            return new Payfast([
                 'merchant_id' => config('payfast.merchant_id'),
                 'merchant_key' => config('payfast.merchant_key'),
                 'passphrase' => config('payfast.passphrase'),
 
-                'testmode' => config('payfast.testmode'),
+                'test_mode' => config('payfast.test_mode'),
 
                 'merchant_id_test' => config('payfast.merchant_id_test'),
                 'merchant_key_test' => config('payfast.merchant_key_test'),

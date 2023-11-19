@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\PayFast;
+namespace FintechSystems\Payfast;
 
 use FintechSystems\PayFast\Exceptions\PayFastException;
 use Illuminate\Support\Facades\Http;

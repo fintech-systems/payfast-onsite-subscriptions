@@ -5,12 +5,9 @@ namespace App\Nova\Actions;
 use Illuminate\Bus\Queueable;
 use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Fields\ActionFields;
-use FintechSystems\PayFast\Subscription;
 use Illuminate\Queue\InteractsWithQueue;
-use FintechSystems\PayFast\Facades\PayFast;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use FintechSystems\Payfast\Facades\Payfast;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class FetchSubscriptionInformation extends Action
@@ -25,11 +22,11 @@ class FetchSubscriptionInformation extends Action
      * @return mixed
      */
     public function handle(ActionFields $fields, Collection $models)
-    {        
-        foreach($models as $subscription) {            
-            $result = PayFast::fetchSubscription($subscription->payfast_token);
-            
-            $subscription->updatePayFastSubscription($result);
+    {
+        foreach($models as $subscription) {
+            $result = Payfast::fetchSubscription($subscription->payfast_token);
+
+            $subscription->updatePayfastSubscription($result);
         }
     }
 

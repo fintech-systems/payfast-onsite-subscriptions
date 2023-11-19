@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\PayFast\Events;
+namespace FintechSystems\Payfast\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -13,7 +13,7 @@ class WebhookReceived
     /**
      * @var array
      */
-    public $payload;
+    public array $payload;
 
     /**
      * Create a new event instance.

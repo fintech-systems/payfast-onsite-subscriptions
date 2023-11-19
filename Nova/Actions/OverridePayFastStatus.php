@@ -8,7 +8,7 @@ use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Fields\ActionFields;
-use FintechSystems\PayFast\Subscription;
+use FintechSystems\Payfast\Subscription;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Actions\DestructiveAction;
@@ -20,7 +20,7 @@ class OverridePayFastStatus extends DestructiveAction
 
     /**
      * Perform the action on the given models.
-     * 
+     *
      * TODO Beware duplicate code also exists in Subscription.php
      *
      * @param  \Laravel\Nova\Fields\ActionFields  $fields
@@ -36,13 +36,13 @@ class OverridePayFastStatus extends DestructiveAction
 
             if ($subscription->payfast_status == Subscription::STATUS_DELETED && !$subscription->cancelled_at) {
                 $message = ("Subscription status at PayFast is cancelled but no cancelled at date exists. Saving now() as cancelled and ended at as dates.");
-                
+
                 Log::warning($message);
-    
+
                 ray($message)->orange();
-    
+
                 $subscription->cancelled_at = now();
-                
+
                 $subscription->ends_at = now();
             }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\PayFast;
+namespace FintechSystems\Payfast;
 
 use Spatie\Url\Url;
 
@@ -9,75 +9,75 @@ class SubscriptionBuilder
     /**
      * The Billable model that is subscribing.
      *
-     * @var \FintechSystems\PayFast\Billable
+     * @var Billable
      */
-    protected $billable;
+    protected Billable $billable;
 
     /**
      * The name of the subscription.
      *
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * The plan of the subscription.
      *
      * @var int
      */
-    protected $plan;
+    protected int $plan;
 
     /**
      * The quantity of the subscription.
      *
      * @var int
      */
-    protected $quantity = 1;
+    protected int $quantity = 1;
 
     /**
      * The days until the trial will expire.
      *
      * @var int|null
      */
-    protected $trialDays;
+    protected ?int $trialDays;
 
     /**
      * Indicates that the trial should end immediately.
      *
      * @var bool
      */
-    protected $skipTrial = false;
+    protected bool $skipTrial = false;
 
     /**
      * The coupon code being applied to the customer.
      *
      * @var string|null
      */
-    protected $coupon;
+    protected ?string $coupon;
 
     /**
      * The metadata to apply to the subscription.
      *
      * @var array
      */
-    protected $metadata = [];
+    protected array $metadata = [];
 
     /**
      * The return url which will be triggered upon starting the subscription.
      *
      * @var string|null
      */
-    protected $returnTo;
+    protected ?string $returnTo;
 
     /**
      * Create a new subscription builder instance.
      *
-     * @param  \FintechSystems\PayFast\Billable  $billable
-     * @param  string  $name
-     * @param  int  $plan
+     * @param Billable $billable
+     * @param string $name
+     * @param int $plan
      * @return void
      */
-    public function __construct($billable, $name, $plan)
+    public function __construct(Billable $billable, string $name, int $plan)
     {
         $this->name = $name;
         $this->plan = $plan;
@@ -90,7 +90,7 @@ class SubscriptionBuilder
      * @param  int  $quantity
      * @return $this
      */
-    public function quantity($quantity)
+    public function quantity($quantity): static
     {
         $this->quantity = $quantity;
 
@@ -98,12 +98,12 @@ class SubscriptionBuilder
     }
 
     /**
-     * Specify the number of days of the trial.
+     * Specify the number of days for the trial.
      *
-     * @param  int  $trialDays
+     * @param int $trialDays
      * @return $this
      */
-    public function trialDays($trialDays)
+    public function trialDays(int $trialDays): static
     {
         $this->trialDays = $trialDays;
 
@@ -115,7 +115,7 @@ class SubscriptionBuilder
      *
      * @return $this
      */
-    public function skipTrial()
+    public function skipTrial(): static
     {
         $this->skipTrial = true;
 
@@ -128,7 +128,7 @@ class SubscriptionBuilder
      * @param  string  $coupon
      * @return $this
      */
-    public function withCoupon($coupon)
+    public function withCoupon($coupon): static
     {
         $this->coupon = $coupon;
 
@@ -141,7 +141,7 @@ class SubscriptionBuilder
      * @param  array  $metadata
      * @return $this
      */
-    public function withMetadata(array $metadata)
+    public function withMetadata(array $metadata): static
     {
         $this->metadata = $metadata;
 
@@ -151,11 +151,11 @@ class SubscriptionBuilder
     /**
      * The return url which will be triggered upon starting the subscription.
      *
-     * @param  string  $returnTo
-     * @param  string  $checkoutParameter
+     * @param string $returnTo
+     * @param string $checkoutParameter
      * @return $this
      */
-    public function returnTo($returnTo, $checkoutParameter = 'checkout')
+    public function returnTo(string $returnTo, string $checkoutParameter = 'checkout'): static
     {
         $this->returnTo = (string) Url::fromString($returnTo)
             ->withQueryParameter($checkoutParameter, '{checkout_hash}');
@@ -166,10 +166,12 @@ class SubscriptionBuilder
     /**
      * Generate a pay link for a subscription.
      *
+     * TODO This has very specific Paddle code and should be removed
+     *
      * @param  array  $options
      * @return string
      */
-    public function create(array $options = [])
+    public function create(array $options = []): string
     {
         $payload = array_merge($this->buildPayload(), $options);
 
@@ -193,9 +195,11 @@ class SubscriptionBuilder
     /**
      * Build the payload for subscription creation.
      *
+     * TODO This looks like Paddle specific code and should be removed
+     *
      * @return array
      */
-    protected function buildPayload()
+    protected function buildPayload(): array
     {
         return [
             'coupon_code' => (string) $this->coupon,
@@ -209,7 +213,7 @@ class SubscriptionBuilder
      *
      * @return int|null
      */
-    protected function getTrialEndForPayload()
+    protected function getTrialEndForPayload(): ?int
     {
         if ($this->skipTrial) {
             return 0;
@@ -219,12 +223,12 @@ class SubscriptionBuilder
     }
 
     /**
-     * Get the plan prices for the PayFast payload.
+     * Get the plan prices for the Payfast payload.
      *
-     * @param  bool  $trialing
+     * @param bool $trialing
      * @return array
      */
-    protected function getPlanPricesForPayload($trialing = true)
+    protected function getPlanPricesForPayload(bool $trialing = true): array
     {
         $plan = Cashier::post(
             '/subscription/plans',

@@ -1,87 +1,111 @@
 <?php
 
+use App\Models\User;
+
 return [
     'merchant_id' => env('PAYFAST_MERCHANT_ID'),
-    'merchant_key' => env('PAYFAST_MERCHANT_KEY'),        
-    'passphrase' => env('PAYFAST_PASSPHRASE'),  
+    'merchant_key' => env('PAYFAST_MERCHANT_KEY'),
+    'passphrase' => env('PAYFAST_PASSPHRASE'),
 
-    'testmode' => env('PAYFAST_TESTMODE'),
+    'test_mode' => env('PAYFAST_TEST_MODE'),
+    'test_mode_callback_url' => env('PAYFAST_TEST_MODE_CALLBACK_URL',config('app.url')),
+
+    'merchant_id_test' => env('PAYFAST_MERCHANT_ID_TEST'),
+    'merchant_key_test' => env('PAYFAST_MERCHANT_KEY_TEST'),
+    'passphrase_test' => env('PAYFAST_PASSPHRASE_TEST'),
 
     'debug' => env('PAYFAST_DEBUG', false),
 
-    'trial_days' => env('PAYFAST_TRIAL_DAYS', 30),
-
-    'merchant_id_test' => env('PAYFAST_MERCHANT_ID_TEST'),
-    'merchant_key_test' => env('PAYFAST_MERCHANT_KEY_TEST'),        
-    'passphrase_test' => env('PAYFAST_PASSPHRASE_TEST'),
-    
     'return_url' => env('PAYFAST_RETURN_URL', '/payfast/return'),
     'cancel_url' => env('PAYFAST_CANCEL_URL', '/payfast/cancel'),
     'notify_url' => env('PAYFAST_NOTIFY_URL', '/payfast/notify'),
 
-    'callback_url' => env('PAYFAST_CALLBACK_URL', config('app.url')),
-    'callback_url_test' => env('PAYFAST_CALLBACK_URL_TEST', ''),
-
-    'plans' => [
-        3 => [
-            'name' => 'Monthly R 99',
-            'start_date' => \Carbon\Carbon::now()->format('Y-m-d'),
-            'payfast_frequency' => 3, // 3 = monthly
-            'initial_amount' => 99, // For card updates or subscription reactivatitions, this should be zero
-            'recurring_amount' => 99,
-        ],
-        6 => [
-            'name' => 'Yearly R 1089',
-            'start_date' => \Carbon\Carbon::now()->format('Y-m-d'),
-            'payfast_frequency' => 6, // 6 = yearly
-            'initial_amount' => 1089, // For card updates or subscription reactivatitions, this should be zero
-            'recurring_amount' => 1089,
-        ]
-    ],
-
     'billables' => [
         'user' => [
             'model' => User::class,
+
             'trial_days' => 30,
-            'type' => 'subscription', // or sponsorship. Will be appended to PayFast description
+
+            'default_interval' => 'monthly',
+
+            'currency_prefix' => 'R ',
+
             'plans' => [
                 [
-                    'name' => 'Personal',
-                    'short_description' => "Keep track of up to 3 accounts.",
-                    'monthly' => 99,
-                    'yearly' => 1089,
-                    'features' => [
-                        'Import up to 3 accounts',
-                        'Export data and tags',                        
+                    'name' => 'Startup',
+                    'short_description' => "Send 100 invoices per month",
+                    'daily' => [
+                        'setup_amount' => 5,
+                        'recurring_amount' => 6,
                     ],
-                    'cta' => 'Start Free Trial',
+                    'monthly' => [
+                        'setup_amount' => 0,
+                        'recurring_amount' => 99,
+                    ],
+                    'yearly' => [
+                        'setup_amount' => 0,
+                        'recurring_amount' => 1089,
+                    ],
+                    'features' => [
+                        'Send 100 invoices per month',
+                        'Unlimited beautiful PDF quotes',
+                    ],
+                    'archived' => false,
+                    'cta' => '30 DAY FREE TRIAL',
                     'mostPopular' => false,
                 ],
                 [
                     'name' => 'Business',
-                    'short_description' => "Keep track of up to 10 accounts.",
-                    'monthly' => 199,
-                    'yearly' => 2189,
-                    'features' => [
-                        'Import up to 10 accounts',
-                        'Export data and tags',
-                        'Access data using an API',
+                    'short_description' => "Automatically reconcile invoices",
+                    'daily' => [
+                        'setup_amount' => 7,
+                        'recurring_amount' => 8,
                     ],
-                    'cta' => 'Start Free Trial',
+                    'monthly' => [
+                        'setup_amount' => 0,
+                        'recurring_amount' => 199,
+                    ],
+                    'yearly' => [
+                        'setup_amount' => 0,
+                        'recurring_amount' => 2189,
+                    ],
+                    'features' => [
+                        '1000 invoices per month',
+                        'Unlimited beautiful PDF quotes',
+                        'Payfast Payment gateway',
+                        'Subscription Billing',
+                        'Bank feeds*',
+                    ],
+                    'archived' => false,
+                    'cta' => '30 DAY FREE TRIAL',
                     'mostPopular' => true,
                 ],
                 [
-                    'name' => 'Provider',
-                    'short_description' => "Ideal when you're doing work for others.",
-                    'monthly' => env('SPARK_STANDARD_MONTHLY_PLAN', 1000),
-                    'yearly' => env('SPARK_STANDARD_YEARLY_PLAN', 1001),
-                    'features' => [
-                        'Import up to 100 accounts',
-                        'Export data and tags',
-                        'Access data using an API',
-                        'Central console for tag sharing',
+                    'name' => 'Enterprise',
+                    'short_description' => "Ideal when you're doing work for others",
+                    'daily' => [
+                        'setup_amount' => 9,
+                        'recurring_amount' => 10,
                     ],
-                    'cta' => 'Start Free Trial',
+                    'monthly' => [
+                        'setup_amount' => 0,
+                        'recurring_amount' => 299,
+                    ],
+                    'yearly' => [
+                        'setup_amount' => 0,
+                        'recurring_amount' => 3289,
+                    ],
+                    'features' => [
+                        'Unlimited invoices',
+                        'Unlimited beautiful PDF quotes',
+                        'Payfast Payment gateway',
+                        'Subscription Billing',
+                        'Bank feeds*',
+                        'Central console for tag sharing',
+                        'API Access',
+                    ],
+                    'archived' => false,
+                    'cta' => '30 DAY FREE TRIAL',
                     'mostPopular' => false,
                 ],
             ],

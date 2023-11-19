@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use Carbon\Carbon;
-use FintechSystems\PayFast\Customer;
+use FintechSystems\Payfast\Customer;
 #use PHPUnit\Framework\TestCase;
 #use Tests\TestCase; // See https://laracasts.com/discuss/channels/laravel/call-to-a-member-function-connection-on-null-at-laravel-unit-testing
 use Orchestra\Testbench\TestCase;

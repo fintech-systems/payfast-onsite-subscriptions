@@ -1,18 +1,21 @@
 <?php
 
-namespace FintechSystems\PayFast;
+namespace FintechSystems\Payfast;
 
+use App\Models\Client;
+use App\Models\User;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Exception;
-use FintechSystems\PayFast\Concerns\Prorates;
-use FintechSystems\PayFast\Facades\PayFast;
+use FintechSystems\Payfast\Concerns\Prorates;
+use FintechSystems\Payfast\Facades\Payfast;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Log;
 use LogicException;
 
 /**
- * @property \FintechSystems\PayFast\Billable $billable
+ * @property Billable $billable
  */
 class Subscription extends Model
 {
@@ -100,7 +103,7 @@ class Subscription extends Model
      *
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->active() || $this->onTrial() || $this->onPausedGracePeriod() || $this->onGracePeriod();
     }
@@ -110,7 +113,7 @@ class Subscription extends Model
      *
      * @return bool
      */
-    public function active()
+    public function active(): bool
     {
         return (is_null($this->ends_at) || $this->onGracePeriod() || $this->onPausedGracePeriod()) &&
             (! Cashier::$deactivatePastDue || $this->payfast_status !== self::STATUS_PAST_DUE) &&
@@ -768,7 +771,7 @@ class Subscription extends Model
      */
     public function cancelAt2(DateTimeInterface $endsAt)
     {
-        PayFast::cancelSubscription($this->payfast_token);
+        Payfast::cancelSubscription($this->payfast_token);
 
         $this->forceFill([
             'payfast_status' => self::STATUS_DELETED,
@@ -912,15 +915,9 @@ class Subscription extends Model
             return $this->payfastInfo;
         }
 
-        $payfastInfo = PayFast::fetchSubscription($this->payfast_token)['data']['response'];
-
-        ray($payfastInfo);
+        $payfastInfo = Payfast::fetchSubscription($this->payfast_token)['data']['response'];
 
         return $this->payfastInfo = $payfastInfo;
-
-        // return $this->payfastInfo = Cashier::post('/subscription/users', array_merge([
-        //     'subscription_id' => $this->paddle_id,
-        // ], $this->billable->payfastOptions()))['response'][0];
     }
 
     /**
@@ -951,15 +948,34 @@ class Subscription extends Model
     }
 
     /**
-     * PayFast frequencies
+     * PayFast frequencies - required for subscriptions
+     *
+     * See https://developers.payfast.co.za/docs#subscriptions
      */
-    public static function frequencies($frequency)
+    public static function frequencies($frequency): string
     {
         return match ($frequency) {
+            1 => 'Daily',
+            2 => 'Weekly',
             3 => 'Monthly',
             4 => 'Quarterly',
             5 => 'Biannually',
             6 => 'Annual'
         };
+    }
+
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Plan::class);
+    }
+
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

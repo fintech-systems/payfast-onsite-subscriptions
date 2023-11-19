@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\PayFast\Concerns;
+namespace FintechSystems\Payfast\Concerns;
 
 trait Prorates
 {
@@ -9,14 +9,14 @@ trait Prorates
      *
      * @var bool
      */
-    protected $prorate = true;
+    protected bool $prorate = true;
 
     /**
      * Indicate that the plan change should not be prorated.
      *
      * @return $this
      */
-    public function noProrate()
+    public function noProrate(): static
     {
         $this->prorate = false;
 
@@ -28,7 +28,7 @@ trait Prorates
      *
      * @return $this
      */
-    public function prorate()
+    public function prorate(): static
     {
         $this->prorate = true;
 
@@ -38,10 +38,10 @@ trait Prorates
     /**
      * Set the prorating behavior for the plan change.
      *
-     * @param  bool  $prorate
+     * @param bool $prorate
      * @return $this
      */
-    public function setProration($prorate = true)
+    public function setProration(bool $prorate = true): static
     {
         $this->prorate = $prorate;
 

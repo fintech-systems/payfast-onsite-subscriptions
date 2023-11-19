@@ -1,8 +1,8 @@
 <?php
 
-namespace FintechSystems\PayFast\Tests;
+namespace FintechSystems\Payfast\Tests;
 
-use FintechSystems\PayFast\Facades\PayFast;
+use FintechSystems\Payfast\Facades\Payfast;
 use Tests\Feature\FeatureTestCase;
 
 class LaravelTest extends FeatureTestCase
@@ -10,7 +10,7 @@ class LaravelTest extends FeatureTestCase
     /** @test */
     public function laravel_dependency_injection_works()
     {
-        $result = PayFast::di();
+        $result = Payfast::di();
 
         $this->assertTrue($result);
     }

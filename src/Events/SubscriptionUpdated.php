@@ -1,8 +1,8 @@
 <?php
 
-namespace FintechSystems\PayFast\Events;
+namespace FintechSystems\Payfast\Events;
 
-use FintechSystems\PayFast\Subscription;
+use FintechSystems\Payfast\Subscription;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -14,21 +14,21 @@ class SubscriptionUpdated
     /**
      * The subscription instance.
      *
-     * @var \FintechSystems\PayFast\Subscription
+     * @var Subscription
      */
-    public $subscription;
+    public Subscription $subscription;
 
     /**
      * The webhook payload.
      *
      * @var array
      */
-    public $payload;
+    public array $payload;
 
     /**
      * Create a new event instance.
      *
-     * @param  \FintechSystems\PayFast\Subscription  $subscription
+     * @param Subscription $subscription
      * @param  array  $payload
      * @return void
      */

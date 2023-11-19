@@ -2,7 +2,8 @@
 
 namespace FintechSystems\PayFast\Components;
 
-use FintechSystems\PayFast\Facades\PayFast;
+use FintechSystems\PayFast\Facades\Payfast;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -52,13 +53,13 @@ class Subscriptions extends Component
         $this->confirmingCancelSubscription = true;
     }
 
-    public function cancelSubscription()
+    public function cancelSubscription(): void
     {
-        PayFast::debug('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token, 'warning');
+        Payfast::debug('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token, 'warning');
 
         $this->user->subscription('default')->cancel2();
 
-        $this->emit('billingUpdated');
+        $this->dispatch('billingUpdated');
 
         $this->confirmingCancelSubscription = false;
     }
@@ -66,14 +67,13 @@ class Subscriptions extends Component
     /**
      * Update card
      */
-    public function updateCard()
+    public function updateCard(): RedirectResponse
     {
         $payfast_token = $this->user->subscription('default')->payfast_token;
 
         ray("updateCard has been called with this token: $payfast_token");
 
-        // $url = "https://www.payfast.co.za/eng/recurring/update/$payfast_token?return=" . config('app.url') . "/user/profile?card_updated=true";
-        $url = PayFast::url() . "/recurring/update/$payfast_token?return=" . PayFast::callbackUrl() . "/user/profile?card_updated=true";
+        $url = Payfast::url() . "/recurring/update/$payfast_token?return=" . Payfast::updateCardCallbackUrl() . "/user/profile?card_updated=true";
 
         $message = "updateCard is going to redirect()->to this URL: " . $url;
 
@@ -141,7 +141,7 @@ class Subscriptions extends Component
             $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
         }
 
-        $this->identifier = PayFast::createOnsitePayment(
+        $this->identifier = Payfast::createOnsitePayment(
             (int) $this->plan,
             $billingDate,
             $this->mergeFields

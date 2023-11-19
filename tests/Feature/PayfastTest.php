@@ -2,7 +2,7 @@
 
 namespace FintechSystems\PayFast\Tests;
 
-use FintechSystems\PayFast\Facades\PayFast;
+use FintechSystems\PayFast\Facades\Payfast;
 use FintechSystems\PayFast\Subscription;
 use Illuminate\Support\Facades\Http;
 use Tests\Feature\FeatureTestCase;
@@ -13,7 +13,7 @@ class PayFastTest extends FeatureTestCase
     public function it_can_fetch_a_unique_payment_identifier_for_a_new_subscription()
     {
         Http::fake([
-            PayFast::url() => Http::response(
+            Payfast::url() => Http::response(
                 [
                     "uuid" => "12345678-0123-5678-0123-567890123456",
                 ]
@@ -21,8 +21,8 @@ class PayFastTest extends FeatureTestCase
         ]);
 
         $pfData = [
-            'merchant_id' => PayFast::merchantId(),
-            'merchant_key' => PayFast::merchantKey(),
+            'merchant_id' => Payfast::merchantId(),
+            'merchant_key' => Payfast::merchantKey(),
             'subscription_type' => 1,
             'm_payment_id' => 2,
             'amount' => 300,
@@ -38,11 +38,11 @@ class PayFastTest extends FeatureTestCase
             'email_address' => 'user@example.com',
         ];
 
-        $signature = PayFast::generateApiSignature($pfData, PayFast::passphrase());
+        $signature = Payfast::generateApiSignature($pfData, Payfast::passphrase());
 
         $pfData = array_merge($pfData, ["signature" => $signature]);
 
-        $identifier = PayFast::generatePaymentIdentifier($pfData);
+        $identifier = Payfast::generatePaymentIdentifier($pfData);
 
         ray("generatePaymentIdentifier result: $identifier");
 
@@ -54,15 +54,15 @@ class PayFastTest extends FeatureTestCase
     {
         Http::fake([
             'https://api.payfast.co.za/ping' => Http::response(
-                '"PayFast API"',
+                '"Payfast API"',
                 200,
                 ['Headers']
             ),
         ]);
 
-        $result = PayFast::ping();
+        $result = Payfast::ping();
 
-        $this->assertEquals('"PayFast API"', $result);
+        $this->assertEquals('"Payfast API"', $result);
     }
 
     /** @test */
@@ -90,7 +90,7 @@ class PayFastTest extends FeatureTestCase
             ),
         ]);
 
-        $result = PayFast::fetchSubscription("667b8608-38bd-4513-8c49-250ce836876a");
+        $result = Payfast::fetchSubscription("667b8608-38bd-4513-8c49-250ce836876a");
 
         $this->assertEquals(Subscription::STATUS_ACTIVE, $result['data']['response']['status_text']);
     }
@@ -120,7 +120,7 @@ class PayFastTest extends FeatureTestCase
             ),
         ]);
 
-        $result = PayFast::fetchSubscription("1294009b-3778-420f-8ddc-aac0f9c8b477");
+        $result = Payfast::fetchSubscription("1294009b-3778-420f-8ddc-aac0f9c8b477");
 
         $this->assertEquals(Subscription::STATUS_PAUSED, $result['data']['response']['status_text']);
     }
