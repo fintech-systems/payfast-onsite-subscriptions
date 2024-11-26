@@ -1,43 +1,36 @@
 <?php
 
-namespace Tests\Unit;
-
+uses(\Orchestra\Testbench\TestCase::class);
 use Carbon\Carbon;
 use FintechSystems\Payfast\Customer;
-#use PHPUnit\Framework\TestCase;
-#use Tests\TestCase; // See https://laracasts.com/discuss/channels/laravel/call-to-a-member-function-connection-on-null-at-laravel-unit-testing
-use Orchestra\Testbench\TestCase;
+
 use Tests\Fixtures\User;
 
-class CustomerTest extends TestCase
-{
-    public function test_customer_can_be_put_on_a_generic_trial()
-    {
-        $user = new User();
-        $user->customer = $customer = new Customer();
-        $customer->setDateFormat('Y-m-d H:i:s');
 
-        $this->assertFalse($user->onGenericTrial());
+test('customer can be put on a generic trial', function () {
+    $user = new User();
+    $user->customer = $customer = new Customer();
+    $customer->setDateFormat('Y-m-d H:i:s');
 
-        $customer->trial_ends_at = Carbon::tomorrow();
+    expect($user->onGenericTrial())->toBeFalse();
 
-        $this->assertTrue($user->onTrial());
-        $this->assertTrue($user->onGenericTrial());
+    $customer->trial_ends_at = Carbon::tomorrow();
 
-        $customer->trial_ends_at = Carbon::today()->subDays(5);
+    expect($user->onTrial())->toBeTrue();
+    expect($user->onGenericTrial())->toBeTrue();
 
-        $this->assertFalse($user->onGenericTrial());
-    }
+    $customer->trial_ends_at = Carbon::today()->subDays(5);
 
-    public function test_we_can_check_if_a_generic_trial_has_expired()
-    {
-        $user = new User();
-        $user->customer = $customer = new Customer();
-        $customer->setDateFormat('Y-m-d H:i:s');
+    expect($user->onGenericTrial())->toBeFalse();
+});
 
-        $customer->trial_ends_at = Carbon::yesterday();
+test('we can check if a generic trial has expired', function () {
+    $user = new User();
+    $user->customer = $customer = new Customer();
+    $customer->setDateFormat('Y-m-d H:i:s');
 
-        $this->assertTrue($user->hasExpiredTrial());
-        $this->assertTrue($user->hasExpiredGenericTrial());
-    }
-}
+    $customer->trial_ends_at = Carbon::yesterday();
+
+    expect($user->hasExpiredTrial())->toBeTrue();
+    expect($user->hasExpiredGenericTrial())->toBeTrue();
+});

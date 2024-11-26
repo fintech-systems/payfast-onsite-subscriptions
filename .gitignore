@@ -32,8 +32,13 @@ coverage.xml
 /.idea
 
 ## phpunit.xml contains sensitive info
-phpunit.xml
+## 26 November 2024 commented out
+## phpunit.xml
 
 ##
 .php-cs-fixer.cache
 /.php-cs-fixer.cache
+
+## 26 November 2024
+/.phpunit.cache/*
+

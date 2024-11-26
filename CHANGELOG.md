@@ -2,6 +2,14 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v2.2 - 2024-11-26
+
+- Update Orchestra Testbench to version 9 for Laravel 11 compatibility
+- Convert test suite from PHPUnit to Pest
+- The minimum PHP version is now PHP 8.3
+- The minimum Laravel version is now Laravel 11
+- Update Github workflows
+
 ## v2 BETA
 
 - Updated Orchestra Testbench to version 8 for Laravel 10 compatibility

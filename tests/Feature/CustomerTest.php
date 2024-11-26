@@ -1,39 +1,35 @@
 <?php
 
-namespace Tests\Feature;
+use Tests\Fixtures\User;
 
-class CustomerTest extends FeatureTestCase
-{
-    public function test_billable_models_can_create_a_customer_record()
-    {
-        $user = $this->createUser();
+uses(\Tests\Feature\FeatureTestCase::class);
 
-        $customer = $user->createAsCustomer(['trial_ends_at' => $trialEndsAt = now()->addDays(15)]);
+test('billable models can create a customer record', function () {
+    $user = $this->createUser();
 
-        $this->assertSame($trialEndsAt->timestamp, $customer->trial_ends_at->timestamp);
-        $this->assertSame($trialEndsAt->timestamp, $user->trialEndsAt()->timestamp);
-        $this->assertTrue($user->onGenericTrial());
-    }
+    $customer = $user->createAsCustomer(['trial_ends_at' => $trialEndsAt = now()->addDays(15)]);
 
-    public function test_billable_models_without_having_a_customer_record_can_still_use_some_methods()
-    {
-        $user = $this->createUser();
+    expect($customer->trial_ends_at->timestamp)->toBe($trialEndsAt->timestamp)
+        ->and($user->trialEndsAt()->timestamp)->toBe($trialEndsAt->timestamp)
+        ->and($user->onGenericTrial())->toBeTrue();
+});
 
-        $this->assertFalse($user->onTrial());
-        $this->assertFalse($user->onGenericTrial());
-        $this->assertFalse($user->onPlan(123));
-        $this->assertFalse($user->subscribed());
-        $this->assertFalse($user->subscribedToPlan(123));
-        $this->assertEmpty($user->subscriptions);
-        $this->assertEmpty($user->receipts);
-        $this->assertNull($user->subscription());
-    }
+test('billable models without having a customer record can still use some methods', function () {
+    $user = $this->createUser();
 
-    public function test_trial_ends_at_works_if_generic_trial_is_expired()
-    {
-        $user = $this->createUser();
-        $user->createAsCustomer(['trial_ends_at' => $trialEndsAt = now()->subDays(15)]);
+    expect($user->onTrial())->toBeFalse();
+    expect($user->onGenericTrial())->toBeFalse();
+    expect($user->onPlan(123))->toBeFalse();
+    expect($user->subscribed())->toBeFalse();
+    expect($user->subscribedToPlan(123))->toBeFalse();
+    expect($user->subscriptions)->toBeEmpty();
+    expect($user->receipts)->toBeEmpty();
+    expect($user->subscription())->toBeNull();
+});
 
-        $this->assertSame($trialEndsAt->timestamp, $user->trialEndsAt()->timestamp);
-    }
-}
+test('trial ends at works if generic trial is expired', function () {
+    $user = $this->createUser();
+    $user->createAsCustomer(['trial_ends_at' => $trialEndsAt = now()->subDays(15)]);
+
+    expect($user->trialEndsAt()->timestamp)->toBe($trialEndsAt->timestamp);
+});

@@ -1,22 +1,18 @@
 <?php
 
-namespace Tests\Feature;
-
+uses(\Tests\Feature\FeatureTestCase::class);
 use FintechSystems\PayFast\Receipt;
 use Money\Currency;
 
-class ReceiptsTest extends FeatureTestCase
-{
-    public function test_it_can_returns_its_amount_and_currency()
-    {
-        $receipt = new Receipt([
-            'amount' => '12.45',
-            'tax' => '4.36',
-            'currency' => 'ZAR',
-        ]);
 
-        $this->assertSame('12.45', $receipt->amount);
-        $this->assertInstanceOf(Currency::class, $receipt->currency());
-        $this->assertSame('ZAR', $receipt->currency()->getCode());
-    }
-}
+test('it can returns its amount and currency', function () {
+    $receipt = new Receipt([
+        'amount' => '12.45',
+        'tax' => '4.36',
+        'currency' => 'ZAR',
+    ]);
+
+    expect($receipt->amount)->toBe('12.45');
+    expect($receipt->currency())->toBeInstanceOf(Currency::class);
+    expect($receipt->currency()->getCode())->toBe('ZAR');
+});

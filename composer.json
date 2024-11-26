@@ -27,9 +27,9 @@
         }
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.3",
         "symfony/dotenv": "*",
-        "livewire/livewire": "^v3.0@beta",
+        "livewire/livewire": "*",
         "moneyphp/money": "*",
         "spatie/ray": "*",
         "nunomaduro/collision": "*",
@@ -37,10 +37,10 @@
         "guzzlehttp/psr7": "*"
     },
     "require-dev": {          
-        "orchestra/testbench": "8",
+        "orchestra/testbench": "9",
         "spatie/laravel-ray": "*",
-        "vimeo/psalm": "*",
-        "phpunit/phpunit": "*"
+        "pestphp/pest": "^2.36",
+        "pestphp/pest-plugin-drift": "^2.5"
     },
     "extra": {
         "laravel": {
@@ -50,6 +50,11 @@
             "aliases": {
                 "payfast": "Payfast"
             }
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     }
 }
