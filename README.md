@@ -6,8 +6,8 @@ A [Payfast Onsite Payments](https://developers.payfast.co.za/docs#onsite_payment
 
 Requirements:
 
-- PHP 8.1
-- Laravel 9.x or higher
+- PHP 8.3
+- Laravel 11.x or higher
 - A [Payfast Sandbox account](https://sandbox.payfast.co.za/)
 - A [Payfast account](https://www.payfast.co.za/registration)
 
