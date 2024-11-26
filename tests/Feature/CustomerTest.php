@@ -1,6 +1,5 @@
 <?php
 
-use Tests\Fixtures\User;
 
 uses(\Tests\Feature\FeatureTestCase::class);
 

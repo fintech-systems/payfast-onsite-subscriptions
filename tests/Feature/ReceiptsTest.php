@@ -4,7 +4,6 @@ uses(\Tests\Feature\FeatureTestCase::class);
 use FintechSystems\PayFast\Receipt;
 use Money\Currency;
 
-
 test('it can returns its amount and currency', function () {
     $receipt = new Receipt([
         'amount' => '12.45',
