@@ -4,14 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReceiptsTable extends Migration
-{
+return new class extends Migration{
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
@@ -31,7 +30,6 @@ class CreateReceiptsTable extends Migration
             $table->date('billing_date')->nullable();
             $table->timestamp('received_at');
             $table->timestamps();
-
             $table->index(['billable_id', 'billable_type']);
         });
     }
@@ -41,8 +39,8 @@ class CreateReceiptsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('receipts');
     }
-}
+};

@@ -2,13 +2,20 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v2.3 - 2025-02-27
+
+- Fix camel case name spacing issue in the Subscriptions component
+- Do not down on migrations anymore and convert to anonymous classes
+- New Livewire 3 compatible Payfast modal event opener
+
 ## v2.2 - 2024-11-26
 
 - Update Orchestra Testbench to version 9 for Laravel 11 compatibility
 - Convert test suite from PHPUnit to Pest
 - The minimum PHP version is now PHP 8.3
 - The minimum Laravel version is now Laravel 11
-- Update Github workflows
+- Update GitHub workflows
+- Made migrations anonymous and added PHP types
 
 ## v2 BETA
 

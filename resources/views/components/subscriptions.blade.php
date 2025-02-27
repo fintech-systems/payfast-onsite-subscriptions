@@ -123,19 +123,18 @@
         <!-- End Subscription Action Buttons -->
 
         <!-- Launch PayFast Subscription Modal -->
-        @if ($displayingCreateSubscription)
-            <script>
-                console.log('Launching PayFast onsite payment modal')
-
-                window.payfast_do_onsite_payment({
-                    "uuid": "{{ $identifier }}"
-                })
-
-                console.log("Adding an event listener to 'message' for when it closes")
-
-                window.addEventListener("message", refreshComponent);
-            </script>
-        @endif
+        <script>
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('launchPayfast', ({ identifier }) => {
+                    console.log('Launching PayFast onsite payment modal');
+                    console.log('identifier: ' + identifier)
+                    window.payfast_do_onsite_payment({
+                        uuid: identifier
+                    });
+                    window.addEventListener("message", refreshComponent);
+                });
+            });
+        </script>
 
         @push('payfast-event-listener')
             <script>

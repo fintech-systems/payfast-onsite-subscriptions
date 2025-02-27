@@ -2,7 +2,7 @@
 
 namespace FintechSystems\PayFast\Components;
 
-use FintechSystems\PayFast\Facades\Payfast;
+use FintechSystems\Payfast\Facades\Payfast;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -148,6 +148,7 @@ class Subscriptions extends Component
         );
 
         $this->displayingCreateSubscription = true;
+        $this->dispatch('launchPayfast', identifier: $this->identifier);
     }
 
     public function mount()

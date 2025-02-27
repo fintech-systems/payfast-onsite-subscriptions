@@ -4,14 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCustomersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
@@ -19,7 +19,6 @@ class CreateCustomersTable extends Migration
             $table->string('billable_type');
             $table->timestamp('trial_ends_at')->nullable();
             $table->timestamps();
-
             $table->index(['billable_id', 'billable_type']);
         });
     }
@@ -29,8 +28,8 @@ class CreateCustomersTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('customers');
     }
-}
+};
