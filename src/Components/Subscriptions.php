@@ -37,7 +37,7 @@ class Subscriptions extends Component
      */
     public function billingWasUpdated()
     {
-        $this->emitTo('receipts', 'refreshComponent');
+        $this->dispatch('refreshComponent')->to('receipts');
 
         $this->displayingCreateSubscription = false;
     }
@@ -67,7 +67,7 @@ class Subscriptions extends Component
     /**
      * Update card
      */
-    public function updateCard(): RedirectResponse
+    public function updateCard()
     {
         $payfast_token = $this->user->subscription('default')->payfast_token;
 

@@ -141,7 +141,7 @@
                 const refreshComponent = () => {
                     console.log('Refreshing subscription status by emitting a billingUpdated event')
 
-                    Livewire.emit('billingUpdated')
+                    window.Livewire.dispatch('billingUpdated')
                 }
             </script>
         @endpush

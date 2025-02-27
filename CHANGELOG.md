@@ -2,6 +2,10 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v2.4 - 2025-02-27
+
+- Two additional Livewire 3 upgrade fixes and fix a redirect response return type
+
 ## v2.3 - 2025-02-27
 
 - Fix camel case name spacing issue in the Subscriptions component
