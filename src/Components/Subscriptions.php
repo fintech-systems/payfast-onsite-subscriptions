@@ -49,6 +49,7 @@ class Subscriptions extends Component
         $this->password = '';
 
         $this->dispatchBrowserEvent('confirming-cancel-subscription');
+        
 
         $this->confirmingCancelSubscription = true;
     }
