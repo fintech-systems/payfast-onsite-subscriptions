@@ -3,7 +3,6 @@
 namespace FintechSystems\PayFast\Components;
 
 use FintechSystems\Payfast\Facades\Payfast;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
