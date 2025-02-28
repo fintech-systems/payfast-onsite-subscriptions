@@ -2,6 +2,10 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v2.5 - 2025-02-28
+
+- Implement Spark style plan configuration
+
 ## v2.4 - 2025-02-27
 
 - Two additional Livewire 3 upgrade fixes and fix a redirect response return type

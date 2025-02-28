@@ -84,35 +84,71 @@ php artisan migrate
 <?php
 
 return [
-    'merchant_id' => env('PAYFAST_MERCHANT_ID', '10004002'),
-    'merchant_key' => env('PAYFAST_MERCHANT_KEY', 'q1cd2rdny4a53'),
-    'passphrase' => env('PAYFAST_PASSPHRASE', 'payfast'),
-    'test_mode' => env('PAYFAST_TEST_MODE', true),        
-    'return_url' => env('PAYFAST_RETURN_URL', config('app.url') . '/payfast/return'),
-    'cancel_url' => env('PAYFAST_CANCEL_URL', config('app.url') . '/payfast/cancel'),
-    'notify_url' => env('PAYFAST_NOTIFY_URL', config('app.url') . '/payfast/notify'),
-    'card_update_link_css' => env('CARD_UPDATE_LINK_CSS', 'inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition'),
-    'card_updated_return_url' => env('CARD_UPDATED_RETURN_URL', config('app.url') . '/user/profile'),
-    'plans' => [
-        3 => [
-            'name' => 'Monthly R 99',
-            'start_date' => \Carbon\Carbon::now()->addDay()->format('Y-m-d'),
-            'payfast_frequency' => 3,
-            'initial_amount' => 5.99,
-            'recurring_amount' => 5.99,
+    'merchant_id' => env('PAYFAST_MERCHANT_ID'),
+    'merchant_key' => env('PAYFAST_MERCHANT_KEY'),
+    'passphrase' => env('PAYFAST_PASSPHRASE'),
+    'testmode' => env('PAYFAST_TESTMODE'),
+    'test_mode' => env('PAYFAST_TEST_MODE'),
+    'test_mode_callback_url' => env('PAYFAST_TEST_MODE_CALLBACK_URL',config('app.url')),
+    'trial_days' => env('PAYFAST_TRIAL_DAYS', 30),
+    'merchant_id_test' => env('PAYFAST_MERCHANT_ID_TEST'),
+    'merchant_key_test' => env('PAYFAST_MERCHANT_KEY_TEST'),
+    'passphrase_test' => env('PAYFAST_PASSPHRASE_TEST'),
+    'debug' => env('PAYFAST_DEBUG', false),
+    'return_url' => env('PAYFAST_RETURN_URL', '/payfast/return'),
+    'cancel_url' => env('PAYFAST_CANCEL_URL', '/payfast/cancel'),
+    'notify_url' => env('PAYFAST_NOTIFY_URL', '/payfast/notify'),
+    'callback_url' => env('PAYFAST_CALLBACK_URL', config('app.url')),
+    'callback_url_test' => env('PAYFAST_CALLBACK_URL_TEST', ''),
+    'billables' => [
+        'user' => [
+            'model' => User::class,
+            'trial_days' => 30,
+            'default_interval' => 'monthly',
+            'currency_prefix' => 'R ',
+            'plans' => [
+                [
+                    'name' => 'Startup',
+                    'short_description' => "",
+                    'monthly' => [
+                        'setup_amount' => 69000,
+                        'recurring_amount' => 69000,
+                    ],
+                    'yearly' => [
+                        'setup_amount' => 700000,
+                        'recurring_amount' => 700000,
+                    ],
+                    'features' => [
+                        'Feature 1',
+                        'Feature 2',
+                        'Feature 3',
+                    ],
+                    'archived' => false,
+                    'cta' => '30 DAY FREE TRIAL',
+                    'mostPopular' => false,
+                ],
+                [
+                    'name' => 'Business',
+                    'short_description' => "",                    
+                    'monthly' => [
+                        'setup_amount' => 199000,
+                        'recurring_amount' => 199000,
+                    ],
+                    'yearly' => [
+                        'setup_amount' => 2189000,
+                        'recurring_amount' => 2189000,
+                    ],
+                    'features' => [
+                        'Feature 1',
+                        'Feature 2',
+                        'Feature 3',
+                    ],
+                    'archived' => false,
+                    'cta' => '30 DAY FREE TRIAL',
+                    'mostPopular' => true,
+                ],                
+            ],
         ],
-        6 => [
-            'name' => 'Yearly R 1089',
-            'start_date' => \Carbon\Carbon::now()->format('Y-m-d'),
-            'payfast_frequency' => 6,
-            'initial_amount' => 6.89,
-            'recurring_amount' => 6.89,
-        ]
-    ],
-    'cancelation_reasons' => [
-        'Too expensive',
-        'Lacks features',
-        'Not what I expected',
     ],
 ];
 ```
