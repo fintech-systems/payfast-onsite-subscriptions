@@ -85,7 +85,7 @@ return [
                     'short_description' => "Ideal when you're doing work for others",
                     'daily' => [
                         'setup_amount' => 9,
-                        'recurring_amount' => 10,
+                        'recurring_amount' => 11,
                     ],
                     'monthly' => [
                         'setup_amount' => 0,

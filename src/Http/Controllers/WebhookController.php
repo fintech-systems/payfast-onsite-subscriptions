@@ -146,7 +146,7 @@ class WebhookController extends Controller
         $subscription = $customer->subscriptions()->create([
             'name' => 'default',
             'payfast_token' => $payload['token'],
-            'plan_id' => $payload['custom_int2'],
+            'plan_id' => $payload['custom_int2'] - 1, // Payfast doesn't accept 0 for integers, so we need to subtract 1 from the plan ID
             'merchant_payment_id' => $payload['m_payment_id'],
             'payfast_status' => $payload['payment_status'],
             'next_bill_at' => $payload['billing_date'] ?? null, // This happens when subscription was never created but then cancelled

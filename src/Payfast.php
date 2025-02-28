@@ -16,6 +16,8 @@ class Payfast implements BillingProvider
     private string $merchant_id;
     private string $merchant_key;
     private string $passphrase;
+    private string $url;
+    private array $urlCollection;
     private string $test_mode;
     private string $returnUrl;
     private string $cancelUrl;
@@ -146,9 +148,13 @@ class Payfast implements BillingProvider
      * @return mixed
      * @throws Exception
      */
-    public function createOnsitePayment($planId, $billingDate = null, array $mergeFields = [], int $cycles = 0)
+    public function createOnsitePayment($plan, $billingDate = null, array $mergeFields = [], int $cycles = 0)
     {
-        $plan = $this->getPlanDetail($planId);
+        ray("createOnsitePayment is called with this plan: $plan");
+
+        $plan = $this->getPlanDetail($plan);
+
+        ray($plan);
 
         $data = [
             'merchant_id' => $this->merchantId(),
@@ -163,7 +169,9 @@ class Payfast implements BillingProvider
             'custom_str1' => Auth::user()->getMorphClass(),
             'custom_int1' => Auth::user()->getKey(),
             'custom_str2' => $plan['name'],
-            'custom_int2' => $planId + 1, // Array index starts at zero but this might be plan #1
+            // Payfast doesn't accept 0 for integers, so we need to add 1 to the plan ID
+            // which we reverse on the notify return journey    
+            'custom_int2' => (int) $plan['id'] + 1,
             'item_name' => $plan['item_name'],
             'email_address' => Auth::user()->email,
         ];
@@ -285,30 +293,26 @@ class Payfast implements BillingProvider
      * @param $planId
      * @return array
      */
-    public function getPlanDetail($planId): array
+    public function getPlanDetail($plan): array
     {
-        $id = (int) $planId / 3;
+        ray("getPlanDetail is called with this plan: $plan");
+        list($planId, $frequency) = explode('|', $plan);
 
-        $plan = config('payfast.billables.user.plans')[$id];
+        ray($planId);        
+
+        $plan = config('payfast.billables.user.plans')[$planId];
 
         $planDetail = [];
         $recurringType = "";
 
-        if ($planId % 3 == 0) {
-            $recurringType = "Daily";
-            $planDetail['frequency'] = 3;
-            $planDetail['initial_amount'] = $plan['daily']['setup_amount'] ?? 0;
-            $planDetail['recurring_amount'] = $plan['daily']['recurring_amount'];
-        }
-
-        if ($planId % 3 == 1) {
+        if ($frequency == 'monthly') {
             $recurringType = "Monthly";
             $planDetail['frequency'] = 3;
             $planDetail['initial_amount'] = $plan['monthly']['setup_amount'] ?? 0;
             $planDetail['recurring_amount'] = $plan['monthly']['recurring_amount'];
         }
 
-        if ($planId % 3 == 2) {
+        if ($frequency == 'yearly') {
             $recurringType = "Yearly";
             $planDetail['frequency'] = 6;
             $planDetail['initial_amount'] = $plan['yearly']['setup_amount'] ?? 0;
@@ -317,6 +321,10 @@ class Payfast implements BillingProvider
 
         $planDetail['name'] = $plan['name'];
         $planDetail['item_name'] = config('app.name') . " $recurringType Subscription";
+
+        $planDetail['id'] = $planId;
+
+        ray("Returning planDetail:", $planDetail);
 
         return $planDetail;
     }

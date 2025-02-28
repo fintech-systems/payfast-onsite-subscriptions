@@ -15,7 +15,7 @@ class Subscriptions extends Component
 
     public $displayingCreateSubscription = false;
 
-    public $plan = 3;
+    public $plan = '0|monthly'; // TODO when initializing this component, we need a way to specify the default plan what will be selected.
 
     public $identifier;
 
@@ -24,6 +24,8 @@ class Subscriptions extends Component
     public $mergeFields;
 
     public $afterTrialNextDueDate;
+
+    private $password;
 
     protected $listeners = [
         'billingUpdated' => 'billingWasUpdated',
@@ -94,14 +96,18 @@ class Subscriptions extends Component
      */
     public function updatedPlan($planId)
     {
+        ray($planId);
+
         $this->plan = $planId;
 
         if ($this->user->onGenericTrial()) {
-            if ((int) $this->plan == 3) {
+            list($id, $frequency) = explode('|', $this->plan);
+
+            if ($frequency === 'monthly') {
                 $this->afterTrialNextDueDate = $this->user->trialEndsAt()->addMonth()->addDay()->format('jS \o\f F Y');
             }
 
-            if ((int) $this->plan == 6) {
+            if ($frequency === 'yearly') {
                 $this->afterTrialNextDueDate = $this->user->trialEndsAt()->addYear()->addDay()->format('jS \o\f F Y');
             }
         }
@@ -112,15 +118,20 @@ class Subscriptions extends Component
      */
     public function displayCreateSubscription()
     {
+        ray('displayCreateSubscription has been called');
+        ray($this->plan);        
+        
         // User's trial has been activated but they have never been a subscriber
         if ($this->user->onGenericTrial() && ! $this->user->subscribed('default')) {
             $billingDate = $this->user->trialEndsAt()->addDay();
 
-            if ((int) $this->plan == 3) {
+            list($planId, $frequency) = explode('|', $this->plan);
+
+            if ($frequency === 'monthly') {
                 $billingDate = $billingDate->addMonth();
             }
 
-            if ((int) $this->plan == 6) {
+            if ($frequency === 'yearly') {
                 $billingDate = $billingDate->addYear();
             }
 
@@ -141,7 +152,7 @@ class Subscriptions extends Component
         }
 
         $this->identifier = Payfast::createOnsitePayment(
-            (int) $this->plan,
+            $this->plan,
             $billingDate,
             $this->mergeFields
         );
