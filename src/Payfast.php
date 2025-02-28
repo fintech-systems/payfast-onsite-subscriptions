@@ -170,7 +170,7 @@ class Payfast implements BillingProvider
             'custom_int1' => Auth::user()->getKey(),
             'custom_str2' => $plan['name'],
             // Payfast doesn't accept 0 for integers, so we need to add 1 to the plan ID
-            // which we reverse on the notify return journey    
+            // which we reverse on the notify return journey
             'custom_int2' => (int) $plan['id'] + 1,
             'item_name' => $plan['item_name'],
             'email_address' => Auth::user()->email,
@@ -298,7 +298,7 @@ class Payfast implements BillingProvider
         ray("getPlanDetail is called with this plan: $plan");
         list($planId, $frequency) = explode('|', $plan);
 
-        ray($planId);        
+        ray($planId);
 
         $plan = config('payfast.billables.user.plans')[$planId];
 
