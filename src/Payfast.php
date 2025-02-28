@@ -161,8 +161,8 @@ class Payfast implements BillingProvider
             'merchant_key' => $this->merchantKey(),
             'subscription_type' => 1, // required for subscriptions - sets type to a subscription
             'm_payment_id' => Order::generate(),
-            'amount' => $plan['initial_amount'],
-            'recurring_amount' => $plan['recurring_amount'],
+            'amount' => $plan['initial_amount'] / 100,
+            'recurring_amount' => $plan['recurring_amount'] / 100,
             'billing_date' => $billingDate,
             'frequency' => $plan['frequency'],
             'cycles' => $cycles,
