@@ -71,7 +71,7 @@
                     {{-- Subscribed --}}
                     <h3 class="text-lg font-medium text-gray-900">
                         You are subscribed to the
-                            {{ config('payfast.plans')[$user->subscription('default')->plan_id]['name'] }} plan.
+                        {{ config('payfast.billables.user.plans')[$user->subscription('default')->plan_id]['name'] }} plan.
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>
@@ -99,11 +99,13 @@
                 <div class="flex">
                     <select wire:model="plan" name="plan"
                         class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        @foreach (config('payfast.plans') as $key => $value)
-                            <option value="{{ $key }}">{{ $value['name'] }}</option>
+                        @foreach (config('payfast.billables.user.plans') as $index => $plan)
+                            <option value="{{ $index }}|monthly">{{ $plan['name'] }} Monthly - {{ config('payfast.billables.user.currency_prefix') }}{{ number_format($plan['monthly']['recurring_amount'] / 100, 2) }}</option>
+                            <option value="{{ $index }}|yearly">{{ $plan['name'] }} Yearly - {{ config('payfast.billables.user.currency_prefix') }}{{ number_format($plan['yearly']['recurring_amount'] / 100, 2) }}</option>
                         @endforeach
                     </select>
 
+                    {{-- This is the main button that gets clicked to subscribe to a plan. It calls displayCreateSubscription(). --}}
                     <x-secondary-button class="ml-2 align-middle h-9 mt-2" style="color: green;"
                         wire:click="displayCreateSubscription">
                         @if ($user->subscribed('default') && $user->subscription('default')->onGracePeriod())

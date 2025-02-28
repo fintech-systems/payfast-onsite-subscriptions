@@ -7,18 +7,22 @@ return [
     'merchant_key' => env('PAYFAST_MERCHANT_KEY'),
     'passphrase' => env('PAYFAST_PASSPHRASE'),
 
-    'test_mode' => env('PAYFAST_TEST_MODE'),
-    'test_mode_callback_url' => env('PAYFAST_TEST_MODE_CALLBACK_URL',config('app.url')),
+    'testmode' => env('PAYFAST_TESTMODE'),
+
+    'debug' => env('PAYFAST_DEBUG', false),
+
+    'trial_days' => env('PAYFAST_TRIAL_DAYS', 30),
 
     'merchant_id_test' => env('PAYFAST_MERCHANT_ID_TEST'),
     'merchant_key_test' => env('PAYFAST_MERCHANT_KEY_TEST'),
     'passphrase_test' => env('PAYFAST_PASSPHRASE_TEST'),
 
-    'debug' => env('PAYFAST_DEBUG', false),
-
     'return_url' => env('PAYFAST_RETURN_URL', '/payfast/return'),
     'cancel_url' => env('PAYFAST_CANCEL_URL', '/payfast/cancel'),
     'notify_url' => env('PAYFAST_NOTIFY_URL', '/payfast/notify'),
+
+    'callback_url' => env('PAYFAST_CALLBACK_URL', config('app.url')),
+    'callback_url_test' => env('PAYFAST_CALLBACK_URL_TEST', ''),
 
     'billables' => [
         'user' => [
@@ -32,82 +36,43 @@ return [
 
             'plans' => [
                 [
-                    'name' => 'Startup',
-                    'short_description' => "Send 100 invoices per month",
-                    'daily' => [
-                        'setup_amount' => 5,
-                        'recurring_amount' => 6,
-                    ],
+                    'name' => 'Best Agent',
+                    'short_description' => "",                    
                     'monthly' => [
-                        'setup_amount' => 0,
-                        'recurring_amount' => 99,
+                        'setup_amount' => 69000,
+                        'recurring_amount' => 69000,
                     ],
                     'yearly' => [
-                        'setup_amount' => 0,
-                        'recurring_amount' => 1089,
+                        'setup_amount' => 700000,
+                        'recurring_amount' => 700000,
                     ],
                     'features' => [
-                        'Send 100 invoices per month',
-                        'Unlimited beautiful PDF quotes',
+                        'Feature 1',
+                        'Feature 2',
                     ],
                     'archived' => false,
-                    'cta' => '30 DAY FREE TRIAL',
+                    'cta' => 'Sign up now',
                     'mostPopular' => false,
                 ],
                 [
-                    'name' => 'Business',
-                    'short_description' => "Automatically reconcile invoices",
-                    'daily' => [
-                        'setup_amount' => 7,
-                        'recurring_amount' => 8,
-                    ],
+                    'name' => 'Vander Host Subscription',
+                    'short_description' => "",                    
                     'monthly' => [
                         'setup_amount' => 0,
-                        'recurring_amount' => 199,
+                        'recurring_amount' => 69000,
                     ],
                     'yearly' => [
                         'setup_amount' => 0,
-                        'recurring_amount' => 2189,
+                        'recurring_amount' => 700000,
                     ],
                     'features' => [
-                        '1000 invoices per month',
-                        'Unlimited beautiful PDF quotes',
-                        'Payfast Payment gateway',
-                        'Subscription Billing',
-                        'Bank feeds*',
+                        'Feature 1',
+                        'Feature 2',
                     ],
                     'archived' => false,
-                    'cta' => '30 DAY FREE TRIAL',
-                    'mostPopular' => true,
-                ],
-                [
-                    'name' => 'Enterprise',
-                    'short_description' => "Ideal when you're doing work for others",
-                    'daily' => [
-                        'setup_amount' => 9,
-                        'recurring_amount' => 11,
-                    ],
-                    'monthly' => [
-                        'setup_amount' => 0,
-                        'recurring_amount' => 299,
-                    ],
-                    'yearly' => [
-                        'setup_amount' => 0,
-                        'recurring_amount' => 3289,
-                    ],
-                    'features' => [
-                        'Unlimited invoices',
-                        'Unlimited beautiful PDF quotes',
-                        'Payfast Payment gateway',
-                        'Subscription Billing',
-                        'Bank feeds*',
-                        'Central console for tag sharing',
-                        'API Access',
-                    ],
-                    'archived' => false,
-                    'cta' => '30 DAY FREE TRIAL',
+                    'cta' => 'Sign up now',
                     'mostPopular' => false,
-                ],
+                ],              
             ],
         ],
     ],
