@@ -119,8 +119,8 @@ class Subscriptions extends Component
     public function displayCreateSubscription()
     {
         ray('displayCreateSubscription has been called');
-        ray($this->plan);        
-        
+        ray($this->plan);
+
         // User's trial has been activated but they have never been a subscriber
         if ($this->user->onGenericTrial() && ! $this->user->subscribed('default')) {
             $billingDate = $this->user->trialEndsAt()->addDay();
