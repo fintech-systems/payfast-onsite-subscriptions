@@ -57,7 +57,7 @@
                         ) != 0)
                             <p>
                                 There are
-                                {{ \Carbon\Carbon::now()->diffInDays($user->subscription('default')->ends_at) }}
+                                {{ (int) \Carbon\Carbon::now()->diffInDays($user->subscription('default')->ends_at) }}
                                 days left of your subscription and the last day is the
                                 {{ $user->subscription('default')->ends_at->format('jS \o\f F Y') }}.
                             </p>
@@ -71,7 +71,8 @@
                     {{-- Subscribed --}}
                     <h3 class="text-lg font-medium text-gray-900">
                         You are subscribed to the
-                        {{ config('payfast.billables.user.plans')[$user->subscription('default')->plan_id]['name'] }} plan.
+                        {{ config('payfast.billables.user.plans')[explode('|', $user->subscription('default')->plan_id)[0]]['name'] }} 
+                        {{ explode('|', $user->subscription('default')->plan_id)[1] }} plan.
                     </h3>
                     <div class="mt-3 max-w-xl text-sm text-gray-600">
                         <p>

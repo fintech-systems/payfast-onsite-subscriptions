@@ -26,8 +26,7 @@ it('can fetch a unique payment identifier for a new subscription', function () {
         'cycles' => 0,
         'custom_str1' => 'App\User',
         'custom_int1' => 1,
-        'custom_int2' => 3,
-        'custom_str2' => 'Monthly R 99',
+        'custom_str2' => '0|monthly',
         'item_name' => config('app.name') . " Monthly Subscription",
         'email_address' => 'user@example.com',
     ];

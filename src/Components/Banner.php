@@ -49,7 +49,7 @@ class Banner extends Component
                     $user->subscriptions()->active()->first()->ends_at->format('Y-m-d'),
                 ) != 0) {
                     $message = "There are "
-                        . Carbon::now()->diffInDays($user->subscription('default')->ends_at)
+                        . (int) Carbon::now()->diffInDays($user->subscription('default')->ends_at)
                         . " days left of your subscription and the last day is the "
                         . $user->subscription('default')->ends_at->format('jS \o\f F Y');
                 } else {
@@ -57,7 +57,8 @@ class Banner extends Component
                 }
             } else {
                 $message = "You are subscribed to the "
-                    . config('payfast.plans')[$user->subscription('default')->plan_id]['name']  . " plan.";
+                        . config('payfast.billables.user.plans')[explode('|', $user->subscription('default')->plan_id)[0]]['name'] 
+                        . ' ' . explode('|', $user->subscription('default')->plan_id)[1] . " plan.";
             }
         }
 

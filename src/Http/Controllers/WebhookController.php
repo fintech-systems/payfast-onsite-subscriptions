@@ -141,12 +141,12 @@ class WebhookController extends Controller
 
     protected function createSubscription(array $payload)
     {
-        $customer = $this->findOrCreateCustomer($payload);
+        $customer = $this->findOrCreateCustomer($payload);        
 
         $subscription = $customer->subscriptions()->create([
             'name' => 'default',
             'payfast_token' => $payload['token'],
-            'plan_id' => $payload['custom_int2'] - 1, // Payfast doesn't accept 0 for integers, so we need to subtract 1 from the plan ID
+            'plan_id' => $payload['custom_str2'],
             'merchant_payment_id' => $payload['m_payment_id'],
             'payfast_status' => $payload['payment_status'],
             'next_bill_at' => $payload['billing_date'] ?? null, // This happens when subscription was never created but then cancelled
@@ -255,13 +255,14 @@ class WebhookController extends Controller
     }
 
     /**
-     * Get plan frequency based on $payload custom_int2 converted to an integer
+     * Get plan frequency based on $payload custom_str2 plan_id pipe second value
      */
     private function getSubscriptionName($payload)
     {
-        $recurringType = Subscription::frequencies((int) $payload['custom_int2']);
-
-        return config('app.name') . " $recurringType Subscription";
+        // Old deprecated code that worked out the sub name using an integer
+        // $recurringType = Subscription::frequencies((int) $payload['custom_int2']);
+        // return config('app.name') . " $recurringType Subscription";
+        return $payload['custom_str2'];
     }
 
     /**

@@ -52,7 +52,7 @@ class Subscription extends Model
      */
     protected $casts = [
         'token' => 'string',
-        'plan_id' => 'integer',
+        'plan_id' => 'string',
         'next_bill_at' => 'datetime',
         'cancelled_at' => 'datetime',
         'trial_ends_at' => 'datetime',

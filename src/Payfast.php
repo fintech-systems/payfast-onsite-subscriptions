@@ -152,27 +152,26 @@ class Payfast implements BillingProvider
     {
         ray("createOnsitePayment is called with this plan: $plan");
 
-        $plan = $this->getPlanDetail($plan);
+        $planDetail = $this->getPlanDetail($plan);
 
-        ray($plan);
+        ray("the plan detail is: ", $planDetail);
 
         $data = [
             'merchant_id' => $this->merchantId(),
             'merchant_key' => $this->merchantKey(),
             'subscription_type' => 1, // required for subscriptions - sets type to a subscription
             'm_payment_id' => Order::generate(),
-            'amount' => $plan['initial_amount'] / 100,
-            'recurring_amount' => $plan['recurring_amount'] / 100,
+            'amount' => $planDetail['initial_amount'] / 100,
+            'recurring_amount' => $planDetail['recurring_amount'] / 100,
             'billing_date' => $billingDate,
-            'frequency' => $plan['frequency'],
+            'frequency' => $planDetail['frequency'],
             'cycles' => $cycles,
             'custom_str1' => Auth::user()->getMorphClass(),
             'custom_int1' => Auth::user()->getKey(),
-            'custom_str2' => $plan['name'],
+            'custom_str2' => $plan,
             // Payfast doesn't accept 0 for integers, so we need to add 1 to the plan ID
             // which we reverse on the notify return journey
-            'custom_int2' => (int) $plan['id'] + 1,
-            'item_name' => $plan['item_name'],
+            'item_name' => $planDetail['item_name'],
             'email_address' => Auth::user()->email,
         ];
 

@@ -2,6 +2,12 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v2.7 - 2025-03-05
+
+- When sending plans to Payfast, don't send the plan ID anymore but rather the plan string e.g. 0|monthly
+- Fix subscriptions blade to (int) for days remaining and fix displaying of plan names
+- Cast plan_id to string instead of integer
+
 ## v2.5 - 2025-02-28
 
 - Implement Spark style plan configuration
