@@ -143,7 +143,7 @@ class WebhookController extends Controller
 
     protected function createSubscription(array $payload)
     {
-        $customer = $this->findOrCreateCustomer($payload);        
+        $customer = $this->findOrCreateCustomer($payload);
 
         $subscription = $customer->subscriptions()->create([
             'name' => 'default',
