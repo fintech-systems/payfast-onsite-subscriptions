@@ -49,6 +49,7 @@ class WebhookController extends Controller
         ray("Checking what kind of webhook received...");
 
         try {
+            // Non subscription payment handling
             if (! isset($payload['token'])) {
                 $this->nonSubscriptionPaymentReceived($payload);
 
@@ -60,6 +61,7 @@ class WebhookController extends Controller
                 return new Response('Webhook ad-hoc payment received (nonSubscriptionPaymentReceived) handled');
             }
 
+            // New token received, so let's create a subscription
             if (! $this->findSubscription($payload['token'])) {
                 $this->createSubscription($payload);
 
@@ -255,7 +257,8 @@ class WebhookController extends Controller
     }
 
     /**
-     * Get the subscription name by exploding the $plan to get the ID
+     * Get the subscription name by exploding the $plan to get the ID.
+     * This is only invoked during the hook and not when creating a payment subscription for the first time.
      */
     private function getSubscriptionName($payload)
     {
@@ -263,7 +266,7 @@ class WebhookController extends Controller
 
         $planId = explode('|', $customStr2)[0];
 
-        return config('payfast.billables.user.plans')[$planId]['name'];
+        return config('payfast.billables.user.plans')[$planId]['name'] . ' ' . ucfirst(explode('|', $customStr2)[1]);
     }
 
     /**

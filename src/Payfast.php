@@ -169,8 +169,6 @@ class Payfast implements BillingProvider
             'custom_str1' => Auth::user()->getMorphClass(),
             'custom_int1' => Auth::user()->getKey(),
             'custom_str2' => $plan,
-            // Payfast doesn't accept 0 for integers, so we need to add 1 to the plan ID
-            // which we reverse on the notify return journey
             'item_name' => $planDetail['item_name'],
             'email_address' => Auth::user()->email,
         ];
@@ -309,6 +307,7 @@ class Payfast implements BillingProvider
             $planDetail['frequency'] = 3;
             $planDetail['initial_amount'] = $plan['monthly']['setup_amount'] ?? 0;
             $planDetail['recurring_amount'] = $plan['monthly']['recurring_amount'];
+            $planDetail['frequencyName'] = "Monthly";
         }
 
         if ($frequency == 'yearly') {
@@ -316,10 +315,10 @@ class Payfast implements BillingProvider
             $planDetail['frequency'] = 6;
             $planDetail['initial_amount'] = $plan['yearly']['setup_amount'] ?? 0;
             $planDetail['recurring_amount'] = $plan['yearly']['recurring_amount'];
+            $planDetail['frequencyName'] = "Yearly";
         }
-
-        $planDetail['name'] = $plan['name'];
-        $planDetail['item_name'] = config('app.name') . " $recurringType Subscription";
+        
+        $planDetail['item_name'] = $plan['name'] . " $recurringType";
 
         $planDetail['id'] = $planId;
 

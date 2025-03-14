@@ -86,8 +86,7 @@ php artisan migrate
 return [
     'merchant_id' => env('PAYFAST_MERCHANT_ID'),
     'merchant_key' => env('PAYFAST_MERCHANT_KEY'),
-    'passphrase' => env('PAYFAST_PASSPHRASE'),
-    'testmode' => env('PAYFAST_TESTMODE'),
+    'passphrase' => env('PAYFAST_PASSPHRASE'),    
     'test_mode' => env('PAYFAST_TEST_MODE'),
     'test_mode_callback_url' => env('PAYFAST_TEST_MODE_CALLBACK_URL',config('app.url')),
     'trial_days' => env('PAYFAST_TRIAL_DAYS', 30),
