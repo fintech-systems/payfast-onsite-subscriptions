@@ -41,4 +41,3 @@ test('payfast ITN returns on new subscriptions triggers the webhook without any 
         'ping' => now(),
     ])->assertOk();
 });
-

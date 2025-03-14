@@ -317,7 +317,7 @@ class Payfast implements BillingProvider
             $planDetail['recurring_amount'] = $plan['yearly']['recurring_amount'];
             $planDetail['frequencyName'] = "Yearly";
         }
-        
+
         $planDetail['item_name'] = $plan['name'] . " $recurringType";
 
         $planDetail['id'] = $planId;

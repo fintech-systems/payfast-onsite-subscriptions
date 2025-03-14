@@ -57,7 +57,7 @@ class Banner extends Component
                 }
             } else {
                 $message = "You are subscribed to the "
-                        . config('payfast.billables.user.plans')[explode('|', $user->subscription('default')->plan)[0]]['name'] 
+                        . config('payfast.billables.user.plans')[explode('|', $user->subscription('default')->plan)[0]]['name']
                         . ' ' . explode('|', $user->subscription('default')->plan)[1] . " plan.";
             }
         }
