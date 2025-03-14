@@ -64,7 +64,7 @@ trait Payfast
                 }
                 
                 $subscription = $this->subscriptions->first();
-                $planParts = explode('|', $subscription->plan_id);
+                $planParts = explode('|', $subscription->plan);
                 
                 if (count($planParts) < 1) {
                     return null;
@@ -91,7 +91,7 @@ trait Payfast
                 }
                 
                 $subscription = $this->subscriptions->first();
-                $planParts = explode('|', $subscription->plan_id);
+                $planParts = explode('|', $subscription->plan);
                 
                 if (count($planParts) < 2) {
                     return null;
@@ -116,7 +116,7 @@ trait Payfast
                 }
                 
                 $subscription = $this->subscriptions->first();
-                $planParts = explode('|', $subscription->plan_id);
+                $planParts = explode('|', $subscription->plan);
                 
                 if (count($planParts) < 1) {
                     return null;

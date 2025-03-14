@@ -2,6 +2,10 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v2.9 - 2025-03-14
+
+- Fix plan ID in Billable helper
+
 ## v2.8 - 2025-03-14
 
 - Refactor plan_id to plan. Note, this logic was completely re-engineerd in Cashier 15, see:
