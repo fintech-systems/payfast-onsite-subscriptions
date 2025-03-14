@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('billable_id');
             $table->string('billable_type');
             $table->string('name');
-            $table->string('plan_id');
+            $table->string('plan');
             $table->string('payfast_status');
             $table->string('payfast_token')->unique();
             $table->timestamp('trial_ends_at')->nullable();

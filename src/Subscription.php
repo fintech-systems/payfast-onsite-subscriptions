@@ -52,7 +52,7 @@ class Subscription extends Model
      */
     protected $casts = [
         'token' => 'string',
-        'plan_id' => 'string',
+        'plan' => 'string',
         'next_bill_at' => 'datetime',
         'cancelled_at' => 'datetime',
         'trial_ends_at' => 'datetime',
@@ -90,12 +90,12 @@ class Subscription extends Model
     /**
      * Determine if the subscription has a specific plan.
      *
-     * @param  int  $plan
+     * @param  string  $plan
      * @return bool
      */
     public function hasPlan($plan)
     {
-        return $this->plan_id == $plan;
+        return $this->plan == $plan;
     }
 
     /**
@@ -477,9 +477,9 @@ class Subscription extends Model
     }
 
     /**
-     * Swap the subscription to a new Paddle plan.
+     * Swap the subscription to a new Payfast plan.
      *
-     * @param  int  $plan
+     * @param  string  $plan
      * @param  array  $options
      * @return $this
      */
@@ -488,12 +488,12 @@ class Subscription extends Model
         $this->guardAgainstUpdates('swap plans');
 
         $this->updatePaddleSubscription(array_merge($options, [
-            'plan_id' => $plan,
+            'plan' => $plan,
             'prorate' => $this->prorate,
         ]));
 
         $this->forceFill([
-            'paddle_plan' => $plan,
+            'payfast_plan' => $plan,
         ])->save();
 
         $this->payfastInfo = null;

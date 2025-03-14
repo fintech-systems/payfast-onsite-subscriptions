@@ -2,6 +2,12 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v2.8 - 2025-03-14
+
+- Refactor plan_id to plan. Note, this logic was completely re-engineerd in Cashier 15, see:
+https://github.com/laravel/cashier-stripe/blob/a2185d181e4ca9901f98b4ba69bec7f5bee75f25/UPGRADE.md?plain=1#L356
+However, we don't need to align with Stripe as this module is closer to Paddle.
+
 ## v2.7 - 2025-03-05
 
 - When sending plans to Payfast, don't send the plan ID anymore but rather the plan string e.g. 0|monthly

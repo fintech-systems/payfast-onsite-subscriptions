@@ -146,7 +146,7 @@ class WebhookController extends Controller
         $subscription = $customer->subscriptions()->create([
             'name' => 'default',
             'payfast_token' => $payload['token'],
-            'plan_id' => $payload['custom_str2'],
+            'plan' => $payload['custom_str2'],
             'merchant_payment_id' => $payload['m_payment_id'],
             'payfast_status' => $payload['payment_status'],
             'next_bill_at' => $payload['billing_date'] ?? null, // This happens when subscription was never created but then cancelled
@@ -255,14 +255,15 @@ class WebhookController extends Controller
     }
 
     /**
-     * Get plan frequency based on $payload custom_str2 plan_id pipe second value
+     * Get the subscription name by exploding the $plan to get the ID
      */
     private function getSubscriptionName($payload)
     {
-        // Old deprecated code that worked out the sub name using an integer
-        // $recurringType = Subscription::frequencies((int) $payload['custom_int2']);
-        // return config('app.name') . " $recurringType Subscription";
-        return $payload['custom_str2'];
+        $customStr2 = $payload['custom_str2'];
+
+        $planId = explode('|', $customStr2)[0];
+
+        return config('payfast.billables.user.plans')[$planId]['name'];
     }
 
     /**

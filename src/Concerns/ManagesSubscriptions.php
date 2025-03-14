@@ -155,11 +155,11 @@ trait ManagesSubscriptions
     /**
      * Determine if the Billable model is actively subscribed to one of the given plans.
      *
-     * @param int $plan
+     * @param string $plan
      * @param string $name
      * @return bool
      */
-    public function subscribedToPlan(int $plan, string $name = 'default'): bool
+    public function subscribedToPlan(string $plan, string $name = 'default'): bool
     {
         $subscription = $this->subscription($name);
 
@@ -173,13 +173,13 @@ trait ManagesSubscriptions
     /**
      * Determine if the entity has a valid subscription on the given plan.
      *
-     * @param  int  $plan
+     * @param  string  $plan
      * @return bool
      */
     public function onPlan($plan)
     {
         return ! is_null($this->subscriptions()
-            ->where('plan_id', $plan)
+            ->where('plan', $plan)
             ->get()
             ->first(fn (Subscription $subscription) => $subscription->valid()));
     }
