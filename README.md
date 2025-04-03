@@ -1,7 +1,7 @@
 ## About Payfast Onsite Subscriptions
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fintech-systems/payfast-onsite-subscriptions) ![Tests](https://github.com/fintech-systems/payfast-onsite-subscriptions/actions/workflows/tests.yml/badge.svg)
  ![GitHub](https://img.shields.io/github/license/fintech-systems/payfast-onsite-subscriptions)
- [![Downloads](https://img.shields.io/packagist/dt/fintech-systems/payfast-onsite-subscriptions.svg)](https://packagist.org/packages/fintech-systems/payfast-onsite-subscriptions)
+ [![Downloads](https://img.shields.io/packagist/dt/fintechsystems/payfast-onsite-subscriptions.svg)](https://packagist.org/packages/fintechsystems/payfast-onsite-subscriptions)
 
 A [Payfast Onsite Payments](https://developers.payfast.co.za/docs#onsite_payments) implementation for Laravel designed to ease subscription billing. [Livewire](https://laravel-livewire.com/) views are included.
 
