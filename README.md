@@ -288,10 +288,6 @@ To see if a user is on trial as used in the subscriptions blade, do this:
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## Screenshots
-
-![Livewire Subscriptions and Receipts Components](../../blob/main/screenshots/subscription_and_receipts.png)
-
 ## Credits
 
 - [Eugene van der Merwe](https://github.com/eugenevdm)
