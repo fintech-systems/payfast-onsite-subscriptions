@@ -27,6 +27,8 @@ class Payfast implements BillingProvider
     {
         $this->test_mode = $client['test_mode'] ?? false;
 
+        // TODO There is bad coding with overlap of return URLs and how prepend
+        // is used. This needs to be refactored.
         $prependUrl = "";
 
         if ($this->test_mode) {
@@ -40,7 +42,7 @@ class Payfast implements BillingProvider
             $this->merchant_key = $client['merchant_key'];
             $this->passphrase = $client['passphrase'];
             $this->url = 'https://www.payfast.co.za/onsite/process';
-            //            $prependUrl = config('payfast.callback_url');
+            $prependUrl = config('payfast.callback_url');
         }
 
         if (config('payfast.debug') == true) {
