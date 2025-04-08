@@ -273,14 +273,14 @@ class Payfast implements BillingProvider
     private function extractErrorMessageFromHtml($html): string|bool
     {
         Log::info("extractErrorMessageFromHtml is called with this html: $html");
-        
+
         $doc = new DOMDocument();
-        
+
         // Suppress warnings about duplicate IDs and other HTML parsing issues
         libxml_use_internal_errors(true);
         $doc->loadHTML($html, LIBXML_NOERROR);
         libxml_clear_errors();
-        
+
         $xpath = new DOMXPath($doc);
         $result = $xpath->query('//span[@class="err-msg"]');
 
