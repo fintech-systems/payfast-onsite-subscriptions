@@ -207,7 +207,7 @@ class WebhookController extends Controller
             'billing_date' => $payload['billing_date'],
             'received_at' => now(),
         ]);
-        
+
         // Obtain fresh subscription information from Payfast which includes "run_date"
 
         // First get first subscription attached to this token

@@ -563,7 +563,7 @@ class Subscription extends Model
 
     /**
      * Update the underlying Payfast subscription information for the model.
-     * 
+     *
      * The important item here is the "run_date" which is the date of the next payment.
      *
      * TODO Check how similar this code is to Override Status
