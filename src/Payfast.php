@@ -257,7 +257,7 @@ class Payfast implements BillingProvider
             ->get("https://api.payfast.co.za/subscriptions/$token/fetch?$append")
             ->json();
 
-        Log::debug("fetchSubscription response: ", $response['data']['response']);
+        Log::debug("fetchSubscription response: ", [$response['data']['response']]);
 
         return $response;
     }

@@ -587,8 +587,8 @@ class Subscription extends Model
             $result['data']['response']['token']
         )->firstOrFail();
 
-        Log::debug("payfast_status/status_text: ", $result['data']['response']['status_text']);
-        Log::debug("run_date: ", $result['data']['response']['run_date']);
+        Log::debug("payfast_status/status_text: ", [$result['data']['response']['status_text']]);
+        Log::debug("run_date: ", [$result['data']['response']['run_date']]);
 
         $subscription->payfast_status = $result['data']['response']['status_text'];
         $subscription->next_bill_at = $result['data']['response']['run_date'];
