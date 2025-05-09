@@ -2,7 +2,7 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
-## v2.10 - 2025-05-09
+## v2.11 - 2025-05-09
 
 - In the webhook apply payment routine, split the code into separate lines for easier debugging. Also show status and next run date as when the subscriptions renewed we ended up with a new status of "UPSTREAM"
 - Moved the `SubscriptionPaymentSucceeded` event to the very end of the ApplySubscriptionPayment webhook
