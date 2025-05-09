@@ -19,7 +19,7 @@ If you want to use Laravel Nova, version 4 is required for the `Subscription` an
 Install the package via composer:
 
 ```bash
-composer require fintech-systems/payfast-onsite-subscriptions
+composer require fintechsystems/payfast-onsite-subscriptions
 ```
 
 ## Publish Configuration and Views
