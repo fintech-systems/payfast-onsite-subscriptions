@@ -2,6 +2,14 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v2.10 - 2025-05-09
+
+- In the webhook apply payment routine, split the code into separate lines for easier debugging. Also show status and next run date as when the subscriptions renewed we ended up with a new status of "UPSTREAM"
+- Moved the `SubscriptionPaymentSucceeded` event to the very end of the ApplySubscriptionPayment webhook
+- Converted some `ray()` commands to Log::debug() instead
+- Removed some redundant `ray()` commands
+- Commented out some old Paddle code. This code was related to updating the underlying Paddle subscription but in our case it's the Payfast subscription.
+
 ## v2.9 - 2025-03-14
 
 - Fix plan ID in Billable helper

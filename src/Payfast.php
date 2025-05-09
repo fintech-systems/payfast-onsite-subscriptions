@@ -249,7 +249,7 @@ class Payfast implements BillingProvider
      */
     public function fetchSubscription($token)
     {
-        ray("fetchSubscription is called with this token: $token")->blue();
+        Log::debug("fetchSubscription is called with this token: $token");
 
         $append = ($this->test_mode ? 'testing=true' : "");
 
@@ -257,7 +257,7 @@ class Payfast implements BillingProvider
             ->get("https://api.payfast.co.za/subscriptions/$token/fetch?$append")
             ->json();
 
-        ray($response['data']['response'])->green();
+        Log::debug("fetchSubscription response: ", $response['data']['response']);
 
         return $response;
     }

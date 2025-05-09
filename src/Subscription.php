@@ -26,6 +26,7 @@ class Subscription extends Model
     public const STATUS_PAST_DUE = 'past_due';
     public const STATUS_PAUSED = 'PAUSED';
     public const STATUS_DELETED = 'CANCELLED';
+    public const STATUS_UPSTREAM = 'UPSTREAM';
 
     public static function uiOptions()
     {
@@ -522,7 +523,7 @@ class Subscription extends Model
      */
     public function pause()
     {
-        $this->updatePayFastSubscription([
+        $this->updatePayfastSubscription([
             'pause' => true,
         ]);
 
@@ -560,48 +561,25 @@ class Subscription extends Model
         return $this;
     }
 
-    // /**
-    //  * Update the underlying Paddle subscription information for the model.
-    //  *
-    //  * @param  array  $options
-    //  * @return array
-    //  */
-    // public function updatePaddleSubscription(array $options)
-    // {
-    //     $payload = $this->billable->paddleOptions(array_merge([
-    //         'subscription_id' => $this->paddle_id,
-    //     ], $options));
-
-    //     $response = Cashier::post('/subscription/users/update', $payload)['response'];
-
-    //     $this->payfastInfo = null;
-
-    //     return $response;
-    // }
-
     /**
-     * Update the underlying PayFast subscription information for the model.
+     * Update the underlying Payfast subscription information for the model.
+     * 
+     * The important item here is the "run_date" which is the date of the next payment.
      *
-     * TODO Duplicate code also exists in Override Status
+     * TODO Check how similar this code is to Override Status
      */
-    public function updatePayFastSubscription(array $result)
+    public function updatePayfastSubscription(array $result)
     {
         if ($result['status'] !== 'success') {
             $message = 'Unable to update PayFast subscription because API result !== success';
 
             Log::error($message);
 
-            ray($message);
-
             $message = 'Result will follow';
 
             Log::error($message);
 
-            ray($message);
-
             Log::debug($result);
-
-            ray($result);
         }
 
         $subscription = Subscription::where(
@@ -609,8 +587,10 @@ class Subscription extends Model
             $result['data']['response']['token']
         )->firstOrFail();
 
-        $subscription->payfast_status = $result['data']['response']['status_text'];
+        Log::debug("payfast_status/status_text: ", $result['data']['response']['status_text']);
+        Log::debug("run_date: ", $result['data']['response']['run_date']);
 
+        $subscription->payfast_status = $result['data']['response']['status_text'];
         $subscription->next_bill_at = $result['data']['response']['run_date'];
 
         if ($subscription->payfast_status == self::STATUS_DELETED && ! $subscription->cancelled_at) {

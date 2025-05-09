@@ -190,6 +190,7 @@ class WebhookController extends Controller
             throw new Exception("Unable to apply a payment to an existing subscription because amount_gross is not set. Probably cause the subscription was deleted.");
         }
 
+        // Create a receipt
         $receipt = $billable->receipts()->create([
             'payfast_token' => $payload['token'],
             'order_id' => $payload['m_payment_id'],
@@ -206,16 +207,20 @@ class WebhookController extends Controller
             'billing_date' => $payload['billing_date'],
             'received_at' => now(),
         ]);
+        
+        // Obtain fresh subscription information from Payfast which includes "run_date"
 
-        ray("A new receipt was created");
-        ray($receipt);
-
-        SubscriptionPaymentSucceeded::dispatch($billable, $receipt, $payload);
-
-        // Get the user's latest subscription using first()
+        // First get first subscription attached to this token
         $subscription = Subscription::where('payfast_token', $payload['token'])->first();
 
-        $subscription->updatePayfastSubscription(Payfast::fetchSubscription($payload['token']));
+        // Next get the current subscription data from Payfast
+        $result = Payfast::fetchSubscription($payload['token']);
+
+        // Update the subscription with the fresh data
+        $subscription->updatePayfastSubscription($result);
+
+        // Raise an event
+        SubscriptionPaymentSucceeded::dispatch($billable, $receipt, $payload);
 
         // Payfast requires a 200 response after a successful payment application
         return response("Subscription payment applied or subscription reactivated for $billable->email", 200);
