@@ -23,6 +23,12 @@ Install the package via composer:
 composer require fintechsystems/payfast-onsite-subscriptions
 ```
 
+If you don't have Sancum already:
+
+```bash
+php artisan install:api
+```
+
 ## Publish Configuration and Views
 
 Publish the config file with:
@@ -210,7 +216,7 @@ Replace `$user->name` with your first name and last name fields.
         ]] )        
 </div>
 
-<x-section-border />
+<x-payfast::section-border />
 <!-- End Subscriptions -->
 
 <!-- Receipts -->
@@ -218,7 +224,7 @@ Replace `$user->name` with your first name and last name fields.
         @livewire('receipts')
     </div>
 
-<x-section-border />
+<x-payfast::section-border />
 <!-- End Receipts -->
 ```
 
