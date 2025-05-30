@@ -46,7 +46,7 @@ class WebhookController extends Controller
 
         WebhookReceived::dispatch($payload);
 
-        ray("Checking what kind of webhook received...");    
+        ray("Checking what kind of webhook received...");
 
         try {
             // Non subscription payment handling
