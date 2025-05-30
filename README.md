@@ -23,7 +23,7 @@ Install the package via composer:
 composer require fintechsystems/payfast-onsite-subscriptions
 ```
 
-If you don't have Sancum already:
+If you don't have Sanctum already:
 
 ```bash
 php artisan install:api
