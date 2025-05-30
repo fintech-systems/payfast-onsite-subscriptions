@@ -2,6 +2,13 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v3.1 - 2025-05-30
+
+- We've renamed the subscriptions table to payfast_subscriptions to avoid name classes with other users who might be using the same table name.
+- The components to display the modals and buttons weren't copied during the view asset publishing. We copied those over.
+- The Readme has been updated a with more accurate and concise instructions
+- We're in the process of depracating Nova assets publishing. For the time being it's still working, but this will probably be the last version where we use them.
+
 ## v2.11 - 2025-05-09
 
 - In the webhook apply payment routine, split the code into separate lines for easier debugging. Also show status and next run date as when the subscriptions renewed we ended up with a new status of "UPSTREAM"
