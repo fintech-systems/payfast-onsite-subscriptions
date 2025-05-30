@@ -21,6 +21,8 @@ class Subscription extends Model
 {
     use Prorates;
 
+    public $table = 'payfast_subscriptions';
+
     public const STATUS_ACTIVE = 'ACTIVE';
     public const STATUS_TRIALING = 'trialing';
     public const STATUS_PAST_DUE = 'past_due';
