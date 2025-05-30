@@ -54,7 +54,17 @@ success.blade.php
 
 ## Setup
 
-Add the Billable() trait to your user model.
+Add the `Billable()` trait to your user model.
+
+```php
+use FintechSystems\Payfast\Billable;
+
+class User extends Authenticatable
+{
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory, Notifiable;
+    use Billable;
+```
 
 ## In your header
 
