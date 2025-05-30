@@ -18,7 +18,7 @@
             </div>
             <!-- End Subscriptions -->
 
-            <x-section-border />
+            <x-payfast::section-border />
 
             <!-- Receipts -->
             <div class="mt-10 sm:mt-0">

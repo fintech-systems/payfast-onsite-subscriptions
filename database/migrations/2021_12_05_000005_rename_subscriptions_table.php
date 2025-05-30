@@ -13,6 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasColumn('subscriptions', 'payfast_token')) {
+            throw new \Exception('Cannot rename table: subscriptions table does not contain payfast_token column');
+        }
+        
         Schema::rename('subscriptions', 'payfast_subscriptions');
     }
 

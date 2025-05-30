@@ -11,6 +11,7 @@ Requirements:
 - Laravel 11.x or higher
 - A [Payfast Sandbox account](https://sandbox.payfast.co.za/)
 - A [Payfast account](https://www.payfast.co.za/registration)
+- Sanctum
 
 If you want to use Laravel Nova, version 4 is required for the `Subscription` and `Receipt` resources.
 
@@ -43,6 +44,23 @@ pricing.blade.php
 receipts.blade.php
 subscriptions.blade.php
 success.blade.php
+```
+
+## Setup
+
+Add the Billable() trait to your user model.
+
+## In your header
+
+```php
+@if (config('payfast.test_mode'))
+    <!-- Payfast Test Mode -->
+    <script src="https://sandbox.payfast.co.za/onsite/engine.js" defer></script>
+@else
+    <script src="https://www.payfast.co.za/onsite/engine.js" defer></script>
+@endif
+
+@stack('payfast-event-listener')
 ```
 
 To include the pricing component on a page, do this:

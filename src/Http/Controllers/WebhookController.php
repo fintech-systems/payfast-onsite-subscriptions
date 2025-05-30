@@ -46,11 +46,12 @@ class WebhookController extends Controller
 
         WebhookReceived::dispatch($payload);
 
-        ray("Checking what kind of webhook received...");
+        ray("Checking what kind of webhook received...");    
 
         try {
             // Non subscription payment handling
             if (! isset($payload['token'])) {
+                ray("Non subscription payment received");
                 $this->nonSubscriptionPaymentReceived($payload);
 
                 WebhookHandled::dispatch([
@@ -63,6 +64,7 @@ class WebhookController extends Controller
 
             // New token received, so let's create a subscription
             if (! $this->findSubscription($payload['token'])) {
+                ray("New token received, so let's create a subscription");
                 $this->createSubscription($payload);
 
                 WebhookHandled::dispatch([
@@ -74,6 +76,7 @@ class WebhookController extends Controller
             }
 
             if ($payload['payment_status'] == Subscription::STATUS_DELETED) {
+                ray("Subscrition cancellation received");
                 $this->cancelSubscription($payload);
 
                 WebhookHandled::dispatch([
@@ -85,6 +88,8 @@ class WebhookController extends Controller
             }
 
             if ($payload['payment_status'] == Payment::COMPLETE) {
+                ray("Payment received");
+
                 $this->applySubscriptionPayment($payload);
 
                 WebhookHandled::dispatch($payload);
@@ -143,6 +148,8 @@ class WebhookController extends Controller
 
     protected function createSubscription(array $payload)
     {
+        ray("create Subscription in webhook");
+
         $customer = $this->findOrCreateCustomer($payload);
 
         $subscription = $customer->subscriptions()->create([
@@ -289,6 +296,8 @@ class WebhookController extends Controller
             'billable_id' => $passthrough['custom_int1'],
             'billable_type' => $passthrough['custom_str1'],
         ])->billable;
+
+        ray("We found this customer", $customer);
 
         return $customer;
     }

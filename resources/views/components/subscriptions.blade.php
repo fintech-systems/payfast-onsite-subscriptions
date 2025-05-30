@@ -1,4 +1,4 @@
-<x-action-section>
+<x-payfast::action-section>
     <x-slot name="title">
         {{ __('Subscription Information') }}
     </x-slot>
@@ -95,14 +95,14 @@
         <div class="mt-5">
             {{-- @if ($user->subscribed('default') && !$user->onGenericTrial() && !$user->subscription('default')->onGracePeriod())                             --}}
             @if ($user->subscribed('default')  && !$user->subscription('default')->onGracePeriod())
-                <x-secondary-button style="color: blue;" wire:click="updateCard">
+                <x-payfast::secondary-button style="color: blue;" wire:click="updateCard">
                     {{ __('Update Card Information') }}
-                </x-secondary-button>
+                </x-payfast::secondary-button>
 
-                <x-secondary-button style="color: red;" wire:click="confirmCancelSubscription"
+                <x-payfast::secondary-button style="color: red;" wire:click="confirmCancelSubscription"
                     wire:loading.attr="disabled">
                     {{ __('Cancel Subscription') }}
-                </x-secondary-button>
+                </x-payfast::secondary-button>
             @else
                 <div class="flex">
                     <select wire:model="plan" name="plan"
@@ -114,14 +114,14 @@
                     </select>
 
                     {{-- This is the main button that gets clicked to subscribe to a plan. It calls displayCreateSubscription(). --}}
-                    <x-secondary-button class="ml-2 align-middle h-9 mt-2" style="color: green;"
+                    <x-payfast::secondary-button class="ml-2 align-middle h-9 mt-2" style="color: green;"
                         wire:click="displayCreateSubscription">
                         @if ($user->subscribed('default') && $user->subscription('default')->onGracePeriod())
                             {{ __('Resubscribe') }}
                         @else
                             {{ __('Subscribe') }}
                         @endif
-                    </x-secondary-button>
+                    </x-payfast::secondary-button>
 
                     <div wire:loading class="ml-2 align-middle mt-3">
                         Please wait...
@@ -157,35 +157,43 @@
         @endpush
 
         <!-- Start Cancel Subscription Confirmation Modal -->
-        <x-dialog-modal wire:model="confirmingCancelSubscription">
+        <x-payfast::dialog-modal wire:model="confirmingCancelSubscription">
 
             <x-slot name="title">
                 {{ __('Cancel Subscription') }}
             </x-slot>
 
-            <x-slot name="content">
-                {{ __('Are you sure you want to cancel your subscription?') }}
+            <x-slot name="content" class="mb-4">
+                {{ __('Are you sure you want to cancel your subscription?') }}                
             </x-slot>
 
-            <x-slot name="footer">
-                <div wire:loading class="mr-2 align-middle mt-3">
-                    Please wait...
+            <x-slot name="footer" class="mt-4">
+                <div class="flex flex-col items-center mb-4">                    
+                    <div class="flex space-x-3 space-y-3">
+                        <x-payfast::secondary-button
+                            wire:click="$toggle('confirmingCancelSubscription')"
+                            wire:loading.attr="disabled"
+                            style="color: green;">
+                            {{ __('Keep Subscription') }}
+                        </x-payfast::secondary-button>
+
+                        <x-payfast::secondary-button                    
+                            wire:click="cancelSubscription"
+                            wire:loading.attr="disabled"
+                            class="ml-5"
+                            style="color: red;">
+                            {{ __('Cancel Subscription') }}
+                        </x-payfast::secondary-button>
+
+                        <div wire:loading class="text-center">
+                        Please wait...
+                        </div>
+                    </div>
                 </div>
-
-                <x-button wire:click="$toggle('confirmingCancelSubscription')"
-                    wire:loading.attr="disabled">
-                    {{ __('Keep Subscription') }}
-                </x-button>
-
-                <x-danger-button class="ml-2" wire:click="cancelSubscription"
-                    wire:loading.attr="disabled">
-                    {{ __('Cancel Subscription') }}
-                </x-danger-button>
-
             </x-slot>
 
-        </x-dialog-modal>
+        </x-payfast::dialog-modal>
         <!-- End Cancel Subscription Confirmation Modal -->
 
     </x-slot>
-</x-action-section>
+</x-payfast::action-section>

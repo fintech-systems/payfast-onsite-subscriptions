@@ -1,4 +1,4 @@
-<x-action-section>
+<x-payfast::action-section>
 
     <x-slot name="title">
         {{ __('Receipts') }}
@@ -35,4 +35,4 @@
         </div>
     </x-slot>
 
-</x-action-section>
+</x-payfast::action-section>
