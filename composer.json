@@ -29,7 +29,7 @@
     "require": {
         "php": "^8.3",
         "symfony/dotenv": "*",
-        "livewire/livewire": "*",
+        "livewire/livewire": "3.6.3",
         "moneyphp/money": "*",
         "spatie/ray": "*",
         "nunomaduro/collision": "*",
