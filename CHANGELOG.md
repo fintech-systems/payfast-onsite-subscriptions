@@ -2,6 +2,13 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v3.2 - 2025-10-09
+
+- Add trimming to generateApiSignature
+- Implement new generic error handling for unknown errors contained in the modal HTML
+- Release Livewire dependency version from 3.6.3 to *
+- Add a `composer test` command
+
 ## v3.1 - 2025-05-30
 
 - We've renamed the subscriptions table to payfast_subscriptions to avoid name classes with other users who might be using the same table name.

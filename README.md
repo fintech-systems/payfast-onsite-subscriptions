@@ -286,7 +286,7 @@ Route::get('/update-card', function() {
 $user->subscription('default')->ends_at = [date in the past]
 
 ```bash
-vendor/bin/phpunit
+composer test
 ```
 
 In your main project, add this:
@@ -310,12 +310,6 @@ If you want to test trials, use this one-liner to activate a billable user and a
 
 ```php
 $user = User::find(x)->createAsCustomer(['trial_ends_at' => now()->addDays(30)]);
-```
-
-To see if a user is on trial as used in the subscriptions blade, do this:
-
-```php
-
 ```
 
 ## Changelog

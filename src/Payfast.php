@@ -121,9 +121,9 @@ class Payfast implements BillingProvider
         // If in testing mode make use of either sandbox.payfast.co.za or www.payfast.co.za
         //        $testingMode = true;
         $pfHost = $this->test_mode ? 'sandbox.payfast.co.za' : 'www.payfast.co.za';
-        $htmlForm = '<form action="https://'.$pfHost.'/eng/process" method="post">';
+        $htmlForm = '<form action="https://' . $pfHost . '/eng/process" method="post">';
         foreach ($data as $name => $value) {
-            $htmlForm .= '<input name="'.$name.'" type="hidden" value=\''.$value.'\' />';
+            $htmlForm .= '<input name="' . $name . '" type="hidden" value=\'' . $value . '\' />';
         }
         $htmlForm .= '<input type="submit" value="Pay Now" /></form>';
         echo $htmlForm;
@@ -282,10 +282,32 @@ class Payfast implements BillingProvider
         libxml_clear_errors();
 
         $xpath = new DOMXPath($doc);
-        $result = $xpath->query('//span[@class="err-msg"]');
 
+        // Try old format first (for backward compatibility)
+        $result = $xpath->query('//span[@class="err-msg"]');
         if ($result->length > 0) {
             return $result->item(0)->nodeValue;
+        }
+
+        // Try new format (current Payfast error pages)
+        $result = $xpath->query('//div[@class="error-block__message"]');
+        if ($result->length > 0) {
+            $errorMessage = trim($result->item(0)->nodeValue);
+
+            // Also try to get the error number and text for context
+            $errorNumber = $xpath->query('//div[@class="error-block__number"]');
+            $errorText = $xpath->query('//div[@class="error-block__text"]');
+
+            $fullError = '';
+            if ($errorNumber->length > 0) {
+                $fullError .= trim($errorNumber->item(0)->nodeValue) . ' ';
+            }
+            if ($errorText->length > 0) {
+                $fullError .= trim($errorText->item(0)->nodeValue) . ': ';
+            }
+            $fullError .= $errorMessage;
+
+            return $fullError;
         }
 
         return false;
@@ -358,7 +380,7 @@ class Payfast implements BillingProvider
         ray("generatePaymentIdentifier() URL: $this->url");
 
         $response = Http::withOptions(["verify" => false])
-        ->post($this->url, $pfParameters);
+            ->post($this->url, $pfParameters);
 
         if (! isset($response['uuid'])) {
             ray("generatePaymentIdentifier failed as response didn't have UUID. Output request parameters and response body(): ", $pfParameters);
@@ -381,6 +403,11 @@ class Payfast implements BillingProvider
 
     public function generateApiSignature($pfData, $passPhrase = null): string
     {
+        // Trim all values
+        $pfData = array_map(function ($value) {
+            return is_string($value) ? trim($value) : $value;
+        }, $pfData);
+
         if ($passPhrase !== null) {
             $pfData['passphrase'] = $passPhrase;
         }

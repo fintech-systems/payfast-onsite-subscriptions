@@ -29,7 +29,7 @@
     "require": {
         "php": "^8.3",
         "symfony/dotenv": "*",
-        "livewire/livewire": "3.6.3",
+        "livewire/livewire": "*",
         "moneyphp/money": "*",
         "spatie/ray": "*",
         "nunomaduro/collision": "*",
@@ -56,5 +56,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest"
     }
 }
