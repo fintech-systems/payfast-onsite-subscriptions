@@ -5,16 +5,12 @@ namespace App\Nova;
 use App\Nova\Actions\ChangeEndsAt;
 use App\Nova\Actions\CancelSubscription;
 use App\Nova\Actions\FetchSubscriptionInformation;
-use App\Nova\Actions\OverridePayFastStatus;
-use Illuminate\Support\Str;
+use App\Nova\Actions\OverridePayfastStatus;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\Stack;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\DateTime;;
 
 class Subscription extends Resource
 {
@@ -23,7 +19,7 @@ class Subscription extends Resource
      *
      * @var string
      */
-    public static $model = \FintechSystems\PayFast\Subscription::class;
+    public static $model = \FintechSystems\Payfast\Subscription::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -68,9 +64,9 @@ class Subscription extends Resource
 
             Text::make('Merchant Payment ID'),
 
-            Text::make('PayFast Token'),
+            Text::make('Payfast Token'),
 
-            Text::make('PayFast Status'),
+            Text::make('Payfast Status'),
 
             Date::make('Next Bill At'),
 
@@ -127,7 +123,7 @@ class Subscription extends Resource
             new ChangeEndsAt,
             new FetchSubscriptionInformation,
             new CancelSubscription,
-            new OverridePayFastStatus,
+            new OverridePayfastStatus,
         ];
     }
 }

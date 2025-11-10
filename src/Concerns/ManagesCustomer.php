@@ -46,7 +46,7 @@ trait ManagesCustomer
     // }
 
     /**
-     * Get the billable model's email address to associate with PayFast.
+     * Get the billable model's email address to associate with Payfast.
      *
      * @return string|null
      */

@@ -1,10 +1,10 @@
 <?php
 
-namespace FintechSystems\PayFast\Exceptions;
+namespace FintechSystems\Payfast\Exceptions;
 
 use Exception;
 
-class PayFastException extends Exception
+class PayfastException extends Exception
 {
     //
 }

@@ -10,7 +10,7 @@
     "authors": [
         {
             "name": "Eugene van der Merwe",
-            "email": "eugenefvdm@gmail.com",
+            "email": "eugene@vander.host",
             "role": "Developer"
         }
     ],
@@ -48,7 +48,7 @@
                 "FintechSystems\\Payfast\\PayfastServiceProvider"
             ],
             "aliases": {
-                "payfast": "Payfast"
+                "Payfast": "FintechSystems\\Payfast\\Facades\\Payfast"
             }
         }
     },

@@ -1,6 +1,6 @@
 <?php
 
-namespace FintechSystems\PayFast\Components;
+namespace FintechSystems\Payfast\Components;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;

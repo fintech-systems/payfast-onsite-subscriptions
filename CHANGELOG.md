@@ -2,6 +2,13 @@
 
 All notable changes to `payfast-onsite-subscriptions` will be documented in this file.
 
+## v3.3 - 2025-11-10
+
+- Fix issue with class loader and make if full qualified to avoid new "Payfast not found" errors
+- Change all uppercase instances of "PayFast" to "Payfast"
+- Composer update
+- Change contact email in composer
+
 ## v3.2 - 2025-10-09
 
 - Add trimming to generateApiSignature

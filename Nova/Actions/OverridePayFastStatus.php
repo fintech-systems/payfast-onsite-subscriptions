@@ -14,7 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Actions\DestructiveAction;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class OverridePayFastStatus extends DestructiveAction
+class OverridePayfastStatus extends DestructiveAction
 {
     use InteractsWithQueue, Queueable;
 
@@ -35,7 +35,7 @@ class OverridePayFastStatus extends DestructiveAction
             $subscription->payfast_status = $fields->payfast_status;
 
             if ($subscription->payfast_status == Subscription::STATUS_DELETED && !$subscription->cancelled_at) {
-                $message = ("Subscription status at PayFast is cancelled but no cancelled at date exists. Saving now() as cancelled and ended at as dates.");
+                $message = ("Subscription status at Payfast is cancelled but no cancelled at date exists. Saving now() as cancelled and ended at as dates.");
 
                 Log::warning($message);
 

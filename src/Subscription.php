@@ -64,7 +64,7 @@ class Subscription extends Model
     ];
 
     /**
-     * The cached PayFast info for the subscription.
+     * The cached Payfast info for the subscription.
      *
      * @var array
      */
@@ -573,7 +573,7 @@ class Subscription extends Model
     public function updatePayfastSubscription(array $result)
     {
         if ($result['status'] !== 'success') {
-            $message = 'Unable to update PayFast subscription because API result !== success';
+            $message = 'Unable to update Payfast subscription because API result !== success';
 
             Log::error($message);
 
@@ -596,7 +596,7 @@ class Subscription extends Model
         $subscription->next_bill_at = $result['data']['response']['run_date'];
 
         if ($subscription->payfast_status == self::STATUS_DELETED && ! $subscription->cancelled_at) {
-            $message = ("Subscription status at PayFast is cancelled but no cancelled_at exists. Adding now() as cancellation date.");
+            $message = ("Subscription status at Payfast is cancelled but no cancelled_at exists. Adding now() as cancellation date.");
 
             Log::warning($message);
 
@@ -611,7 +611,7 @@ class Subscription extends Model
     }
 
     /**
-     * Get the PayFast update url. Not in use, copied from Laravel Cashier Paddle.
+     * Get the Payfast update url. Not in use, copied from Laravel Cashier Paddle.
      *
      * @return array
      */
@@ -744,7 +744,7 @@ class Subscription extends Model
     /**
      * Cancel the subscription at a specific moment in time.
      *
-     * This is the PayFast version. It calls the PayFast API instead of the Cashier::post method
+     * This is the Payfast version. It calls the Payfast API instead of the Cashier::post method
      * and it also adds a cancelled_at field which is non-default to the standard Cashier
      * fields. This fields is useful for UI output to reminder user when they cancelled.
      *
@@ -767,7 +767,7 @@ class Subscription extends Model
     }
 
     /**
-     * Get the PayFast cancellation url. Not in use, copied from Laravel Cashier Paddle.
+     * Get the Payfast cancellation url. Not in use, copied from Laravel Cashier Paddle.
      *
      * @return array
      */
@@ -793,7 +793,7 @@ class Subscription extends Model
      *
      * This is the paddle version. Do not use.
      *
-     * We're now using the PayFast version called 'runDate()'
+     * We're now using the Payfast version called 'runDate()'
      *
      * @return \Laravel\Paddle\Payment|null
      *
@@ -812,12 +812,12 @@ class Subscription extends Model
     /**
      * Get the next payment for the subscription.
      *
-     * This is the PayFast version. In fixes the currency to ZAR and strips the
+     * This is the Payfast version. In fixes the currency to ZAR and strips the
      * date of the time portion which in normally returned like this:
      * 2022-11-01T00:00:00+02:00 for use in Payment date() method
      *
      *
-     * @return \FintechSystems\PayFast\Payment|null
+     * @return \FintechSystems\Payfast\Payment|null
      */
     public function runDate()
     {
@@ -883,11 +883,11 @@ class Subscription extends Model
     }
 
     /**
-     * Get raw information about the subscription from PayFast.
+     * Get raw information about the subscription from Payfast.
      *
      * This is based on paddleInfo() from the original Laravel Cashier code for Paddle. It calls the
-     * PayFast API and then returns the 'response' array in the 'data' array of the response object
-     * This will contain pertinent information about the subscription on record at PayFast
+     * Payfast API and then returns the 'response' array in the 'data' array of the response object
+     * This will contain pertinent information about the subscription on record at Payfast
      *
      * @return array
      */
@@ -930,7 +930,7 @@ class Subscription extends Model
     }
 
     /**
-     * PayFast frequencies - required for subscriptions
+     * Payfast frequencies - required for subscriptions
      *
      * See https://developers.payfast.co.za/docs#subscriptions
      */

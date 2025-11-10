@@ -1,8 +1,8 @@
 <?php
 
-namespace FintechSystems\PayFast\Events;
+namespace FintechSystems\Payfast\Events;
 
-use FintechSystems\PayFast\Subscription;
+use FintechSystems\Payfast\Subscription;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -14,7 +14,7 @@ class SubscriptionCancelled
     /**
      * The subscription instance.
      *
-     * @var \FintechSystems\PayFast\Subscription
+     * @var \FintechSystems\Payfast\Subscription
      */
     public $subscription;
 
@@ -28,7 +28,7 @@ class SubscriptionCancelled
     /**
      * Create a new event instance.
      *
-     * @param  \FintechSystems\PayFast\Subscription  $subscription
+     * @param  \FintechSystems\Payfast\Subscription  $subscription
      * @param  array  $payload
      * @return void
      */

@@ -56,7 +56,7 @@ abstract class FeatureTestCase extends TestCase
     protected function getPackageProviders($app)
     {
         return [
-            PayFastServiceProvider::class,
+            PayfastServiceProvider::class,
             LivewireServiceProvider::class,
         ];
     }

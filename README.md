@@ -210,7 +210,7 @@ Also look for the responsive part and add this:
 
 #### Adding the subscriptions and receipts views
 
-When calling the Livewire component, you can override any [PayFast form field](https://developers.payfast.co.za/docs#step_1_form_fields) by specifying a `mergeFields` array.
+When calling the Livewire component, you can override any [Payfast form field](https://developers.payfast.co.za/docs#step_1_form_fields) by specifying a `mergeFields` array.
 
 Example modification Jetstream Livewire's `resources/views/profiles/show.php`:
 
@@ -248,7 +248,7 @@ Replace `$user->name` with your first name and last name fields.
 - Update a card
 
 ```php
-use FintechSystems\PayFast\Facades\Payfast;
+use FintechSystems\Payfast\Facades\Payfast;
 
 Route::get('/payment', function() {
     return Payfast::payment(5,'Order #1');

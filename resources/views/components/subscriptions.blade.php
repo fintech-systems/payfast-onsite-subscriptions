@@ -132,11 +132,11 @@
         </div>
         <!-- End Subscription Action Buttons -->
 
-        <!-- Launch PayFast Subscription Modal -->
+        <!-- Launch Payfast Subscription Modal -->
         <script>
             document.addEventListener('livewire:init', () => {
                 Livewire.on('launchPayfast', ({ identifier }) => {
-                    console.log('Launching PayFast onsite payment modal');
+                    console.log('Launching Payfast onsite payment modal');
                     console.log('identifier: ' + identifier)
                     window.payfast_do_onsite_payment({
                         uuid: identifier

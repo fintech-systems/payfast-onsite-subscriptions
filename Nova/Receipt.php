@@ -18,7 +18,7 @@ class Receipt extends Resource
      *
      * @var string
      */
-    public static $model = \FintechSystems\PayFast\Receipt::class;
+    public static $model = \FintechSystems\Payfast\Receipt::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -58,7 +58,7 @@ class Receipt extends Resource
 
             Text::make('Merchant Payment ID')->readonly(),
 
-            Number::make('PayFast Payment Id')->readonly(),
+            Number::make('Payfast Payment Id')->readonly(),
 
             Text::make('Payment Status')->readonly(),
 
@@ -78,7 +78,7 @@ class Receipt extends Resource
                 return $this->billable->email;
             }),
 
-            Text::make('PayFast Token')->readonly()->hideFromIndex(),
+            Text::make('Payfast Token')->readonly()->hideFromIndex(),
 
             Text::make('Order ID')->readonly()->hideFromIndex(),
 

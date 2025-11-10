@@ -56,7 +56,7 @@ class Subscriptions extends Component
 
     public function cancelSubscription(): void
     {
-        Payfast::debug('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token, 'warning');
+        \FintechSystems\Payfast\Facades\Payfast::debug('Cancelling subscription for ' . $this->user->subscriptions()->active()->first()->payfast_token, 'warning');
 
         $this->user->subscription('default')->cancel2();
 
@@ -74,7 +74,7 @@ class Subscriptions extends Component
 
         ray("updateCard has been called with this token: $payfast_token");
 
-        $url = Payfast::url() . "/recurring/update/$payfast_token?return=" . Payfast::updateCardCallbackUrl() . "/user/profile?card_updated=true";
+        $url = \FintechSystems\Payfast\Facades\Payfast::url() . "/recurring/update/$payfast_token?return=" . \FintechSystems\Payfast\Facades\Payfast::updateCardCallbackUrl() . "/user/profile?card_updated=true";
 
         $message = "updateCard is going to redirect()->to this URL: " . $url;
 
@@ -151,7 +151,7 @@ class Subscriptions extends Component
             $this->mergeFields = array_merge($this->mergeFields, ['amount' => 0]);
         }
 
-        $this->identifier = Payfast::createOnsitePayment(
+        $this->identifier = \FintechSystems\Payfast\Facades\Payfast::createOnsitePayment(
             $this->plan,
             $billingDate,
             $this->mergeFields
